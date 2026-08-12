@@ -4,7 +4,6 @@ import { Hero } from '@/components/hero'
 import { Philosophy } from '@/components/philosophy'
 import { ServicesSection } from '@/components/services-section'
 import { BroomsSection } from '@/components/brooms-section'
-import { MenuSection } from '@/components/menu-section'
 import { GallerySection } from '@/components/gallery-section'
 import { TestimonialsSection } from '@/components/testimonials-section'
 import { FaqSection } from '@/components/faq-section'
@@ -76,10 +75,6 @@ export default function Page() {
           <BroomsSection />
         </section>
 
-        {/* Menu */}
-        <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
-          <MenuSection />
-        </section>
 
         {/* Gallery */}
         <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
