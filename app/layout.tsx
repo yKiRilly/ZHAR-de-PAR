@@ -1,6 +1,7 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Cormorant_Garamond, Jost } from 'next/font/google'
+import { LanguageProvider } from '@/components/language-provider'
 import './globals.css'
 
 const cormorant = Cormorant_Garamond({
@@ -21,12 +22,15 @@ const siteUrl = 'https://emberandbirch.example'
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+
   title: {
     default: 'DUBъ — Private Slavic Bathhouse',
     template: '%s | DUBъ',
   },
+
   description:
     'Ember & Birch is a private luxury bathhouse and thermal wellness retreat offering traditional steam rituals, aromatic bath brooms, plunge pools, and a restaurant-style menu. Reserve your private sauna experience — minimum three hours.',
+
   keywords: [
     'luxury bathhouse',
     'private sauna experience',
@@ -39,16 +43,20 @@ export const metadata: Metadata = {
     'sauna and plunge pool',
     'premium wellness sanctuary',
   ],
+
   authors: [{ name: 'DUBъ' }],
-creator: 'DUBъ',
+  creator: 'DUBъ',
+
   openGraph: {
     type: 'website',
     locale: 'en',
     url: siteUrl,
     siteName: 'DUBъ',
-title: 'DUBъ — Private Slavic Bathhouse',
+    title: 'DUBъ — Private Slavic Bathhouse',
+
     description:
       'A private luxury bathhouse and thermal wellness retreat. Traditional steam rituals, aromatic bath brooms, and cinematic relaxation. Reserve for a minimum of three hours.',
+
     images: [
       {
         url: '/images/hero.png',
@@ -58,14 +66,22 @@ title: 'DUBъ — Private Slavic Bathhouse',
       },
     ],
   },
+
   twitter: {
     card: 'summary_large_image',
     title: 'DUBъ — Private Slavic Bathhouse',
+
     description:
       'A private luxury bathhouse and thermal wellness retreat. Reserve your steam ritual for a minimum of three hours.',
+
     images: ['/images/hero.png'],
   },
-  robots: { index: true, follow: true },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
+
   generator: 'v0.app',
 }
 
@@ -80,9 +96,15 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${jost.variable} bg-background`}>
+    <html
+      lang="en"
+      className={`${cormorant.variable} ${jost.variable} bg-background`}
+    >
       <body className="font-sans antialiased">
-        {children}
+        <LanguageProvider>
+          {children}
+        </LanguageProvider>
+
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

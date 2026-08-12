@@ -17,7 +17,10 @@ export function ServicesSection() {
   const { open } = useBooking()
 
   return (
-    <section id="rituals" className="relative border-t border-border/50 py-24 sm:py-32">
+    <section
+      id="rituals"
+      className="relative border-t border-border/50 py-24 sm:py-32"
+    >
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
 
         {/* Section heading */}
@@ -90,7 +93,9 @@ export function ServicesSection() {
             </div>
 
             <button
-              onClick={() => open({ service: 'Rental of a Sauna Estate' })}
+              onClick={() =>
+                open({ service: 'Rental of a Sauna Estate' })
+              }
               className="mt-10 w-full rounded-full border border-border px-6 py-3 text-xs font-medium uppercase tracking-widest text-foreground transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
             >
               Reserve
@@ -98,8 +103,15 @@ export function ServicesSection() {
           </article>
         </Reveal>
 
+        {/* New heading */}
+        <Reveal>
+          <h2 className="mt-20 max-w-3xl text-balance font-serif text-4xl font-light leading-tight sm:text-5xl">
+            For those who understand a lot, we offer:
+          </h2>
+        </Reveal>
+
         {/* Steam rituals */}
-        <div className="mt-14 grid gap-6 lg:grid-cols-3">
+        <div className="mt-10 grid gap-6 lg:grid-cols-3">
           {services.map((service, i) => (
             <Reveal key={service.id} delay={i * 90}>
               <article className="group flex h-full flex-col rounded-2xl border border-border bg-card p-8 transition-colors duration-300 hover:border-primary/50">
@@ -172,22 +184,32 @@ export function ServicesSection() {
                 className="group flex h-full w-full flex-col rounded-xl border border-border bg-card/50 p-6 text-left transition-colors hover:border-primary/50 hover:bg-card"
               >
                 <div className="flex items-center justify-between gap-3">
-  <div className="flex items-center gap-3">
-    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-primary">
-      {t.name === 'GRILL' && <Flame className="h-5 w-5" />}
-      {t.name === 'BAPTISMAL FONT' && <Waves className="h-5 w-5" />}
-      {t.name === 'JACUZZI' && <Bath className="h-5 w-5" />}
-    </div>
 
-    <span className="font-serif text-xl font-light">
-      {t.name}
-    </span>
-  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-primary">
+                      {t.name === 'GRILL' && (
+                        <Flame className="h-5 w-5" />
+                      )}
 
-  <span className="font-serif text-xl text-primary">
-    {t.price}
-  </span>
-</div>
+                      {t.name === 'BAPTISMAL FONT' && (
+                        <Waves className="h-5 w-5" />
+                      )}
+
+                      {t.name === 'JACUZZI' && (
+                        <Bath className="h-5 w-5" />
+                      )}
+                    </div>
+
+                    <span className="font-serif text-xl font-light">
+                      {t.name}
+                    </span>
+                  </div>
+
+                  <span className="font-serif text-xl text-primary">
+                    {t.price}
+                  </span>
+
+                </div>
 
                 <span className="mt-3 text-sm leading-relaxed text-muted-foreground">
                   {t.description}
@@ -197,66 +219,70 @@ export function ServicesSection() {
           ))}
         </div>
 
-{/* Bath essentials */}
-<div className="mx-auto mt-6 grid max-w-2xl gap-4 sm:grid-cols-2">
+        {/* Bath essentials */}
+        <div className="mx-auto mt-6 grid max-w-2xl gap-4 sm:grid-cols-2">
 
-  {/* Towel & Sheet */}
-  <Reveal delay={160}>
-    <button
-      onClick={() => open({ service: 'Towel & Sheet' })}
-      className="group flex h-full w-full flex-col rounded-xl border border-border bg-card/50 p-6 text-left transition-colors hover:border-primary/50 hover:bg-card"
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-primary">
-            <Bath className="h-5 w-5" />
-          </div>
+          {/* Towel & Sheet */}
+          <Reveal delay={160}>
+            <button
+              onClick={() => open({ service: 'Towel & Sheet' })}
+              className="group flex h-full w-full flex-col rounded-xl border border-border bg-card/50 p-6 text-left transition-colors hover:border-primary/50 hover:bg-card"
+            >
+              <div className="flex items-start justify-between gap-3">
 
-          <span className="font-serif text-xl font-light">
-            Towel &amp; Sheet
-          </span>
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-primary">
+                    <Bath className="h-5 w-5" />
+                  </div>
+
+                  <span className="font-serif text-xl font-light">
+                    Towel &amp; Sheet
+                  </span>
+                </div>
+
+                <span className="font-serif text-xl text-primary">
+                  €15
+                </span>
+
+              </div>
+
+              <span className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                Fresh bath towel and linen sheet for your sauna ritual.
+              </span>
+            </button>
+          </Reveal>
+
+          {/* Slippers & Bath Hat */}
+          <Reveal delay={240}>
+            <button
+              onClick={() => open({ service: 'Slippers & Bath Hat' })}
+              className="group flex h-full w-full flex-col rounded-xl border border-border bg-card/50 p-6 text-left transition-colors hover:border-primary/50 hover:bg-card"
+            >
+              <div className="flex items-start justify-between gap-3">
+
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-primary">
+                    <Footprints className="h-5 w-5" />
+                  </div>
+
+                  <span className="font-serif text-xl font-light">
+                    Slippers &amp; Bath Hat
+                  </span>
+                </div>
+
+                <span className="font-serif text-xl text-primary">
+                  €5
+                </span>
+
+              </div>
+
+              <span className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                Comfortable slippers and a traditional bath hat for your visit.
+              </span>
+            </button>
+          </Reveal>
+
         </div>
-
-        <span className="font-serif text-xl text-primary">
-          €15
-        </span>
-      </div>
-
-      <span className="mt-4 text-sm leading-relaxed text-muted-foreground">
-        Fresh bath towel and linen sheet for your sauna ritual.
-      </span>
-    </button>
-  </Reveal>
-
-  {/* Slippers & Bath Hat */}
-  <Reveal delay={240}>
-    <button
-      onClick={() => open({ service: 'Slippers & Bath Hat' })}
-      className="group flex h-full w-full flex-col rounded-xl border border-border bg-card/50 p-6 text-left transition-colors hover:border-primary/50 hover:bg-card"
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-primary">
-            <Footprints className="h-5 w-5" />
-          </div>
-
-          <span className="font-serif text-xl font-light">
-            Slippers &amp; Bath Hat
-          </span>
-        </div>
-
-        <span className="font-serif text-xl text-primary">
-          €5
-        </span>
-      </div>
-
-      <span className="mt-4 text-sm leading-relaxed text-muted-foreground">
-        Comfortable slippers and a traditional bath hat for your visit.
-      </span>
-    </button>
-  </Reveal>
-
-</div>
 
       </div>
     </section>
