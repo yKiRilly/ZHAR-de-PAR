@@ -41,11 +41,11 @@ export function GallerySection() {
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <div className="max-w-2xl">
           <Reveal>
-            <p className="text-xs font-medium uppercase tracking-[0.3em] text-primary">The Sanctuary</p>
+            <p className="text-xs font-medium uppercase tracking-[0.3em] text-primary">The atmosphere</p>
           </Reveal>
           <Reveal delay={80}>
             <h2 className="mt-4 text-balance font-serif text-4xl font-light leading-tight sm:text-5xl">
-              A glimpse inside the house
+              Steam. Fire. Water. Nature.
             </h2>
           </Reveal>
         </div>
@@ -53,10 +53,14 @@ export function GallerySection() {
         <div className="mt-14 grid auto-rows-[220px] grid-cols-2 gap-4 sm:auto-rows-[280px] lg:grid-cols-3">
           {gallery.map((image, i) => (
             <Reveal
-              key={image.src}
-              delay={(i % 3) * 90}
-              className={cn(image.span && 'sm:col-span-2', 'h-full')}
-            >
+  key={image.src}
+  delay={(i % 3) * 90}
+  className={cn(
+    image.span && 'sm:col-span-2',
+    i === gallery.length - 1 && 'lg:col-start-3 lg:row-start-2',
+    'h-full'
+  )}
+>
               <button
                 onClick={() => setActive(i)}
                 aria-label={`Open image: ${image.alt}`}
@@ -78,18 +82,19 @@ export function GallerySection() {
 
       {active !== null && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-background/95 p-4 backdrop-blur-md animate-in fade-in duration-300"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Image viewer"
-        >
+  onClick={close}
+  className="fixed inset-0 z-[100] flex items-center justify-center bg-background/95 p-4 backdrop-blur-md animate-in fade-in duration-300 cursor-pointer"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Image viewer"
+>
           <button
-            onClick={close}
-            aria-label="Close viewer"
-            className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-secondary"
-          >
-            <X className="h-5 w-5" />
-          </button>
+  onClick={close}
+  aria-label="Close viewer"
+  className="absolute right-6 top-6 z-20 flex h-16 w-16 items-center justify-center rounded-full border border-border bg-background/60 text-foreground transition-colors hover:bg-secondary"
+>
+  <X className="h-8 w-8" />
+</button>
           <button
             onClick={prev}
             aria-label="Previous image"

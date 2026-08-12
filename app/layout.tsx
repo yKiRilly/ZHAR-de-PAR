@@ -22,8 +22,8 @@ const siteUrl = 'https://emberandbirch.example'
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'Ember & Birch — Luxury Private Bathhouse & Thermal Wellness Retreat',
-    template: '%s | Ember & Birch',
+    default: 'DUBъ — Private Slavic Bathhouse',
+    template: '%s | DUBъ',
   },
   description:
     'Ember & Birch is a private luxury bathhouse and thermal wellness retreat offering traditional steam rituals, aromatic bath brooms, plunge pools, and a restaurant-style menu. Reserve your private sauna experience — minimum three hours.',
@@ -39,14 +39,14 @@ export const metadata: Metadata = {
     'sauna and plunge pool',
     'premium wellness sanctuary',
   ],
-  authors: [{ name: 'Ember & Birch' }],
-  creator: 'Ember & Birch',
+  authors: [{ name: 'DUBъ' }],
+creator: 'DUBъ',
   openGraph: {
     type: 'website',
     locale: 'en',
     url: siteUrl,
-    siteName: 'Ember & Birch',
-    title: 'Ember & Birch — Luxury Private Bathhouse & Thermal Wellness Retreat',
+    siteName: 'DUBъ',
+title: 'DUBъ — Private Slavic Bathhouse',
     description:
       'A private luxury bathhouse and thermal wellness retreat. Traditional steam rituals, aromatic bath brooms, and cinematic relaxation. Reserve for a minimum of three hours.',
     images: [
@@ -54,13 +54,13 @@ export const metadata: Metadata = {
         url: '/images/hero.png',
         width: 1200,
         height: 630,
-        alt: 'Ember & Birch luxury bathhouse interior with steam and firelight',
+        alt: 'DUBъ private Slavic bathhouse',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Ember & Birch — Luxury Private Bathhouse',
+    title: 'DUBъ — Private Slavic Bathhouse',
     description:
       'A private luxury bathhouse and thermal wellness retreat. Reserve your steam ritual for a minimum of three hours.',
     images: ['/images/hero.png'],

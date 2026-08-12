@@ -16,8 +16,8 @@ export const services: Service[] = [
     duration: '45 minutes',
     price: '€60',
     description:
-      'Designed for guests who want to experience traditional steam rituals without booking a complete individual session. Guests enjoy approximately 10 minutes under aromatic bath brooms in a relaxing steam environment.',
-    includes: ['Aromatic broom treatment', 'Shared parilka session', 'Cold plunge access'],
+      'A traditional steam ritual in a relaxed shared setting, featuring aromatic bath brooms and approximately 10 minutes of gentle steam for a deeply refreshing experience.',
+    includes: ['Aromatic broom treatment', 'Shared parilka session', 'Cold plunge access', 'Aromatic steam infusion'],
   },
   {
     id: 'individual-steam-ritual',
@@ -26,7 +26,7 @@ export const services: Service[] = [
     duration: '30 minutes',
     price: '€40',
     description:
-      'A fully personalised steam ritual for guests seeking a traditional premium experience, guided one-to-one by a master banshchik.',
+      'A fully personalised steam ritual for guests seeking a traditional premium experience, guided one-to-one by a master banshchik. A deeply immersive ritual designed around your comfort.',
     includes: ['Private parilka session', 'Personal broom master', 'Herbal infusion pour', 'Cool-down ritual'],
   },
   {
@@ -36,36 +36,36 @@ export const services: Service[] = [
     duration: '15 minutes',
     price: '€20',
     description:
-      'Natural exfoliation treatment using premium ingredients to refresh the skin and improve circulation.',
-    includes: ['Mineral salt exfoliation', 'Raw honey glaze', 'Warm rinse'],
+      'Natural exfoliation treatment using premium ingredients to refresh the skin and improve circulation. A warm ritual that leaves the skin renewed, nourished and beautifully soft.',
+    includes: ['Mineral salt exfoliation','Warm Rinse', 'Raw honey glaze', 'Deep skin renewal'],
   },
 ]
 
 export const treatments: Service[] = [
   {
-    id: 'honey-wrap',
-    name: 'Warm Honey Body Wrap',
-    guests: '1 guest',
-    duration: '40 minutes',
+    id: '',
+    name: 'GRILL',
+    guests: '',
+    duration: '',
+    price: '€40',
+    description:
+      'Barbecue area for a leisurely dinner outdoors. Light a fire, cook meat or vegetables, open something cold and just stay for an evening in the middle of nature.',
+  },
+  {
+    id: '',
+    name: 'BAPTISMAL FONT',
+    guests: '',
+    duration: '',
     price: '€50',
     description:
-      'A deeply nourishing wrap of raw forest honey and botanical oils, sealing in heat and softening the skin after the steam.',
+      'A cold baptismal font after the steam room helps to complete the bath ritual and feel a pleasant cheerfulness. Hot steam, cool water and fresh nature air all around.',
   },
   {
-    id: 'signature-ritual',
-    name: 'Signature Ember Ritual',
-    guests: '1 guest',
-    duration: '60 minutes',
-    price: '€60',
-    description:
-      'Our complete flagship journey — layered steam, double broom treatment, cold plunge, and a restorative herbal tea service.',
-  },
-  {
-    id: 'aroma-massage',
-    name: 'Aroma Oil Massage',
-    guests: '1 guest',
-    duration: '45 minutes',
-    price: '€40',
+    id: '',
+    name: 'JACUZZI',
+    guests: '',
+    duration: '',
+    price: '€80',
     description:
       'A slow, warming massage with house-blended aromatic oils to release tension held deep in the body.',
   },
@@ -79,43 +79,39 @@ export type Broom = {
   image: string
 }
 
+
 export const brooms: Broom[] = [
   {
     id: 'birch',
     name: 'Birch',
     price: '€15',
-    description: 'Traditional choice with deep, penetrating heat.',
-    image: '/images/broom-birch.png',
+    description: 'Mild fragrance, light massage and traditional bath effect. It is suitable for relaxation, improves blood circulation and leaves a pleasant feeling of lightness.',
+    image: '/photos/brooms/birch.jpg',
   },
   {
     id: 'oak',
     name: 'Oak',
     price: '€15',
-    description: 'Soft aroma and gentle, enveloping steam.',
-    image: '/images/broom-oak.png',
+    description: 'Classics of the Russian bath tradition. Dense oak leaves retain steam well, creating a deep and intense warm-up.',
+
+    image: '/photos/brooms/oak.jpg',
   },
   {
     id: 'eucalyptus',
     name: 'Eucalyptus',
     price: '€15',
-    description: 'Refreshing aroma that supports easier breathing.',
-    image: '/images/broom-eucalyptus.png',
+    description: 'It refreshes your breath, helps you relax and creates a light fragrance in the steam room. It is especially good for deep warming up and feeling fresh.',
+    image: '/photos/brooms/eucalyptus.jpg',
   },
   {
-    id: 'herbal',
-    name: 'Wild Herb',
+    id: 'canadian',
+    name: 'Сanadian oak',
     price: '€15',
-    description: 'Relaxing herbal fragrance of linden and meadow flowers.',
-    image: '/images/broom-herbal.png',
-  },
-  {
-    id: 'fir',
-    name: 'Fir & Juniper',
-    price: '€15',
-    description: 'Premium dense needles with exceptional heat retention.',
-    image: '/images/broom-fir.png',
+    description: 'It is larger and denser than the classic oak broom. It creates thick steam and is particularly durable.',
+    image: '/photos/brooms/canadian.jpg',
   },
 ]
+
 
 export type MenuItem = {
   name: string
@@ -203,19 +199,35 @@ export type GalleryImage = {
 
 export const gallery: GalleryImage[] = [
   {
-    src: '/images/gallery-steam.png',
-    alt: 'Interior of the steam room with dense atmospheric steam and dark oak benches',
+    src: '/photos/galery/saunainside.PNG',
+    alt: '',
     span: true,
   },
-  { src: '/images/gallery-pool.png', alt: 'Dark stone cold plunge pool reflecting candlelight' },
-  { src: '/images/gallery-fire.png', alt: 'Wood-burning sauna stove with glowing embers and rising steam' },
-  { src: '/images/gallery-lounge.png', alt: 'Warm relaxation lounge with linen daybeds and lanterns' },
   {
-    src: '/images/gallery-exterior.png',
-    alt: 'Exterior of the bathhouse at twilight nestled in a misty forest',
+    src: '/photos/galery/font.PNG',
+    alt: '',
+  },
+  {
+    src: '/photos/galery/firearea.PNG',
+    alt: '',
+  },
+  {
+    src: '/photos/galery/relaxarea.PNG',
+    alt: '',
+  },
+  {
+    src: '/photos/galery/windowview.PNG',
+    alt: '',
     span: true,
   },
-  { src: '/images/gallery-tea.png', alt: 'Herbal tea ritual laid out on a dark wooden tray' },
+  {
+    src: '/photos/galery/grill.PNG',
+    alt: '',
+  },
+  {
+    src: '/photos/galery/jicuzzi.PNG',
+    alt: '',
+  },
 ]
 
 export type Testimonial = {
@@ -227,27 +239,27 @@ export type Testimonial = {
 export const testimonials: Testimonial[] = [
   {
     quote:
-      'The most restorative evening I have had in years. Every detail — the light, the scent of birch, the silence — felt considered. We arrived tense and left weightless.',
-    name: 'Eleonora V.',
-    detail: 'Private booking · 4 guests',
+      'It is a very beautiful place. I liked that the sauna was really surrounded by nature, and not just a "sauna with an interior". After the fall, they went to the font, then sat by the fire. The perfect evening.',
+    name: 'Alina N.',
+    detail: '',
   },
   {
     quote:
-      'Not a spa, a sanctuary. The broom master guided the ritual with real craft, and the dinner prepared before we arrived was extraordinary. Worth every minute.',
-    name: 'Marcus D.',
-    detail: 'Signature Ember Ritual',
+      'Dubъ pleasantly surprised me. Quiet, green, no fuss. A separate thrill is the atmosphere itself: wood, fire, the smell of the steam room. We spent three hours here and didnt want to leave at all.',
+    name: 'Michael Prohorov',
+    detail: '',
   },
   {
     quote:
-      'We booked the full three hours and could have stayed all night. Cinematic, intimate, and genuinely authentic. This is how wellness should feel.',
-    name: 'Sofia & Lena',
-    detail: 'Shared Steam Ritual',
+      'We were looking for a place where you can relax with company without feeling like an ordinary SPA. The mood here is completely different. It is very cozy, beautiful and real. We will definitely come back.',
+    name: 'Ekaterina Chuiko',
+    detail: '',
   },
   {
     quote:
-      'The attention to authenticity is remarkable — from the fir brooms to the herbal infusions poured over the stones. A rare, exclusive escape.',
-    name: 'Henrik L.',
-    detail: 'Individual Steam Ritual',
+      'It is a good sauna, but it is not even the main thing here. Nature, silence, fire, cold water after a steam bath — everything adds up to one very proper rest. It is a rare place where you really disconnect from the city.',
+    name: 'Artyom Minailov',
+    detail: '',
   },
 ]
 
@@ -258,34 +270,34 @@ export type Faq = {
 
 export const faqs: Faq[] = [
   {
-    question: 'How long is a reservation?',
+    question: 'Is it possible to rent for more than 3 hours?',
     answer:
-      'Every private booking is reserved for a minimum of three hours. This ensures you never feel rushed — time to steam, plunge, rest, and repeat the ritual at your own pace. Longer sessions can be arranged on request.',
+      'Yes, by prior arrangement, you can rent more than 3 hours. ',
   },
   {
-    question: 'How many guests can join a private session?',
+    question: 'Will the sauna be ready for our arrival?',
     answer:
-      'Our private house comfortably hosts up to eight guests. Steam rituals are tailored to your group, whether that is an intimate visit for one or a celebration with friends.',
+      'Yes. We will prepare everything in advance for your arrival: we will melt the sauna, prepare a space for relaxation and take care of the necessary details. All you have to do is arrive at the appointed time and set yourself up for a rest. You will need to add firewood yourself. But if there is any problem, we have someone who can help you. ',
   },
   {
-    question: 'Can we order food and drinks?',
+    question: 'What should I take with me?',
     answer:
-      'Yes. Guests may order from our restaurant-style menu during their visit, or arrange a complete lunch or dinner to be prepared before arrival so it is ready the moment you step out of the steam.',
+      'The main thing is a good mood. We will provide everything you need for your vacation. ',
   },
   {
-    question: 'What are bath brooms and do I need one?',
+    question: 'Is it possible to come with a large company?',
     answer:
-      'The bath broom, or venik, is central to the traditional steam ritual — bundles of aromatic leaves used to gently massage the body and circulate heat. We offer birch, oak, eucalyptus, wild herb, and fir & juniper, each €15. Your broom master will recommend the right one for you.',
+      'Yes. The difference between our space is that we do not have a division into mens and womens days and we can have a good rest with a large company. ',
   },
   {
-    question: 'What should I bring?',
+    question: 'How do I book a sauna?',
     answer:
-      'Simply bring yourself. We provide robes, linens, slippers, and all ritual essentials. Arrive fifteen minutes early to settle in and be welcomed with a warm herbal infusion.',
+      'You need to fill out a form on the website, leave a contact for communication, and our manager will contact you. Prepayment is paid after contacting our manager!',
   },
   {
-    question: 'What is your cancellation policy?',
+    question: 'Can we order food?',
     answer:
-      'Reservations may be rescheduled or cancelled free of charge up to 48 hours before your session. Within 48 hours, a 50% fee applies as our private house is reserved exclusively for you.',
+      'Yes, but it is better to arrange this in advance so that your dinner arrives on time.',
   },
 ]
 

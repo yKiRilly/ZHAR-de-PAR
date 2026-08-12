@@ -35,7 +35,10 @@ const structuredData = {
       mainEntity: faqs.map((faq) => ({
         '@type': 'Question',
         name: faq.question,
-        acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: faq.answer,
+        },
       })),
     },
   ],
@@ -44,22 +47,58 @@ const structuredData = {
 export default function Page() {
   return (
     <BookingProvider>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
       <SiteHeader />
+
       <main>
+        {/* Structured data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData),
+          }}
+        />
+
+        {/* Hero */}
         <Hero />
-        <Philosophy />
-        <ServicesSection />
-        <BroomsSection />
-        <MenuSection />
-        <GallerySection />
-        <TestimonialsSection />
-        <FaqSection />
+
+        {/* Philosophy */}
+        <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
+          <Philosophy />
+        </section>
+
+        {/* Services */}
+        <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
+          <ServicesSection />
+        </section>
+
+        {/* Brooms */}
+        <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
+          <BroomsSection />
+        </section>
+
+        {/* Menu */}
+        <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
+          <MenuSection />
+        </section>
+
+        {/* Gallery */}
+        <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
+          <GallerySection />
+        </section>
+
+        {/* Testimonials */}
+        <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
+          <TestimonialsSection />
+        </section>
+
+        {/* FAQ */}
+        <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
+          <FaqSection />
+        </section>
       </main>
+
       <SiteFooter />
+
       <BookNowFab />
     </BookingProvider>
   )

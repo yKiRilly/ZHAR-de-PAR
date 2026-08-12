@@ -17,10 +17,11 @@ export function Hero() {
     <section id="top" className="relative flex min-h-[100svh] items-center justify-center overflow-hidden">
       {/* Background image */}
       <div
-        className="absolute inset-0 scale-105 bg-cover bg-center"
-        style={{ backgroundImage: 'url(/images/hero.png)' }}
-        aria-hidden="true"
-      />
+  className="absolute inset-0 scale-105 bg-cover bg-center bg-no-repeat"
+  style={{ backgroundImage: 'url("/photos/view/viewof.PNG")' }}
+  aria-hidden="true"
+/>
+<div className="absolute inset-0 bg-black/45" />
       <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/40 to-background" aria-hidden="true" />
       <div className="absolute inset-0 bg-background/25" aria-hidden="true" />
 
@@ -37,14 +38,13 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto max-w-4xl px-5 text-center">
         <p className="mb-6 animate-in fade-in slide-in-from-bottom-4 text-xs font-medium uppercase tracking-[0.4em] text-primary duration-700">
-          Private Thermal Sanctuary
+          Private Premiun Bathhouse
         </p>
         <h1 className="text-shadow-hero text-balance font-serif text-5xl font-light leading-[1.05] sm:text-7xl lg:text-8xl">
-          Where fire, water &amp; birch restore you
+          Rent a completely private outdoor space
         </h1>
         <p className="mx-auto mt-7 max-w-xl text-pretty text-base leading-relaxed text-foreground/80 sm:text-lg">
-          An exclusive bathhouse retreat built around the ancient ritual of steam. Reserved privately, just
-          for you and yours — for a minimum of three unhurried hours.
+          This is a bathing estate where a person is left alone with nature, the warmth of a tree, a living fire and real steam.
         </p>
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <button

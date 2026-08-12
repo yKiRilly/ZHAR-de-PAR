@@ -36,10 +36,11 @@ export function SiteHeader() {
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8">
         <a href="#top" className="flex items-center gap-2.5" aria-label="Ember and Birch home">
-          <BrandMark className="h-7 w-7 text-primary" />
-          <span className="font-serif text-xl tracking-wide">
-            Ember <span className="text-primary">&amp;</span> Birch
-          </span>
+          <img
+  src="/photos/logos/logoof .PNG"
+  alt="DUB"
+  className="h-55 w-auto"
+/>
         </a>
 
         <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
