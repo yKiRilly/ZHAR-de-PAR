@@ -146,7 +146,7 @@ export const gallery: GalleryImage[] = [
     alt: '',
   },
   {
-    src: '/photos/galery/jicuzzi.PNG',
+    src: '/photos/ps/viewps.PNG',
     alt: '',
   },
 ]

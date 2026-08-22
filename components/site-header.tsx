@@ -77,7 +77,7 @@ export function SiteHeader() {
             <a
               key={link.href}
               href={link.href}
-              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               {t[link.label as keyof typeof t]}
             </a>

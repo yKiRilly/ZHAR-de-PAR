@@ -3,6 +3,7 @@ import { SiteHeader } from '@/components/site-header'
 import { Hero } from '@/components/hero'
 import { Philosophy } from '@/components/philosophy'
 import { ServicesSection } from '@/components/services-section'
+import { VideoSection } from '@/components/video-section'
 import { BroomsSection } from '@/components/brooms-section'
 import { GallerySection } from '@/components/gallery-section'
 import { TestimonialsSection } from '@/components/testimonials-section'
@@ -62,13 +63,14 @@ export default function Page() {
 
         {/* Philosophy */}
         <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
-          <Philosophy />
-        </section>
+  <Philosophy />
+</section>
 
-        {/* Services */}
-        <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
-          <ServicesSection />
-        </section>
+<VideoSection />
+
+<section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
+  <ServicesSection />
+</section>
 
         {/* Brooms */}
         <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">

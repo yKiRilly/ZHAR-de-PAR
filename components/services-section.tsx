@@ -11,10 +11,12 @@ import {
 } from 'lucide-react'
 import { services, treatments } from '@/lib/site-data'
 import { useBooking } from '@/components/booking-provider'
+import { useLanguage } from '@/components/language-provider'
 import { Reveal } from '@/components/reveal'
 
 export function ServicesSection() {
   const { open } = useBooking()
+  const { t } = useLanguage()
 
   return (
     <section
@@ -27,13 +29,13 @@ export function ServicesSection() {
         <div className="max-w-2xl">
           <Reveal>
             <p className="text-xs font-medium uppercase tracking-[0.3em] text-primary">
-              Steam Rituals
+              {t.steamRituals}
             </p>
           </Reveal>
 
           <Reveal delay={80}>
             <h2 className="mt-4 text-balance font-serif text-4xl font-light leading-tight sm:text-5xl">
-              Choose the ritual that calls to you
+              {t.chooseRitual}
             </h2>
           </Reveal>
         </div>
@@ -44,7 +46,7 @@ export function ServicesSection() {
 
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <h3 className="font-serif text-3xl font-light">
-                Rental of a Sauna Estate
+                {t.saunaEstate}
               </h3>
 
               <span className="font-serif text-4xl text-primary">
@@ -56,167 +58,217 @@ export function ServicesSection() {
             </div>
 
             <p className="mt-6 max-w-4xl text-base leading-relaxed text-muted-foreground">
-              A real Slavic sauna reserved exclusively for your company.
-              Complete privacy, the atmosphere of nature, and uninterrupted
-              relaxation without outside guests.
+              {t.saunaEstateDescription}
             </p>
 
             <div className="mt-8 border-t border-border/60 pt-8">
               <h4 className="mb-5 text-xs font-medium uppercase tracking-[0.3em] text-primary">
-                Booking Conditions
+                {t.bookingConditions}
               </h4>
 
               <ul className="space-y-3">
                 <li className="flex items-center gap-3">
                   <Check className="h-4 w-4 text-primary" />
-                  <span>Minimum rental time — 3 hours</span>
+                  <span>{t.minimumRental}</span>
                 </li>
 
                 <li className="flex items-center gap-3">
                   <Check className="h-4 w-4 text-primary" />
-                  <span>Up to 8 guests included</span>
+                  <span>{t.upToGuests}</span>
                 </li>
 
                 <li className="flex items-center gap-3">
                   <Check className="h-4 w-4 text-primary" />
-                  <span>Each additional guest — €50</span>
+                  <span>{t.additionalGuest}</span>
                 </li>
 
                 <li className="flex items-center gap-3">
                   <Check className="h-4 w-4 text-primary" />
-                  <span>
-                    €100 deposit required to confirm the booking
-                    (non-refundable upon cancellation)
-                  </span>
+                  <span>{t.deposit}</span>
                 </li>
               </ul>
             </div>
 
             <button
-              onClick={() =>
-                open({ service: 'Rental of a Sauna Estate' })
-              }
-              className="mt-10 w-full rounded-full border border-border px-6 py-3 text-xs font-medium uppercase tracking-widest text-foreground transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
-            >
-              Reserve
-            </button>
+  type="button"
+  onClick={() => open()}
+  className="mt-10 w-full rounded-full border border-border px-6 py-3 text-xs font-medium uppercase tracking-widest text-foreground transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
+>
+  Reserve
+</button>
           </article>
         </Reveal>
 
         {/* New heading */}
         <Reveal>
-          <h2 className="mt-20 max-w-3xl text-balance font-serif text-4xl font-light leading-tight sm:text-5xl">
-            For those who understand a lot, we offer:
-          </h2>
-        </Reveal>
-
+  <h2
+    className="
+      mt-20
+      max-w-[1100px]
+      font-serif
+      text-4xl
+      font-light
+      leading-[1.1]
+      sm:text-5xl
+      sm:leading-[1.1]
+    "
+  >
+    {t.forThoseWhoUnderstand}
+  </h2>
+</Reveal>
         {/* Steam rituals */}
         <div className="mt-10 grid gap-6 lg:grid-cols-3">
-          {services.map((service, i) => (
-            <Reveal key={service.id} delay={i * 90}>
-              <article className="group flex h-full flex-col rounded-2xl border border-border bg-card p-8 transition-colors duration-300 hover:border-primary/50">
+          {services.map((service, i) => {
+            const translated = t.services[service.id]
 
-                <div className="flex items-start justify-between">
-                  <h3 className="max-w-[12ch] text-balance font-serif text-2xl font-light">
-                    {service.name}
-                  </h3>
-
-                  <span className="font-serif text-3xl text-primary">
-                    {service.price}
-                  </span>
-                </div>
-
-                <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-xs uppercase tracking-widest text-muted-foreground">
-                  <span className="inline-flex items-center gap-1.5">
-                    <Users className="h-3.5 w-3.5 text-primary" />
-                    {service.guests}
-                  </span>
-
-                  <span className="inline-flex items-center gap-1.5">
-                    <Clock className="h-3.5 w-3.5 text-primary" />
-                    {service.duration}
-                  </span>
-                </div>
-
-                <p className="mt-5 text-pretty text-sm leading-relaxed text-muted-foreground">
-                  {service.description}
-                </p>
-
-                {service.includes && (
-                  <ul className="mt-6 space-y-2.5 border-t border-border/60 pt-6">
-                    {service.includes.map((item) => (
-                      <li
-                        key={item}
-                        className="flex items-center gap-2.5 text-sm text-foreground/85"
-                      >
-                        <Check className="h-4 w-4 shrink-0 text-primary" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-
-                <button
-                  onClick={() => open({ service: service.name })}
-                  className="mt-8 w-full rounded-full border border-border px-6 py-3 text-xs font-medium uppercase tracking-widest text-foreground transition-colors group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground"
+            return (
+              <Reveal key={service.id} delay={i * 90}>
+                <article
+                  className="
+                    group
+                    flex
+                    h-full
+                    min-h-[440px]
+                    flex-col
+                    rounded-2xl
+                    border
+                    border-border
+                    bg-card
+                    p-8
+                    transition-colors
+                    duration-300
+                    hover:border-primary/50
+                  "
                 >
-                  Reserve
-                </button>
 
-              </article>
-            </Reveal>
-          ))}
-        </div>
+                  {/* Card content — не растягиваем */}
+                  <div>
+                    <div className="flex items-start justify-between">
+                      <h3 className="max-w-[12ch] text-balance font-serif text-2xl font-light">
+                        {translated.name}
+                      </h3>
+
+                      <span className="shrink-0 font-serif text-3xl text-primary">
+                        {service.price}
+                      </span>
+                    </div>
+
+                    <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-xs uppercase tracking-widest text-muted-foreground">
+                      <span className="inline-flex items-center gap-1.5">
+                        <Users className="h-3.5 w-3.5 text-primary" />
+                        {translated.guests}
+                      </span>
+
+                      <span className="inline-flex items-center gap-1.5">
+                        <Clock className="h-3.5 w-3.5 text-primary" />
+                        {translated.duration}
+                      </span>
+                    </div>
+
+                    <p className="mt-5 text-pretty text-sm leading-relaxed text-muted-foreground">
+                      {translated.description}
+                    </p>
+
+                    {translated.includes && (
+                      <ul className="mt-6 space-y-2.5 border-t border-border/60 pt-6">
+                        {translated.includes.map((item) => (
+                          <li
+                            key={item}
+                            className="flex items-center gap-2.5 text-sm text-foreground/85"
+                          >
+                            <Check className="h-4 w-4 shrink-0 text-primary" />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+
+{/* Кнопка всегда внизу */}
+<div className="mt-auto pt-10">
+  <button
+    onClick={() => open({ service: service.name })}
+    className="
+      w-full
+      rounded-full
+      border
+      border-border
+      px-6
+      py-3
+      text-xs
+      font-medium
+      uppercase
+      tracking-widest
+      text-foreground
+      transition-colors
+      group-hover:border-primary
+      group-hover:bg-primary
+      group-hover:text-primary-foreground
+    "
+  >
+    {t.reserve}
+  </button>
+</div>
+
+</article>
+</Reveal>
+)
+})}
+</div>
 
         {/* Improving the procedure */}
         <Reveal>
           <h3 className="mt-20 text-xs font-medium uppercase tracking-[0.3em] text-primary">
-            Improving the Procedure
+            {t.improvingProcedure}
           </h3>
         </Reveal>
 
         {/* Grill / Font / Jacuzzi */}
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          {treatments.map((t, i) => (
-            <Reveal key={t.id || t.name} delay={i * 80}>
-              <button
-                onClick={() => open({ service: t.name })}
-                className="group flex h-full w-full flex-col rounded-xl border border-border bg-card/50 p-6 text-left transition-colors hover:border-primary/50 hover:bg-card"
-              >
-                <div className="flex items-center justify-between gap-3">
+          {treatments.map((item, i) => {
+            const translated = t.treatments[item.name]
 
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-primary">
-                      {t.name === 'GRILL' && (
-                        <Flame className="h-5 w-5" />
-                      )}
+            return (
+              <Reveal key={item.name} delay={i * 80}>
+                <button
+                  onClick={() => open({ service: item.name })}
+                  className="group flex h-full w-full flex-col rounded-xl border border-border bg-card/50 p-6 text-left transition-colors hover:border-primary/50 hover:bg-card"
+                >
+                  <div className="flex items-center justify-between gap-3">
 
-                      {t.name === 'BAPTISMAL FONT' && (
-                        <Waves className="h-5 w-5" />
-                      )}
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-primary">
+                        {item.name === 'GRILL' && (
+                          <Flame className="h-5 w-5" />
+                        )}
 
-                      {t.name === 'JACUZZI' && (
-                        <Bath className="h-5 w-5" />
-                      )}
+                        {item.name === 'BAPTISMAL FONT' && (
+                          <Waves className="h-5 w-5" />
+                        )}
+
+                        {item.name === 'JACUZZI' && (
+                          <Bath className="h-5 w-5" />
+                        )}
+                      </div>
+
+                      <span className="font-serif text-xl font-light">
+                        {translated.name}
+                      </span>
                     </div>
 
-                    <span className="font-serif text-xl font-light">
-                      {t.name}
+                    <span className="font-serif text-xl text-primary">
+                      {item.price}
                     </span>
+
                   </div>
 
-                  <span className="font-serif text-xl text-primary">
-                    {t.price}
+                  <span className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    {translated.description}
                   </span>
-
-                </div>
-
-                <span className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  {t.description}
-                </span>
-              </button>
-            </Reveal>
-          ))}
+                </button>
+              </Reveal>
+            )
+          })}
         </div>
 
         {/* Bath essentials */}
@@ -236,7 +288,7 @@ export function ServicesSection() {
                   </div>
 
                   <span className="font-serif text-xl font-light">
-                    Towel &amp; Sheet
+                    {t.towelSheet}
                   </span>
                 </div>
 
@@ -247,7 +299,7 @@ export function ServicesSection() {
               </div>
 
               <span className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                Fresh bath towel and linen sheet for your sauna ritual.
+                {t.towelSheetDescription}
               </span>
             </button>
           </Reveal>
@@ -266,7 +318,7 @@ export function ServicesSection() {
                   </div>
 
                   <span className="font-serif text-xl font-light">
-                    Slippers &amp; Bath Hat
+                    {t.slippersHat}
                   </span>
                 </div>
 
@@ -277,7 +329,7 @@ export function ServicesSection() {
               </div>
 
               <span className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                Comfortable slippers and a traditional bath hat for your visit.
+                {t.slippersHatDescription}
               </span>
             </button>
           </Reveal>

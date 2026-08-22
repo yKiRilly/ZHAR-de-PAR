@@ -3,14 +3,16 @@
 import Image from 'next/image'
 import { Clock, Mail, MapPin, Phone } from 'lucide-react'
 import { useBooking } from '@/components/booking-provider'
+import { useLanguage } from '@/components/language-provider'
 
 export function SiteFooter() {
   const { open } = useBooking()
+  const { t } = useLanguage()
 
   return (
     <footer id="contact" className="relative border-t border-border/50">
 
-      {/* CTA band */}
+      {/* CTA */}
       <div
         className="relative overflow-hidden border-b border-border/50 bg-cover bg-center"
         style={{
@@ -19,25 +21,26 @@ export function SiteFooter() {
         }}
       >
         <div className="mx-auto flex min-h-[360px] max-w-7xl items-center justify-end px-5 py-16 sm:px-8">
+          <div className="w-full max-w-xl text-center lg:mr-0 lg:translate-x-30 lg:text-left">
 
-<div className="w-full max-w-xl text-center lg:mr-0 lg:translate-x-30 lg:text-left">            <h2 className="font-serif text-4xl tracking-tight sm:text-5xl">
-              Your Private Escape Awaits
+            <h2 className="font-serif text-4xl tracking-tight sm:text-5xl">
+              {t.footerTitle}
             </h2>
 
             <p className="mt-4 text-sm uppercase tracking-[0.2em] text-muted-foreground">
-              Reserve the house for an evening of steam
+              {t.footerSubtitle}
             </p>
 
             <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted-foreground">
-              Private sessions are held for a minimum of three hours. Choose your
-              ritual, your brooms, and your table — we will prepare the rest.
+              {t.footerDescription}
             </p>
 
             <button
+              type="button"
               onClick={() => open()}
               className="mt-9 rounded-full bg-primary px-10 py-4 text-sm font-medium uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              Book Now
+              {t.bookNow}
             </button>
 
           </div>
@@ -51,7 +54,7 @@ export function SiteFooter() {
         <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr_1fr]">
 
           {/* Logo */}
-          <div className="flex items-start justify-start translate-x-30 -mt-20">
+          <div className="flex items-start justify-start -mt-20 lg:translate-x-30">
             <Image
               src="/photos/logos/logoof .png"
               alt="DUBъ"
@@ -64,19 +67,19 @@ export function SiteFooter() {
           {/* Visit */}
           <div>
             <h3 className="text-xs font-medium uppercase tracking-[0.3em] text-primary">
-              Visit
+              {t.footerVisit}
             </h3>
 
             <ul className="mt-5 space-y-3 text-sm text-muted-foreground">
 
               <li className="flex items-start gap-3">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                MQPM+73, 17300 Blanes, Girona
+                <span>MQPM+73, 17300 Blanes, Girona</span>
               </li>
 
               <li className="flex items-start gap-3">
                 <Clock className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                Daily · 24/7 · By reservation
+                <span>{t.footerHours}</span>
               </li>
 
             </ul>
@@ -85,23 +88,21 @@ export function SiteFooter() {
           {/* Concierge */}
           <div>
             <h3 className="text-xs font-medium uppercase tracking-[0.3em] text-primary">
-              Concierge
+              {t.footerConcierge}
             </h3>
 
             <ul className="mt-5 space-y-3 text-sm text-muted-foreground">
 
-              {/* Phone */}
               <li>
                 <a
                   href="tel:+34614279511"
                   className="flex items-center gap-3 transition-colors hover:text-foreground"
                 >
                   <Phone className="h-4 w-4 shrink-0 text-primary" />
-                  +34614279511
+                  +34 614 279 511
                 </a>
               </li>
 
-              {/* Email */}
               <li>
                 <a
                   href="mailto:kirill2525225@gmail.com"
@@ -138,20 +139,8 @@ export function SiteFooter() {
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <rect
-                x="3"
-                y="3"
-                width="18"
-                height="18"
-                rx="5"
-              />
-
-              <circle
-                cx="12"
-                cy="12"
-                r="4"
-              />
-
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
               <circle
                 cx="17.5"
                 cy="6.5"
@@ -185,11 +174,11 @@ export function SiteFooter() {
         <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-border/60 pt-6 text-xs text-muted-foreground sm:flex-row">
 
           <p>
-            © {new Date().getFullYear()} DUBъ. All rights reserved.
+            © {new Date().getFullYear()} DUBъ. {t.footerRights}
           </p>
 
           <p className="uppercase tracking-widest">
-            Crafted for stillness
+            {t.footerTagline}
           </p>
 
         </div>
