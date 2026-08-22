@@ -3,7 +3,6 @@
 import Image from 'next/image'
 
 import { Reveal } from '@/components/reveal'
-
 import { useLanguage } from '@/components/language-provider'
 
 export function Philosophy() {
@@ -12,8 +11,10 @@ export function Philosophy() {
   return (
     <section id="philosophy" className="border-t border-border/60">
       <div className="mx-auto grid max-w-7xl gap-12 px-5 py-24 lg:grid-cols-2 lg:gap-20 lg:py-32">
+
         {/* Photos */}
         <div className="relative min-h-[620px]">
+
           {/* Photo 1 */}
           <Reveal
             className="absolute right-0 top-0 z-10 h-[250px] w-[72%] overflow-hidden rounded-2xl"
@@ -54,10 +55,12 @@ export function Philosophy() {
               className="object-cover"
             />
           </Reveal>
+
         </div>
 
         {/* Text */}
         <div className="lg:translate-y-12">
+
           <Reveal>
             <p className="text-xs font-medium uppercase tracking-[0.3em] text-primary">
               {t.ourPhilosophy}
@@ -86,6 +89,7 @@ export function Philosophy() {
               </p>
             </div>
           </Reveal>
+
         </div>
       </div>
     </section>

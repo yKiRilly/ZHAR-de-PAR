@@ -1,4 +1,5 @@
 import { BookingProvider } from '@/components/booking-provider'
+
 import { SiteHeader } from '@/components/site-header'
 import { Hero } from '@/components/hero'
 import { Philosophy } from '@/components/philosophy'
@@ -10,6 +11,7 @@ import { TestimonialsSection } from '@/components/testimonials-section'
 import { FaqSection } from '@/components/faq-section'
 import { SiteFooter } from '@/components/site-footer'
 import { BookNowFab } from '@/components/book-now-fab'
+
 import { faqs } from '@/lib/site-data'
 
 const structuredData = {
@@ -17,17 +19,10 @@ const structuredData = {
   '@graph': [
     {
       '@type': 'HealthAndBeautyBusiness',
-      name: 'Ember & Birch',
+      name: 'ZHAR de PAR',
       description:
-        'A private luxury bathhouse and thermal wellness retreat offering traditional steam rituals, aromatic bath brooms, plunge pools, and a restaurant-style menu.',
-      image: 'https://emberandbirch.example/images/hero.png',
+        'A private Slavic sauna in nature offering traditional steam rituals, bath brooms, plunge pools, and private relaxation.',
       priceRange: '€€€',
-      telephone: '+32 10 000 000',
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: '14 Cedar Hollow',
-        addressLocality: 'Northern Forest Reserve',
-      },
       openingHours: 'Mo-Su 10:00-24:00',
     },
     {
@@ -63,20 +58,21 @@ export default function Page() {
 
         {/* Philosophy */}
         <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
-  <Philosophy />
-</section>
+          <Philosophy />
+        </section>
 
-<VideoSection />
+        {/* Video */}
+        <VideoSection />
 
-<section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
-  <ServicesSection />
-</section>
+        {/* Services */}
+        <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
+          <ServicesSection />
+        </section>
 
         {/* Brooms */}
         <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
           <BroomsSection />
         </section>
-
 
         {/* Gallery */}
         <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
@@ -95,7 +91,6 @@ export default function Page() {
       </main>
 
       <SiteFooter />
-
       <BookNowFab />
     </BookingProvider>
   )

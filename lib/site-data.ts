@@ -17,8 +17,14 @@ export const services: Service[] = [
     price: '€60',
     description:
       'A traditional steam ritual in a relaxed shared setting, featuring aromatic bath brooms and approximately 10 minutes of gentle steam for a deeply refreshing experience.',
-    includes: ['Aromatic broom treatment', 'Shared parilka session', 'Cold plunge access', 'Aromatic steam infusion'],
+    includes: [
+      'Aromatic broom treatment',
+      'Shared parilka session',
+      'Cold plunge access',
+      'Aromatic steam infusion',
+    ],
   },
+
   {
     id: 'individual-steam-ritual',
     name: 'Individual Steam Ritual',
@@ -27,8 +33,14 @@ export const services: Service[] = [
     price: '€40',
     description:
       'A fully personalised steam ritual for guests seeking a traditional premium experience, guided one-to-one by a master banshchik. A deeply immersive ritual designed around your comfort.',
-    includes: ['Private parilka session', 'Personal broom master', 'Herbal infusion pour', 'Cool-down ritual'],
+    includes: [
+      'Private parilka session',
+      'Personal broom master',
+      'Herbal infusion pour',
+      'Cool-down ritual',
+    ],
   },
+
   {
     id: 'body-scrub',
     name: 'Salt & Honey Scrub',
@@ -37,37 +49,44 @@ export const services: Service[] = [
     price: '€20',
     description:
       'Natural exfoliation treatment using premium ingredients to refresh the skin and improve circulation. A warm ritual that leaves the skin renewed, nourished and beautifully soft.',
-    includes: ['Mineral salt exfoliation','Warm Rinse', 'Raw honey glaze', 'Deep skin renewal'],
+    includes: [
+      'Mineral salt exfoliation',
+      'Warm rinse',
+      'Raw honey glaze',
+      'Deep skin renewal',
+    ],
   },
 ]
 
 export const treatments: Service[] = [
   {
-    id: '',
+    id: 'grill',
     name: 'GRILL',
     guests: '',
     duration: '',
     price: '€40',
     description:
-      'Barbecue area for a leisurely dinner outdoors. Light a fire, cook meat or vegetables, open something cold and just stay for an evening in the middle of nature.',
+      'Barbecue area for a leisurely dinner outdoors. Light a fire, cook meat or vegetables, open something cold and stay for an evening in the middle of nature.',
   },
+
   {
-    id: '',
+    id: 'baptismal-font',
     name: 'BAPTISMAL FONT',
     guests: '',
     duration: '',
     price: '€50',
     description:
-      'A cold baptismal font after the steam room helps to complete the bath ritual and feel a pleasant cheerfulness. Hot steam, cool water and fresh nature air all around.',
+      'A cold baptismal font after the steam room helps complete the bath ritual and leaves you feeling refreshed. Hot steam, cool water and fresh nature air all around.',
   },
+
   {
-    id: '',
+    id: 'jacuzzi',
     name: 'JACUZZI',
     guests: '',
     duration: '',
     price: '€80',
     description:
-      'A slow, warming massage with house-blended aromatic oils to release tension held deep in the body.',
+      'A warm and relaxing jacuzzi experience designed to help release tension and slow down after the steam ritual.',
   },
 ]
 
@@ -79,35 +98,40 @@ export type Broom = {
   image: string
 }
 
-
 export const brooms: Broom[] = [
   {
     id: 'birch',
     name: 'Birch',
     price: '€15',
-    description: 'Mild fragrance, light massage and traditional bath effect. It is suitable for relaxation, improves blood circulation and leaves a pleasant feeling of lightness.',
+    description:
+      'Mild fragrance, light massage and traditional bath effect. It is suitable for relaxation, improves blood circulation and leaves a pleasant feeling of lightness.',
     image: '/photos/brooms/birch.jpg',
   },
+
   {
     id: 'oak',
     name: 'Oak',
     price: '€15',
-    description: 'Classics of the Russian bath tradition. Dense oak leaves retain steam well, creating a deep and intense warm-up.',
-
+    description:
+      'Classics of the Russian bath tradition. Dense oak leaves retain steam well, creating a deep and intense warm-up.',
     image: '/photos/brooms/oak.jpg',
   },
+
   {
     id: 'eucalyptus',
     name: 'Eucalyptus',
     price: '€15',
-    description: 'It refreshes your breath, helps you relax and creates a light fragrance in the steam room. It is especially good for deep warming up and feeling fresh.',
+    description:
+      'It refreshes your breath, helps you relax and creates a light fragrance in the steam room. It is especially good for deep warming up and feeling fresh.',
     image: '/photos/brooms/eucalyptus.jpg',
   },
+
   {
     id: 'canadian',
-    name: 'Сanadian oak',
+    name: 'Canadian Oak',
     price: '€15',
-    description: 'It is larger and denser than the classic oak broom. It creates thick steam and is particularly durable.',
+    description:
+      'Larger and denser than the classic oak broom. It creates thick steam and is particularly durable.',
     image: '/photos/brooms/canadian.jpg',
   },
 ]
@@ -121,33 +145,39 @@ export type GalleryImage = {
 export const gallery: GalleryImage[] = [
   {
     src: '/photos/galery/saunainside.PNG',
-    alt: '',
+    alt: 'ZHAR de PAR sauna interior',
     span: true,
   },
+
   {
     src: '/photos/galery/font.PNG',
-    alt: '',
+    alt: 'Cold plunge at ZHAR de PAR',
   },
+
   {
     src: '/photos/galery/firearea.PNG',
-    alt: '',
+    alt: 'Fire area at ZHAR de PAR',
   },
+
   {
     src: '/photos/galery/relaxarea.PNG',
-    alt: '',
+    alt: 'Relaxation area at ZHAR de PAR',
   },
+
   {
     src: '/photos/galery/windowview.PNG',
-    alt: '',
+    alt: 'Nature view from ZHAR de PAR',
     span: true,
   },
+
   {
     src: '/photos/galery/grill.PNG',
-    alt: '',
+    alt: 'Grill area at ZHAR de PAR',
   },
+
   {
     src: '/photos/ps/viewps.PNG',
-    alt: '',
+    alt: 'ZHAR de PAR surrounded by nature',
   },
 ]
 
@@ -160,22 +190,25 @@ export type Testimonial = {
 export const testimonials: Testimonial[] = [
   {
     quote:
-      'It is a very beautiful place. I liked that the sauna was really surrounded by nature, and not just a "sauna with an interior". After the fall, they went to the font, then sat by the fire. The perfect evening.',
+      'It is a very beautiful place. I liked that the sauna was really surrounded by nature, and not just a "sauna with an interior". After the steam, we went to the font, then sat by the fire. The perfect evening.',
     name: 'Alina N.',
     detail: '',
   },
+
   {
     quote:
-      'Dubъ pleasantly surprised me. Quiet, green, no fuss. A separate thrill is the atmosphere itself: wood, fire, the smell of the steam room. We spent three hours here and didnt want to leave at all.',
+      'ZHAR de PAR pleasantly surprised me. Quiet, green, no fuss. A separate thrill is the atmosphere itself: wood, fire, the smell of the steam room. We spent three hours here and did not want to leave at all.',
     name: 'Michael Prohorov',
     detail: '',
   },
+
   {
     quote:
       'We were looking for a place where you can relax with company without feeling like an ordinary SPA. The mood here is completely different. It is very cozy, beautiful and real. We will definitely come back.',
     name: 'Ekaterina Chuiko',
     detail: '',
   },
+
   {
     quote:
       'It is a good sauna, but it is not even the main thing here. Nature, silence, fire, cold water after a steam bath — everything adds up to one very proper rest. It is a rare place where you really disconnect from the city.',
@@ -193,28 +226,33 @@ export const faqs: Faq[] = [
   {
     question: 'Is it possible to rent for more than 3 hours?',
     answer:
-      'Yes, by prior arrangement, you can rent more than 3 hours. ',
+      'Yes, by prior arrangement, you can rent the sauna for more than 3 hours.',
   },
+
   {
     question: 'Will the sauna be ready for our arrival?',
     answer:
-      'Yes. We will prepare everything in advance for your arrival: we will melt the sauna, prepare a space for relaxation and take care of the necessary details. All you have to do is arrive at the appointed time and set yourself up for a rest. You will need to add firewood yourself. But if there is any problem, we have someone who can help you. ',
+      'Yes. We will prepare everything in advance for your arrival: we will heat the sauna, prepare the relaxation space and take care of the necessary details. All you have to do is arrive at the appointed time and enjoy your rest. You will need to add firewood yourself, but if there is any problem, someone will be available to help you.',
   },
+
   {
     question: 'What should I take with me?',
     answer:
-      'The main thing is a good mood. We will provide everything you need for your vacation. ',
+      'The main thing is a good mood. We will provide everything you need for your stay.',
   },
+
   {
     question: 'Is it possible to come with a large company?',
     answer:
-      'Yes. The difference between our space is that we do not have a division into mens and womens days and we can have a good rest with a large company. ',
+      'Yes. Unlike many traditional bathhouses, we do not have separate men’s and women’s days, so you can enjoy the space together with a larger company.',
   },
+
   {
     question: 'How do I book a sauna?',
     answer:
-      'You need to fill out a form on the website, leave a contact for communication, and our manager will contact you. Prepayment is paid after contacting our manager!',
+      'Fill out the form on the website and leave your contact details. Our manager will then contact you. Prepayment is made after you speak with our manager.',
   },
+
   {
     question: 'Can we order food?',
     answer:
