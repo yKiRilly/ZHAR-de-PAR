@@ -9,14 +9,45 @@ import {
   Flame,
   Waves,
 } from 'lucide-react'
-import { services, treatments } from '@/lib/site-data'
+
+import { services } from '@/lib/site-data'
 import { useBooking } from '@/components/booking-provider'
 import { useLanguage } from '@/components/language-provider'
 import { Reveal } from '@/components/reveal'
 
 export function ServicesSection() {
-  const { open } = useBooking()
+  const { addToCart, open } = useBooking()
   const { t } = useLanguage()
+
+  const addService = (
+    id: string,
+    name: string,
+    price: number,
+    type: 'service' | 'treatment',
+    maxQuantity: number = 1,
+  ) => {
+    addToCart({
+      id,
+      name,
+      price,
+      type,
+      maxQuantity,
+    })
+  }
+
+  // Аренда бани:
+  // минимум 3 часа.
+  // При повторном нажатии добавляется ещё 1 час.
+  // Корзина автоматически НЕ открывается.
+  const addSaunaRental = () => {
+    addToCart({
+      id: 'sauna-rental',
+      name: t.saunaEstate,
+      price: 100,
+      type: 'sauna',
+      minQuantity: 3,
+    })
+  }
 
   return (
     <section
@@ -42,84 +73,263 @@ export function ServicesSection() {
 
         {/* Private sauna rental */}
         <Reveal delay={140}>
-          <article className="mx-auto mt-10 w-full max-w-5xl rounded-2xl border border-border bg-card p-8 sm:p-10">
-
+          <article
+            id="sauna-rental"
+            className="mx-auto mt-10 w-full max-w-6xl rounded-2xl border border-border bg-card p-8 sm:p-10"
+          >
+            {/* Title + price */}
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-              <h3 className="font-serif text-3xl font-light">
+              <h3 className="font-serif text-3xl font-light sm:text-4xl">
                 {t.saunaEstate}
               </h3>
 
-              <span className="font-serif text-4xl text-primary">
+              <span className="shrink-0 font-serif text-4xl text-primary">
                 €100
                 <span className="text-lg text-muted-foreground">
-                  /hour
+                  {' '}
+                  {t.perHour}
                 </span>
               </span>
             </div>
 
+            {/* Description */}
             <p className="mt-6 max-w-4xl text-base leading-relaxed text-muted-foreground">
               {t.saunaEstateDescription}
             </p>
 
-            <div className="mt-8 border-t border-border/60 pt-8">
-              <h4 className="mb-5 text-xs font-medium uppercase tracking-[0.3em] text-primary">
-                {t.bookingConditions}
-              </h4>
+            {/* Two columns */}
+            <div className="mt-10 grid gap-10 border-t border-border/60 pt-10 lg:grid-cols-2">
 
-              <ul className="space-y-3">
-                <li className="flex items-center gap-3">
-                  <Check className="h-4 w-4 text-primary" />
-                  <span>{t.minimumRental}</span>
-                </li>
+              {/* Booking conditions */}
+              <div>
+                <h4 className="mb-7 text-xs font-medium uppercase tracking-[0.3em] text-primary">
+                  {t.bookingConditions}
+                </h4>
 
-                <li className="flex items-center gap-3">
-                  <Check className="h-4 w-4 text-primary" />
-                  <span>{t.upToGuests}</span>
-                </li>
+                <ul className="space-y-5">
+                  <li className="flex items-start gap-4">
+                    <Check className="mt-1 h-5 w-5 shrink-0 text-primary" />
+                    <span className="text-base leading-relaxed text-foreground/90 sm:text-lg">
+                      {t.minimumRental}
+                    </span>
+                  </li>
 
-                <li className="flex items-center gap-3">
-                  <Check className="h-4 w-4 text-primary" />
-                  <span>{t.additionalGuest}</span>
-                </li>
+                  <li className="flex items-start gap-4">
+                    <Check className="mt-1 h-5 w-5 shrink-0 text-primary" />
+                    <span className="text-base leading-relaxed text-foreground/90 sm:text-lg">
+                      {t.upToGuests}
+                    </span>
+                  </li>
 
-                <li className="flex items-center gap-3">
-                  <Check className="h-4 w-4 text-primary" />
-                  <span>{t.deposit}</span>
-                </li>
-              </ul>
+                  <li className="flex items-start gap-4">
+                    <Check className="mt-1 h-5 w-5 shrink-0 text-primary" />
+                    <span className="text-base leading-relaxed text-foreground/90 sm:text-lg">
+                      {t.additionalGuest}
+                    </span>
+                  </li>
+
+                  <li className="flex items-start gap-4">
+                    <Check className="mt-1 h-5 w-5 shrink-0 text-primary" />
+                    <span className="text-base leading-relaxed text-foreground/90 sm:text-lg">
+                      {t.deposit}
+                    </span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Additional services */}
+              <div className="lg:border-l lg:border-border/60 lg:pl-10">
+                <h4 className="mb-6 text-xs font-medium uppercase tracking-[0.3em] text-primary">
+                  {t.improvingProcedure}
+                </h4>
+
+                {/* Plunge pool */}
+                <div className="space-y-2.5">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      addService(
+                        'baptismal-font',
+                        'BAPTISMAL FONT',
+                        50,
+                        'treatment',
+                        1,
+                      )
+                    }
+                    className="group flex w-full items-center justify-between rounded-lg border border-border bg-card/50 px-3.5 py-3 text-left transition-colors hover:border-primary/50 hover:bg-card"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border text-primary transition-colors group-hover:border-primary">
+                        <Waves className="h-4 w-4" />
+                      </div>
+
+                      <span className="font-serif text-lg font-light">
+                        {t.treatments['BAPTISMAL FONT'].name}
+                      </span>
+                    </div>
+
+                    <span className="font-serif text-2xl text-primary">
+                      €50
+                    </span>
+                  </button>
+                </div>
+
+                {/* Bath essentials */}
+                <div className="mt-6">
+                  <p className="mb-3 text-[10px] font-medium uppercase tracking-[0.25em] text-muted-foreground">
+                    {t.bathEssentials}
+                  </p>
+
+                  <div className="space-y-2.5">
+
+                    {/* Towel & sheet — NOT ADDABLE */}
+                    <div className="flex w-full items-center justify-between rounded-lg border border-border bg-card/50 px-3.5 py-3 text-left">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border text-primary">
+                          <Bath className="h-4 w-4" />
+                        </div>
+
+                        <span className="font-serif text-lg font-light">
+                          {t.towelSheet}
+                        </span>
+                      </div>
+
+                      <span className="font-serif text-2xl text-primary">
+                        €15
+                      </span>
+                    </div>
+
+                    {/* Slippers & bath hat — NOT ADDABLE */}
+                    <div className="flex w-full items-center justify-between rounded-lg border border-border bg-card/50 px-3.5 py-3 text-left">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border text-primary">
+                          <Footprints className="h-4 w-4" />
+                        </div>
+
+                        <span className="font-serif text-lg font-light">
+                          {t.slippersHat}
+                        </span>
+                      </div>
+
+                      <span className="font-serif text-2xl text-primary">
+                        €5
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Jacuzzi + Grill */}
+                <div className="mt-6 space-y-2.5">
+
+                  {/* Jacuzzi */}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      addService(
+                        'jacuzzi',
+                        'JACUZZI',
+                        80,
+                        'treatment',
+                        1,
+                      )
+                    }
+                    className="group flex w-full items-center justify-between rounded-lg border border-border bg-card/50 px-3.5 py-3 text-left transition-colors hover:border-primary/50 hover:bg-card"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border text-primary transition-colors group-hover:border-primary">
+                        <Bath className="h-4 w-4" />
+                      </div>
+
+                      <span className="font-serif text-lg font-light">
+                        {t.treatments.JACUZZI.name}
+                      </span>
+                    </div>
+
+                    <span className="font-serif text-2xl text-primary">
+                      €80
+                    </span>
+                  </button>
+
+                  {/* Grill */}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      addService(
+                        'grill',
+                        'GRILL',
+                        40,
+                        'treatment',
+                        1,
+                      )
+                    }
+                    className="group flex w-full items-center justify-between rounded-lg border border-border bg-card/50 px-3.5 py-3 text-left transition-colors hover:border-primary/50 hover:bg-card"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border text-primary transition-colors group-hover:border-primary">
+                        <Flame className="h-4 w-4" />
+                      </div>
+
+                      <span className="font-serif text-lg font-light">
+                        {t.treatments.GRILL.name}
+                      </span>
+                    </div>
+
+                    <span className="font-serif text-2xl text-primary">
+                      €40
+                    </span>
+                  </button>
+                </div>
+              </div>
             </div>
 
+            {/* Reserve sauna */}
             <button
-  type="button"
-  onClick={() => open()}
-  className="mt-10 w-full rounded-full border border-border px-6 py-3 text-xs font-medium uppercase tracking-widest text-foreground transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
->
-  Reserve
-</button>
+              type="button"
+              onClick={addSaunaRental}
+              className="mt-10 w-full rounded-full border border-border px-6 py-3 text-xs font-medium uppercase tracking-widest text-foreground transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
+            >
+              {t.reserve}
+            </button>
+
+            {/* Minimum rental note */}
+            <p className="mt-3 text-center text-xs text-muted-foreground">
+  {t.minimumRental}
+</p>
           </article>
         </Reveal>
 
-        {/* New heading */}
+        {/* Main heading */}
         <Reveal>
-  <h2
-    className="
-      mt-20
-      max-w-[1100px]
-      font-serif
-      text-4xl
-      font-light
-      leading-[1.1]
-      sm:text-5xl
-      sm:leading-[1.1]
-    "
-  >
-    {t.forThoseWhoUnderstand}
-  </h2>
-</Reveal>
+          <h2
+            className="
+              mt-20
+              max-w-[1100px]
+              font-serif
+              text-4xl
+              font-light
+              leading-[1.1]
+              sm:text-5xl
+              sm:leading-[1.1]
+            "
+          >
+            {t.forThoseWhoUnderstand}
+          </h2>
+        </Reveal>
+
         {/* Steam rituals */}
         <div className="mt-10 grid gap-6 lg:grid-cols-3">
           {services.map((service, i) => {
             const translated = t.services[service.id]
+
+            const isMultiple =
+              service.id === 'group-steam-ritual' ||
+              service.id === 'individual-steam-ritual' ||
+              service.id === 'body-scrub'
+
+            const price =
+              Number(
+                service.price.replace('€', '').trim(),
+              ) || 0
 
             return (
               <Reveal key={service.id} delay={i * 90}>
@@ -140,9 +350,10 @@ export function ServicesSection() {
                     hover:border-primary/50
                   "
                 >
+                  {/* Верхняя часть карточки */}
+                  <div className="flex min-h-[245px] flex-col">
 
-                  {/* Card content — не растягиваем */}
-                  <div>
+                    {/* Name + price */}
                     <div className="flex items-start justify-between">
                       <h3 className="max-w-[12ch] text-balance font-serif text-2xl font-light">
                         {translated.name}
@@ -153,6 +364,7 @@ export function ServicesSection() {
                       </span>
                     </div>
 
+                    {/* Guests + duration */}
                     <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-xs uppercase tracking-widest text-muted-foreground">
                       <span className="inline-flex items-center gap-1.5">
                         <Users className="h-3.5 w-3.5 text-primary" />
@@ -165,177 +377,66 @@ export function ServicesSection() {
                       </span>
                     </div>
 
+                    {/* Description */}
                     <p className="mt-5 text-pretty text-sm leading-relaxed text-muted-foreground">
                       {translated.description}
                     </p>
-
-                    {translated.includes && (
-                      <ul className="mt-6 space-y-2.5 border-t border-border/60 pt-6">
-                        {translated.includes.map((item) => (
-                          <li
-                            key={item}
-                            className="flex items-center gap-2.5 text-sm text-foreground/85"
-                          >
-                            <Check className="h-4 w-4 shrink-0 text-primary" />
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
                   </div>
 
-{/* Кнопка всегда внизу */}
-<div className="mt-auto pt-10">
-  <button
-    onClick={() => open({ service: service.name })}
-    className="
-      w-full
-      rounded-full
-      border
-      border-border
-      px-6
-      py-3
-      text-xs
-      font-medium
-      uppercase
-      tracking-widest
-      text-foreground
-      transition-colors
-      group-hover:border-primary
-      group-hover:bg-primary
-      group-hover:text-primary-foreground
-    "
-  >
-    {t.reserve}
-  </button>
-</div>
+                  {/* Includes */}
+                  {translated.includes && (
+                    <ul className="mt-6 space-y-2.5 border-t border-border/60 pt-6">
+                      {translated.includes.map((item) => (
+                        <li
+                          key={item}
+                          className="flex items-center gap-2.5 text-sm text-foreground/85"
+                        >
+                          <Check className="h-4 w-4 shrink-0 text-primary" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
 
-</article>
-</Reveal>
-)
-})}
-</div>
-
-        {/* Improving the procedure */}
-        <Reveal>
-          <h3 className="mt-20 text-xs font-medium uppercase tracking-[0.3em] text-primary">
-            {t.improvingProcedure}
-          </h3>
-        </Reveal>
-
-        {/* Grill / Font / Jacuzzi */}
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          {treatments.map((item, i) => {
-            const translated = t.treatments[item.name]
-
-            return (
-              <Reveal key={item.name} delay={i * 80}>
-                <button
-                  onClick={() => open({ service: item.name })}
-                  className="group flex h-full w-full flex-col rounded-xl border border-border bg-card/50 p-6 text-left transition-colors hover:border-primary/50 hover:bg-card"
-                >
-                  <div className="flex items-center justify-between gap-3">
-
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-primary">
-                        {item.name === 'GRILL' && (
-                          <Flame className="h-5 w-5" />
-                        )}
-
-                        {item.name === 'BAPTISMAL FONT' && (
-                          <Waves className="h-5 w-5" />
-                        )}
-
-                        {item.name === 'JACUZZI' && (
-                          <Bath className="h-5 w-5" />
-                        )}
-                      </div>
-
-                      <span className="font-serif text-xl font-light">
-                        {translated.name}
-                      </span>
-                    </div>
-
-                    <span className="font-serif text-xl text-primary">
-                      {item.price}
-                    </span>
-
+                  {/* Add button */}
+                  <div className="mt-auto pt-10">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        addService(
+                          service.id,
+                          service.name,
+                          price,
+                          'service',
+                          isMultiple ? 15 : 1,
+                        )
+                      }
+                      className="
+                        w-full
+                        rounded-full
+                        border
+                        border-border
+                        px-6
+                        py-3
+                        text-xs
+                        font-medium
+                        uppercase
+                        tracking-widest
+                        text-foreground
+                        transition-colors
+                        hover:border-primary
+                        hover:bg-primary
+                        hover:text-primary-foreground
+                      "
+                    >
+                      {t.reserve}
+                    </button>
                   </div>
-
-                  <span className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                    {translated.description}
-                  </span>
-                </button>
+                </article>
               </Reveal>
             )
           })}
         </div>
-
-        {/* Bath essentials */}
-        <div className="mx-auto mt-6 grid max-w-2xl gap-4 sm:grid-cols-2">
-
-          {/* Towel & Sheet */}
-          <Reveal delay={160}>
-            <button
-              onClick={() => open({ service: 'Towel & Sheet' })}
-              className="group flex h-full w-full flex-col rounded-xl border border-border bg-card/50 p-6 text-left transition-colors hover:border-primary/50 hover:bg-card"
-            >
-              <div className="flex items-start justify-between gap-3">
-
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-primary">
-                    <Bath className="h-5 w-5" />
-                  </div>
-
-                  <span className="font-serif text-xl font-light">
-                    {t.towelSheet}
-                  </span>
-                </div>
-
-                <span className="font-serif text-xl text-primary">
-                  €15
-                </span>
-
-              </div>
-
-              <span className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                {t.towelSheetDescription}
-              </span>
-            </button>
-          </Reveal>
-
-          {/* Slippers & Bath Hat */}
-          <Reveal delay={240}>
-            <button
-              onClick={() => open({ service: 'Slippers & Bath Hat' })}
-              className="group flex h-full w-full flex-col rounded-xl border border-border bg-card/50 p-6 text-left transition-colors hover:border-primary/50 hover:bg-card"
-            >
-              <div className="flex items-start justify-between gap-3">
-
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-primary">
-                    <Footprints className="h-5 w-5" />
-                  </div>
-
-                  <span className="font-serif text-xl font-light">
-                    {t.slippersHat}
-                  </span>
-                </div>
-
-                <span className="font-serif text-xl text-primary">
-                  €5
-                </span>
-
-              </div>
-
-              <span className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                {t.slippersHatDescription}
-              </span>
-            </button>
-          </Reveal>
-
-        </div>
-
       </div>
     </section>
   )

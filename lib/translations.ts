@@ -10,10 +10,36 @@ export const translations = {
     brooms: 'Brooms',
     gallery: 'Gallery',
     journal: 'Questions',
-
+// Booking Modal
+booking: {
+  title: 'Your booking',
+  close: 'Close',
+  emptyTitle: 'Your basket is empty',
+  emptyDescription: 'Add a ritual and a bath broom to continue.',
+  maximum: 'Maximum 15',
+  minimum: 'Minimum 3 hours',
+  total: 'Total',
+  reservation: 'Reservation',
+  yourDetails: 'Your details',
+  detailsDescription:
+    'Fill in your details and we will contact you to confirm the booking.',
+  fullName: 'Name',
+  fullNamePlaceholder: 'Your name',
+  phone: 'Phone',
+  date: 'Date',
+  time: 'Time',
+  guests: 'Number of guests',
+  guest: 'guest',
+  guestsPlural: 'guests',
+  additionalInformation: 'Additional information',
+  additionalInformationPlaceholder:
+    'Your wishes or additional information...',
+  confirm: 'Confirm reservation',
+  thankYou: 'Thank you! We will contact you shortly.',
+},
     // Hero
     heroLabel: '',
-    heroTitle: 'YOUR PRIVATE BANYA IN NATURE',
+    heroTitle: 'YOUR BANYA IN NATURE',
     heroDescription:
       'Rent your own private space for relaxation, where time slows down and the bathing ritual becomes something special.',
     reserveRitual: 'Reserve Your Ritual',
@@ -50,6 +76,13 @@ export const translations = {
     forThoseWhoUnderstand:
       'For those who appreciate bathing traditions and want to immerse themselves in this culture, we offer:',
     improvingProcedure: 'Complete Your Ritual',
+
+    // Rental card
+    grill: 'GRILL',
+    coldPlunge: 'COLD PLUNGE',
+    jacuzzi: 'JACUZZI',
+    bathAccessories: 'Bath Accessories',
+
     towelSheet: 'Towel & Sheet',
     towelSheetDescription:
       'Fresh bath towel and linen sheet for your bathing ritual.',
@@ -103,19 +136,19 @@ export const translations = {
 
     treatments: {
       GRILL: {
-        name: 'GRILL',
+        name: 'Grill',
         description:
           'A barbecue area for a leisurely dinner in nature. Light a fire, cook meat or vegetables, open something cold and simply spend the evening surrounded by nature.',
       },
 
       'BAPTISMAL FONT': {
-        name: 'COLD PLUNGE',
+        name: 'Cold plunge',
         description:
           'A cold plunge after the steam room helps complete the bathing ritual and brings a pleasant feeling of energy. Hot steam, cool water and fresh air all around.',
       },
 
       JACUZZI: {
-        name: 'JACUZZI',
+        name: 'Jacuzzi',
         description:
           'A slow relaxing massage with aromatic oils prepared in-house, helping to release tension and relax the body.',
       },
@@ -176,21 +209,18 @@ export const translations = {
         name: 'Alina Necrasova',
         detail: '',
       },
-
       {
         quote:
-          'DUBъ pleasantly surprised me. Quiet, green and without any fuss. The atmosphere itself is a separate pleasure: wood, fire and the scent of the steam room.',
+          'ZHAR de PAR pleasantly surprised me. Quiet, green and without any fuss. The atmosphere itself is a separate pleasure: wood, fire and the scent of the steam room.',
         name: 'Michael Prohorov',
         detail: '',
       },
-
       {
         quote:
           'We were looking for a place where we could relax with a group without feeling like we were in an ordinary SPA. The atmosphere here is completely different. Very cosy, beautiful and genuine.',
         name: 'Ekaterina Chuiko',
         detail: '',
       },
-
       {
         quote:
           'It is a good banya, but that is not even the main thing here. Nature, silence, fire and cold water after the steam room — everything comes together into a truly proper rest.',
@@ -203,7 +233,7 @@ export const translations = {
     faqLabel: 'Good to Know',
     faqTitle: 'Frequently Asked Questions',
     faqDescription:
-      'Everything you need to know before your visit. If you still have questions, our manager is always ready to help.',
+      'Everything you need to know before your visit. If you still have questions, our admistrator is always ready to help.',
 
     faq: [
       {
@@ -211,31 +241,26 @@ export const translations = {
         answer:
           'Yes. By prior arrangement, you can rent the banya for more than 3 hours.',
       },
-
       {
         question: 'Will the banya be ready when we arrive?',
         answer:
           'Yes. We will prepare everything in advance for your arrival: heat the banya, prepare the relaxation area and take care of the necessary details. All you need to do is arrive at the appointed time and enjoy your stay. You will need to add firewood yourself. If any problem arises, we have someone who can help.',
       },
-
       {
         question: 'What should I bring with me?',
         answer:
-          'The most important thing is a good mood. We will provide everything necessary for your stay.',
+          'All you need is a good mood. We’ll provide everything you need for your stay. If you’d like to save, you’re welcome to bring everything you need with you.',
       },
-
       {
         question: 'Can we come with a large group?',
         answer:
-          'Yes. There are no separate men’s and women’s days, so you can enjoy the banya together with a large group.',
+          'Yes, of course. We have a spacious private area with plenty of room to comfortably enjoy your time with a larger group. You can relax together, enjoy the sauna, the relaxation area and the outdoor space.',
       },
-
       {
         question: 'How do I book the banya?',
         answer:
-          'Fill out the form on the website and leave your contact details. Our manager will contact you. The prepayment is made after speaking with our manager.',
+          'Fill out the form on the website and leave your contact details. Our administrator will contact you. The prepayment is made after you have been contacted by our administrator.',
       },
-
       {
         question: 'Can we order food?',
         answer:
@@ -250,7 +275,7 @@ export const translations = {
       'Private sessions are held for a minimum of three hours. Choose your ritual, your brooms and your table — we will take care of everything else.',
     footerVisit: 'Address',
     footerHours: 'Daily · 24/7 · By reservation',
-    footerConcierge: 'Concierge',
+    footerConcierge: 'Contacts',
     footerRights: 'All rights reserved.',
     footerTagline: 'Created for stillness',
   },
@@ -267,9 +292,36 @@ export const translations = {
     gallery: 'Galería',
     journal: 'Preguntas',
 
+    // Booking Modal
+booking: {
+  title: 'Tu reserva',
+  close: 'Cerrar',
+  emptyTitle: 'Tu cesta está vacía',
+  emptyDescription: 'Añade un ritual y un venik para continuar.',
+  maximum: 'Máximo 15',
+  minimum: 'Mínimo 3 horas',
+  total: 'Total',
+  reservation: 'Reserva',
+  yourDetails: 'Tus datos',
+  detailsDescription:
+    'Introduce tus datos y nos pondremos en contacto contigo para confirmar la reserva.',
+  fullName: 'Nombre ',
+  fullNamePlaceholder: 'Tu nombre',
+  phone: 'Teléfono',
+  date: 'Fecha',
+  time: 'Hora',
+  guests: 'Número de personas',
+  guest: 'persona',
+  guestsPlural: 'personas',
+  additionalInformation: 'Información adicional',
+  additionalInformationPlaceholder:
+    'Tus deseos o información adicional...',
+  confirm: 'Confirmar reserva',
+  thankYou: '¡Gracias! Nos pondremos en contacto contigo en breve.',
+},
     // Hero
     heroLabel: '',
-    heroTitle: 'VUESTRA BANYA PRIVADA EN LA NATURALEZA',
+    heroTitle: 'VUESTRA BANYA EN LA NATURALEZA',
     heroDescription:
       'Alquila tu propio espacio privado para descansar, donde el tiempo se ralentiza y el ritual de baño se convierte en algo especial.',
     reserveRitual: 'Reservar tu ritual',
@@ -306,6 +358,13 @@ export const translations = {
     forThoseWhoUnderstand:
       'Para quienes valoran las tradiciones de la banya y quieren sumergirse en esta cultura, ofrecemos:',
     improvingProcedure: 'Completa tu ritual',
+
+    // Rental card
+    grill: 'BARBACOA',
+    coldPlunge: 'PILETA FRÍA',
+    jacuzzi: 'JACUZZI',
+    bathAccessories: 'Accesorios de baño',
+
     towelSheet: 'Toalla y sábana',
     towelSheetDescription:
       'Toalla de baño fresca y sábana de lino para tu ritual de baño.',
@@ -359,19 +418,19 @@ export const translations = {
 
     treatments: {
       GRILL: {
-        name: 'BARBACOA',
+        name: 'Barbacoa',
         description:
           'Zona de barbacoa para una cena tranquila en plena naturaleza. Enciende el fuego, cocina carne o verduras, abre algo frío y simplemente disfruta de la tarde rodeado de naturaleza.',
       },
 
       'BAPTISMAL FONT': {
-        name: 'PILETA FRÍA',
+        name: 'Pileta fria',
         description:
           'Una pileta fría después de la sala de vapor ayuda a completar el ritual de baño y aporta una agradable sensación de energía. Vapor caliente, agua fresca y aire puro alrededor.',
       },
 
       JACUZZI: {
-        name: 'JACUZZI',
+        name: 'Jacuzzi',
         description:
           'Un masaje lento y relajante con aceites aromáticos preparados en la casa, que ayuda a liberar la tensión y relajar el cuerpo.',
       },
@@ -432,21 +491,18 @@ export const translations = {
         name: 'Alina Necrasova',
         detail: '',
       },
-
       {
         quote:
-          'DUBъ me sorprendió gratamente. Tranquilo, verde y sin prisas. Un placer especial es la propia atmósfera: madera, fuego y el aroma de la sala de vapor.',
+          'ZHAR de PAR me sorprendió gratamente. Tranquilo, verde y sin prisas. Un placer especial es la propia atmósfera: madera, fuego y el aroma de la sala de vapor.',
         name: 'Michael Prohorov',
         detail: '',
       },
-
       {
         quote:
           'Buscábamos un lugar donde poder descansar en compañía sin sentir que estábamos en un SPA normal. Aquí la atmósfera es completamente diferente. Muy acogedora, bonita y auténtica.',
         name: 'Ekaterina Chuiko',
         detail: '',
       },
-
       {
         quote:
           'Es una buena banya, pero ni siquiera eso es lo principal aquí. Naturaleza, silencio, fuego y agua fría después del vapor: todo se combina para crear un descanso de verdad.',
@@ -459,7 +515,7 @@ export const translations = {
     faqLabel: 'Información útil',
     faqTitle: 'Preguntas frecuentes',
     faqDescription:
-      'Todo lo que necesitas saber antes de tu visita. Si todavía tienes preguntas, nuestro responsable estará encantado de ayudarte.',
+      'Todo lo que necesitas saber antes de tu visita. Si todavía tienes preguntas, nuestro administrador estará encantado de ayudarte.',
 
     faq: [
       {
@@ -467,31 +523,26 @@ export const translations = {
         answer:
           'Sí. Previa reserva, puedes alquilar la banya durante más de 3 horas.',
       },
-
       {
         question: '¿La banya estará preparada para nuestra llegada?',
         answer:
           'Sí. Prepararemos todo con antelación: calentaremos la banya, prepararemos la zona de descanso y nos ocuparemos de los detalles necesarios. Solo tendrás que llegar a la hora acordada y disfrutar de tu estancia. Tendrás que añadir la leña por tu cuenta. Si surge algún problema, tenemos a una persona que puede ayudarte.',
       },
-
       {
         question: '¿Qué debo llevar conmigo?',
         answer:
-          'Lo más importante es venir con buen ánimo. Nosotros proporcionaremos todo lo necesario para tu estancia.',
+          'Lo más importante es venir con buen ánimo. Nosotros proporcionaremos todo lo necesario para tu descanso. Si quieres ahorrar, puedes traer contigo todo lo que necesites.',
       },
-
       {
         question: '¿Podemos venir con un grupo grande?',
         answer:
-          'Sí. No hay días separados para hombres y mujeres, por lo que podéis disfrutar de la banya juntos en un grupo grande.',
+          'Sí, por supuesto. Contamos con un amplio espacio privado, perfecto para disfrutar cómodamente en un grupo grande. Podéis relajaros juntos, disfrutar de la sauna, la zona de descanso y el espacio exterior.',
       },
-
       {
         question: '¿Cómo puedo reservar la banya?',
         answer:
-          'Rellena el formulario de la página web y deja tus datos de contacto. Nuestro responsable se pondrá en contacto contigo. El pago anticipado se realiza después de hablar con nuestro responsable.',
+          'Completa el formulario en el sitio web y deja tus datos de contacto. Nuestro administrador se pondrá en contacto contigo. El pago por adelantado se realiza después de que nuestro administrador se haya puesto en contacto contigo.',
       },
-
       {
         question: '¿Podemos pedir comida?',
         answer:
@@ -506,7 +557,7 @@ export const translations = {
       'Las sesiones privadas tienen una duración mínima de tres horas. Elige tu ritual, tus veniks y tu mesa — nosotros nos ocuparemos del resto.',
     footerVisit: 'Dirección',
     footerHours: 'Todos los días · 24/7 · Con reserva',
-    footerConcierge: 'Conserjería',
+    footerConcierge: 'Contactos',
     footerRights: 'Todos los derechos reservados.',
     footerTagline: 'Creado para la calma',
   },
@@ -523,9 +574,37 @@ export const translations = {
     gallery: 'Галерея',
     journal: 'Вопросы',
 
+// Booking Modal
+booking: {
+  title: 'Ваше бронирование',
+  close: 'Закрыть',
+  emptyTitle: 'Ваша корзина пуста',
+  emptyDescription: 'Добавьте ритуал и банный веник, чтобы продолжить.',
+  maximum: 'Максимум 15',
+  minimum: 'Минимум 3 часа',
+  total: 'Итого',
+  reservation: 'Бронирование',
+  yourDetails: 'Ваши данные',
+  detailsDescription:
+    'Заполните данные, и мы свяжемся с вами для подтверждения бронирования.',
+  fullName: 'Имя',
+  fullNamePlaceholder: 'Ваше имя',
+  phone: 'Телефон',
+  date: 'Дата',
+  time: 'Время',
+  guests: 'Количество гостей',
+  guest: 'гость',
+  guestsPlural: 'гостей',
+  additionalInformation: 'Дополнительная информация',
+  additionalInformationPlaceholder:
+    'Ваши пожелания или дополнительная информация...',
+  confirm: 'Подтвердить бронирование',
+  thankYou: 'Спасибо! Мы свяжемся с вами в ближайшее время.',
+},
+
     // Hero
     heroLabel: '',
-    heroTitle: 'ВАША ЧАСТНАЯ БАНЯ НА ПРИРОДЕ',
+    heroTitle: 'ВАША БАНЯ НА ПРИРОДЕ',
     heroDescription:
       'Арендуйте собственное пространство для отдыха, где время замедляется, а банный ритуал становится особенным.',
     reserveRitual: 'Забронировать сеанс',
@@ -541,7 +620,7 @@ export const translations = {
     philosophyText2:
       'Мы попытались создать не просто баню, а саму культуру банного отдыха. Тепло дерева, аромат веников, живой огонь, прохладный воздух и тишина становятся частью одного ритуала. Здесь не нужно никуда спешить: можно париться, отдыхать, разговаривать, смеяться или просто молчать.',
     philosophyText3:
-      'ЖАР de ПАР – приватное пространство. Вы приезжаете своей компанией и на несколько часов остаетесь в абсолютном уединении. Жар сменяется прохладой, пар – свежим воздухом, шум – тишиной.',
+      'ZHAR de PAR – приватное пространство. Вы приезжаете своей компанией и на несколько часов остаетесь в абсолютном уединении. Жар сменяется прохладой, пар – свежим воздухом, шум – тишиной.',
     privacy: 'Полная приватность',
     slavicSauna: 'Настоящая славянская баня',
     inNature: 'Посреди природы',
@@ -552,7 +631,7 @@ export const translations = {
     saunaEstate: 'Аренда банного пространства',
     perHour: '/ час',
     saunaEstateDescription:
-      'Настоящая славянская баня, полностью забронированная только для вашей компании. Полная приватность, атмосфера природы и отдых без посторонних гостей.',
+      'Настоящая славянская баня с печью на дубовых дровах, с площадью парной 20м², полностью забронированная только для вашей компании. Полная приватность, атмосфера природы и отдых без посторонних гостей.',
     bookingConditions: 'Условия бронирования',
     minimumRental: 'Минимальное время аренды — 3 часа',
     upToGuests: 'До 8 гостей включено',
@@ -562,6 +641,13 @@ export const translations = {
     forThoseWhoUnderstand:
       'Для тех, кто ценит банные традиции и хочет окунуться в эту культуру, мы предлагаем:',
     improvingProcedure: 'Дополните свой ритуал',
+
+    // Rental card
+    grill: 'Мангал',
+    coldPlunge: 'Купель',
+    jacuzzi: 'Джакузи',
+    bathAccessories: 'Банные принадлежности',
+
     towelSheet: 'Полотенце и простыня',
     towelSheetDescription:
       'Свежее банное полотенце и льняная простыня для вашего банного ритуала.',
@@ -579,7 +665,6 @@ export const translations = {
         includes: [
           'Ароматный веничный массаж',
           'Общий сеанс в парилке',
-          'Доступ к холодной купели',
           'Ароматный пар',
         ],
       },
@@ -608,26 +693,25 @@ export const translations = {
           'Минеральный солевой скраб',
           'Тёплое ополаскивание',
           'Натуральный мёд',
-          'Глубокое обновление кожи',
         ],
       },
     },
 
     treatments: {
       GRILL: {
-        name: 'ГРИЛЬ',
+        name: 'Мангал',
         description:
           'Зона для барбекю и неспешного ужина на природе. Разожгите огонь, приготовьте мясо или овощи, откройте что-нибудь холодное и просто проведите вечер среди природы.',
       },
 
       'BAPTISMAL FONT': {
-        name: 'КУПЕЛЬ',
+        name: 'Купель',
         description:
           'Холодная купель после парилки помогает завершить банный ритуал и почувствовать приятную бодрость. Горячий пар, прохладная вода и свежий воздух вокруг.',
       },
 
       JACUZZI: {
-        name: 'ДЖАКУЗИ',
+        name: 'Джакузи',
         description:
           'Медленный расслабляющий массаж с ароматическими маслами собственного приготовления, который помогает снять напряжение и расслабить тело.',
       },
@@ -637,7 +721,7 @@ export const translations = {
     bathBroom: 'Банный веник',
     heartOfRitual: 'Сердце ритуала — веник',
     broomDescription:
-      'Связанные вручную пучки ароматных листьев, которые используются для распределения жара и мягкой проработки тела. Каждый веник собирается в сезон и подготавливается перед сеансом. Добавьте веник к своему ритуалу — €15 за штуку.',
+      'Каждый веник собирается в сезон и запаривается перед сеансом по вашему запросу. Добавьте веник к своему ритуалу — €15 за штуку.',
 
     broomTypes: {
       birch: {
@@ -691,7 +775,7 @@ export const translations = {
 
       {
         quote:
-          'DUBъ приятно удивил. Тихо, зелено, без суеты. Отдельное удовольствие — сама атмосфера: дерево, огонь и запах парной.',
+          'ZHAR de PAR приятно удивил. Тихо, зелено, без суеты. Отдельное удовольствие — сама атмосфера: дерево, огонь и запах парной.',
         name: 'Михаил Прохоров',
         detail: '',
       },
@@ -715,7 +799,7 @@ export const translations = {
     faqLabel: 'Полезно знать',
     faqTitle: 'Часто задаваемые вопросы',
     faqDescription:
-      'Всё, что нужно знать перед визитом. Если у вас останутся вопросы, наш менеджер всегда готов помочь.',
+      'Всё, что нужно знать перед визитом. Если у вас останутся вопросы, наш администратор всегда готов помочь.',
 
     faq: [
       {
@@ -733,19 +817,19 @@ export const translations = {
       {
         question: 'Что нужно взять с собой?',
         answer:
-          'Главное — хорошее настроение. Мы предоставим всё необходимое для вашего отдыха.',
+          'Главное — хорошее настроение. Мы предоставим всё необходимое для вашего отдыха. Если хотите сэкономить, можете взять всё необходимое с собой.',
       },
 
       {
         question: 'Можно ли приехать большой компанией?',
         answer:
-          'Да. У нас нет разделения на мужские и женские дни, поэтому вы можете отдыхать большой компанией вместе.',
+          'Да, конечно. У нас большая территория и достаточно пространства, чтобы комфортно провести время большой компанией. Можно отдыхать вместе, наслаждаться баней, зоной отдыха и открытым пространством.',
       },
 
       {
         question: 'Как забронировать баню?',
         answer:
-          'Заполните форму на сайте и оставьте свои контактные данные. Наш менеджер свяжется с вами. Предоплата вносится после связи с нашим менеджером.',
+          'Заполните форму на сайте и оставьте свои контактные данные. Наш администратор свяжется с вами. Предоплата вносится после связи с нашим администратором.',
       },
 
       {
@@ -762,7 +846,7 @@ export const translations = {
       'Приватные сеансы проводятся минимум три часа. Выберите свой ритуал, веники и стол — обо всём остальном позаботимся мы.',
     footerVisit: 'Адрес',
     footerHours: 'Ежедневно · 24/7 · По бронированию',
-    footerConcierge: 'Консьерж',
+    footerConcierge: 'Контакты',
     footerRights: 'Все права защищены.',
     footerTagline: 'Создано для тишины',
   },
@@ -779,9 +863,37 @@ export const translations = {
     gallery: 'Галерея',
     journal: 'Питання',
 
+// Booking Modal
+booking: {
+  title: 'Ваше бронювання',
+  close: 'Закрити',
+  emptyTitle: 'Ваш кошик порожній',
+  emptyDescription: 'Додайте ритуал та банний віник, щоб продовжити.',
+  maximum: 'Максимум 15',
+  minimum: 'Мінімум 3 години',
+  total: 'Разом',
+  reservation: 'Бронювання',
+  yourDetails: 'Ваші дані',
+  detailsDescription:
+    'Заповніть свої дані, і ми зв’яжемося з вами для підтвердження бронювання.',
+  fullName: 'Ім’я',
+  fullNamePlaceholder: 'Ваше ім’я',
+  phone: 'Телефон',
+  date: 'Дата',
+  time: 'Час',
+  guests: 'Кількість гостей',
+  guest: 'гість',
+  guestsPlural: 'гостей',
+  additionalInformation: 'Додаткова інформація',
+  additionalInformationPlaceholder:
+    'Ваші побажання або додаткова інформація...',
+  confirm: 'Підтвердити бронювання',
+  thankYou: 'Дякуємо! Ми зв’яжемося з вами найближчим часом.',
+},
+
     // Hero
     heroLabel: '',
-    heroTitle: 'ВАША ПРИВАТНА ЛАЗНЯ НА ПРИРОДІ',
+    heroTitle: 'ВАША ЛАЗНЯ НА ПРИРОДІ',
     heroDescription:
       'Орендуйте власний приватний простір для відпочинку, де час сповільнюється, а банний ритуал стає особливим.',
     reserveRitual: 'Забронювати сеанс',
@@ -818,6 +930,13 @@ export const translations = {
     forThoseWhoUnderstand:
       'Для тих, хто цінує банні традиції і хоче зануритися в цю культуру, ми пропонуємо:',
     improvingProcedure: 'Доповніть свій ритуал',
+
+    // Rental card
+    grill: 'ГРИЛЬ',
+    coldPlunge: 'КУПІЛЬ',
+    jacuzzi: 'ДЖАКУЗІ',
+    bathAccessories: 'Банне приладдя',
+
     towelSheet: 'Рушник і простирадло',
     towelSheetDescription:
       'Свіжий банний рушник і лляне простирадло для вашого банного ритуалу.',
@@ -871,19 +990,19 @@ export const translations = {
 
     treatments: {
       GRILL: {
-        name: 'ГРИЛЬ',
+        name: 'Мангал',
         description:
           'Зона для барбекю та неспішної вечері на природі. Розпаліть вогонь, приготуйте м’ясо або овочі, відкрийте щось холодне та просто проведіть вечір серед природи.',
       },
 
       'BAPTISMAL FONT': {
-        name: 'КУПІЛЬ',
+        name: 'Купіль',
         description:
           'Холодна купіль після парної допомагає завершити банний ритуал і відчути приємну бадьорість. Гаряча пара, прохолодна вода та свіже повітря навколо.',
       },
 
       JACUZZI: {
-        name: 'ДЖАКУЗІ',
+        name: 'Джакузі',
         description:
           'Повільний розслаблювальний масаж з ароматичними оліями власного приготування, який допомагає зняти напругу та розслабити тіло.',
       },
@@ -947,7 +1066,7 @@ export const translations = {
 
       {
         quote:
-          'DUBъ приємно здивував. Тихо, зелено, без метушні. Окреме задоволення — сама атмосфера: дерево, вогонь і запах парної.',
+          'ZHAR de PAR приємно здивував. Тихо, зелено, без метушні. Окреме задоволення — сама атмосфера: дерево, вогонь і запах парної.',
         name: 'Михайло Прохоров',
         detail: '',
       },
@@ -971,7 +1090,7 @@ export const translations = {
     faqLabel: 'Корисно знати',
     faqTitle: 'Часті запитання',
     faqDescription:
-      'Усе, що потрібно знати перед вашим візитом. Якщо у вас залишаться питання, наш менеджер завжди готовий допомогти.',
+      'Усе, що потрібно знати перед вашим візитом. Якщо у вас залишаться питання, наш адміністратор завжди готовий допомогти.',
 
     faq: [
       {
@@ -989,19 +1108,19 @@ export const translations = {
       {
         question: 'Що потрібно взяти із собою?',
         answer:
-          'Головне — гарний настрій. Ми надамо все необхідне для вашого відпочинку.',
+          'Головне — гарний настрій. Ми надамо все необхідне для вашого відпочинку. Якщо хочете заощадити, можете взяти все необхідне із собою.',
       },
 
       {
         question: 'Чи можна приїхати великою компанією?',
         answer:
-          'Так. У нас немає поділу на чоловічі та жіночі дні, тому ви можете відпочивати великою компанією разом.',
+          'Так, звісно. У нас велика приватна територія та достатньо простору, щоб комфортно провести час великою компанією. Можна відпочивати разом, насолоджуватися лазнею, зоною відпочинку та відкритим простором.',
       },
 
       {
         question: 'Як забронювати лазню?',
         answer:
-          'Заповніть форму на сайті та залиште свої контактні дані. Наш менеджер зв’яжеться з вами. Передоплата вноситься після зв’язку з нашим менеджером.',
+          'Заповніть форму на сайті та залиште свої контактні дані. Наш адміністратор зв’яжеться з вами. Передоплата вноситься після зв’язку з нашим адміністратором.',
       },
 
       {
@@ -1018,7 +1137,7 @@ export const translations = {
       'Приватні сеанси проводяться мінімум три години. Оберіть свій ритуал, віники та стіл — про все інше подбаємо ми.',
     footerVisit: 'Адреса',
     footerHours: 'Щодня · 24/7 · За бронюванням',
-    footerConcierge: 'Консьєрж',
+    footerConcierge: 'Контакти',
     footerRights: 'Усі права захищені.',
     footerTagline: 'Створено для тиші',
   },

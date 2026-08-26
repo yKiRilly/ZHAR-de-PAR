@@ -1,14 +1,16 @@
+
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { ChevronLeft, ChevronRight, Quote } from 'lucide-react'
+
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+
 import { Reveal } from '@/components/reveal'
 import { cn } from '@/lib/utils'
 import { useLanguage } from '@/components/language-provider'
 
 export function TestimonialsSection() {
   const { t } = useLanguage()
-
   const testimonials = t.testimonials
 
   const [index, setIndex] = useState(0)
@@ -16,7 +18,9 @@ export function TestimonialsSection() {
 
   const go = useCallback(
     (dir: number) => {
-      setIndex((i) => (i + dir + testimonials.length) % testimonials.length)
+      setIndex(
+        (i) => (i + dir + testimonials.length) % testimonials.length,
+      )
     },
     [testimonials.length],
   )
@@ -39,12 +43,12 @@ export function TestimonialsSection() {
 
   return (
     <section
-      className="relative overflow-hidden border-t border-border/50 py-24 sm:py-32"
+      className="relative flex min-h-[520px] items-center justify-center overflow-hidden border-t border-border/50 py-16 sm:min-h-[560px] sm:py-20"
       aria-roledescription="carousel"
       aria-label={t.guestTestimonials}
     >
       <div
-        className="mx-auto max-w-4xl px-5 text-center sm:px-8"
+        className="mx-auto w-full max-w-4xl px-5 text-center sm:px-8"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
@@ -57,7 +61,7 @@ export function TestimonialsSection() {
 
         {/* Testimonials */}
         <Reveal delay={80}>
-          <div className="relative mt-10 min-h-[280px] sm:min-h-[240px]">
+          <div className="relative mt-8 min-h-[240px] sm:min-h-[220px]">
             {testimonials.map((testimonial, i) => (
               <blockquote
                 key={testimonial.name}
@@ -69,13 +73,11 @@ export function TestimonialsSection() {
                     : 'pointer-events-none translate-y-4 opacity-0',
                 )}
               >
-                <Quote className="mb-6 h-8 w-8 text-primary/60" />
-
-                <p className="text-balance font-serif text-2xl font-light leading-relaxed sm:text-3xl">
-                  &ldquo;{testimonial.quote}&rdquo;
+                <p className="max-w-3xl text-balance font-serif text-2xl font-light leading-relaxed sm:text-3xl">
+                  {testimonial.quote}
                 </p>
 
-                <footer className="mt-8">
+                <footer className="mt-6">
                   <p className="text-sm font-medium uppercase tracking-widest text-foreground">
                     {testimonial.name}
                   </p>
@@ -92,7 +94,7 @@ export function TestimonialsSection() {
         </Reveal>
 
         {/* Controls */}
-        <div className="mt-10 flex items-center justify-center gap-6">
+        <div className="mt-6 flex items-center justify-center gap-6">
           <button
             type="button"
             onClick={() => go(-1)}

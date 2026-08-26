@@ -1,1667 +1,1033 @@
 'use client'
 
-import { useLanguage } from '@/components/language-provider'
-import { translations } from '@/lib/translations'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
+
 import {
-  Calendar,
-  Check,
+  CalendarDays,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Clock,
+  Clock3,
+  Minus,
+  Plus,
+  ShoppingBag,
+  Trash2,
   X,
 } from 'lucide-react'
 
-import { brooms, serviceOptions } from '@/lib/site-data'
+import type { CartItem } from '@/components/booking-provider'
+import { useBooking } from '@/components/booking-provider'
+import { useLanguage } from '@/components/language-provider'
 
 type BookingModalProps = {
   open: boolean
   onClose: () => void
-  prefill?: {
-
-    service?: string
-    broom?: string
-  }
+  cart: CartItem[]
+  cartTotal: number
 }
 
-type DropdownName =
-  | 'date'
-  | 'time'
-  | 'duration'
-  | 'guests'
-  | 'services'
-  | 'brooms'
-  | null
+const GOLD = '#B28D20'
 
-export function BookingModal({
-  open,
-  onClose,
-  prefill,
-}: BookingModalProps) {
-  const dialogRef = useRef<HTMLDivElement>(null)
+function formatDate(date: string) {
+  if (!date) return ''
 
-  const [submitted, setSubmitted] = useState(false)
-  const [openDropdown, setOpenDropdown] =
-    useState<DropdownName>(null)
+  const [year, month, day] = date.split('-')
 
-  const [selectedDate, setSelectedDate] = useState('')
-  const [selectedTime, setSelectedTime] = useState('')
+  return `${day}.${month}.${year}`
+}
 
-  const [duration, setDuration] = useState('3 hours')
-  const [guests, setGuests] = useState(2)
+function getTodayString() {
+  const today = new Date()
 
-  const [selectedServices, setSelectedServices] =
-    useState<string[]>([])
+  const year = today.getFullYear()
+  const month = String(today.getMonth() + 1).padStart(2, '0')
+  const day = String(today.getDate()).padStart(2, '0')
 
-  const [broomQuantities, setBroomQuantities] =
-    useState<Record<string, number>>({})
+  return `${year}-${month}-${day}`
+}
 
-  const [calendarMonth, setCalendarMonth] =
-    useState(() => new Date())
+function dateToString(date: Date) {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
 
-  /*
-   * =========================================================
-   * ВЕНИКИ
-   * =========================================================
-   *
-   * Получаем все названия веников.
-   * Это используется для того, чтобы веник НИКОГДА
-   * не попал в список Services.
-   */
+  return `${year}-${month}-${day}`
+}
 
-  const broomNames = brooms.map(
-    (broom) => broom.name.trim().toLowerCase(),
-  )
+function getCalendarDays(monthDate: Date) {
+  const year = monthDate.getFullYear()
+  const month = monthDate.getMonth()
 
-  /*
-   * Проверяем, является ли переданное значение веником.
-   *
-   * Поддерживаются:
-   * - название
-   * - id
-   */
+  const firstDay = new Date(year, month, 1)
 
-  const findBroom = (value?: string) => {
-    if (!value) return undefined
+  // Monday = 0, Sunday = 6
+  const startDay = (firstDay.getDay() + 6) % 7
 
-    const normalized = value
-      .trim()
-      .toLowerCase()
+  const daysInMonth = new Date(year, month + 1, 0).getDate()
 
-    return brooms.find((broom) => {
-      const broomName = broom.name
-        .trim()
-        .toLowerCase()
+  const previousMonthDays = new Date(
+    year,
+    month,
+    0,
+  ).getDate()
 
-      const broomId = String(broom.id)
-        .trim()
-        .toLowerCase()
+  const days = []
 
-      return (
-        broomName === normalized ||
-        broomId === normalized
-      )
+  for (let i = startDay - 1; i >= 0; i--) {
+    days.push({
+      day: previousMonthDays - i,
+      currentMonth: false,
+      date: new Date(
+        year,
+        month - 1,
+        previousMonthDays - i,
+      ),
     })
   }
 
-  /*
-   * =========================================================
-   * ОПРЕДЕЛЯЕМ PREFILL
-   * =========================================================
-   */
-
-  const broomFromBroomField =
-    findBroom(prefill?.broom)
-
-  const broomFromServiceField =
-    findBroom(prefill?.service)
-
-  /*
-   * Если в prefill пришёл broom — используем его.
-   *
-   * Если по какой-то причине карточка передала веник
-   * через service — тоже превращаем его в веник.
-   */
-
-  const incomingBroom =
-    broomFromBroomField ??
-    broomFromServiceField
-
-  /*
-   * SERVICE берём ТОЛЬКО если это действительно
-   * НЕ веник.
-   */
-
-  const incomingService =
-    prefill?.service &&
-    !broomFromServiceField &&
-    !broomFromBroomField
-      ? prefill.service
-      : undefined
-
-  /*
-   * =========================================================
-   * OPEN
-   * =========================================================
-   */
-
-  useEffect(() => {
-    if (!open) return
-
-    setSubmitted(false)
-    setOpenDropdown(null)
-
-    /*
-     * Сбрасываем старые услуги.
-     *
-     * ВАЖНО:
-     * даже если service случайно содержит название
-     * веника — мы его сюда НЕ добавляем.
-     */
-
-    if (incomingService) {
-      const isActuallyBroom =
-        broomNames.includes(
-          incomingService
-            .trim()
-            .toLowerCase(),
-        )
-
-      if (isActuallyBroom) {
-        setSelectedServices([])
-      } else {
-        setSelectedServices([
-          incomingService,
-        ])
-      }
-    } else {
-      setSelectedServices([])
-    }
-
-    /*
-     * Устанавливаем веник.
-     */
-
-    if (incomingBroom) {
-      setBroomQuantities({
-        [incomingBroom.name]: 1,
-      })
-    } else {
-      setBroomQuantities({})
-    }
-
-    const handleEscape = (
-      event: KeyboardEvent,
-    ) => {
-      if (event.key === 'Escape') {
-        setOpenDropdown(null)
-        onClose()
-      }
-    }
-
-    const handleOutsideClick = (
-      event: MouseEvent,
-    ) => {
-      if (!openDropdown) return
-
-      const target = event.target
-
-      if (!(target instanceof Element)) return
-
-      const insideDropdown =
-        !!target.closest(
-          '[data-booking-dropdown]',
-        )
-
-      const insideTrigger =
-        !!target.closest(
-          '[data-booking-trigger]',
-        )
-
-      if (
-        !insideDropdown &&
-        !insideTrigger
-      ) {
-        setOpenDropdown(null)
-      }
-    }
-
-    document.addEventListener(
-      'keydown',
-      handleEscape,
-    )
-
-    document.addEventListener(
-      'mousedown',
-      handleOutsideClick,
-    )
-
-    const previousOverflow =
-      document.body.style.overflow
-
-    document.body.style.overflow =
-      'hidden'
-
-    return () => {
-      document.removeEventListener(
-        'keydown',
-        handleEscape,
-      )
-
-      document.removeEventListener(
-        'mousedown',
-        handleOutsideClick,
-      )
-
-      document.body.style.overflow =
-        previousOverflow
-    }
-  }, [
-    open,
-    onClose,
-    prefill?.service,
-    prefill?.broom,
-  ])
-
-  if (!open) {
-    return null
-  }
-
-  /*
-   * =========================================================
-   * DROPDOWN
-   * =========================================================
-   */
-
-  const toggleDropdown = (
-    name: Exclude<
-      DropdownName,
-      null
-    >,
-  ) => {
-    setOpenDropdown(
-      (current) =>
-        current === name
-          ? null
-          : name,
-    )
-  }
-
-  /*
-   * =========================================================
-   * SERVICES
-   * =========================================================
-   */
-
-  const toggleService = (
-    service: string,
-  ) => {
-    /*
-     * ЗАЩИТА:
-     *
-     * Если service почему-то совпадает с веником,
-     * вообще не добавляем его в Services.
-     */
-
-    const isBroom =
-      broomNames.includes(
-        service
-          .trim()
-          .toLowerCase(),
-      )
-
-    if (isBroom) {
-      return
-    }
-
-    setSelectedServices(
-      (current) => {
-        if (
-          current.includes(service)
-        ) {
-          return current.filter(
-            (item) =>
-              item !== service,
-          )
-        }
-
-        return [
-          ...current,
-          service,
-        ]
-      },
-    )
-  }
-
-  /*
-   * =========================================================
-   * ВЕНИКИ
-   * =========================================================
-   */
-
-  const changeBroomQuantity = (
-    broom: string,
-    change: number,
-  ) => {
-    setBroomQuantities(
-      (current) => {
-        const currentQuantity =
-          current[broom] || 0
-
-        const totalQuantity =
-          Object.values(
-            current,
-          ).reduce(
-            (sum, value) =>
-              sum + value,
-            0,
-          )
-
-        /*
-         * Максимум 10 веников.
-         */
-
-        if (
-          change > 0 &&
-          totalQuantity >= 10
-        ) {
-          return current
-        }
-
-        const newQuantity =
-          Math.max(
-            0,
-            currentQuantity +
-              change,
-          )
-
-        const next = {
-          ...current,
-        }
-
-        if (newQuantity === 0) {
-          delete next[broom]
-        } else {
-          next[broom] =
-            newQuantity
-        }
-
-        return next
-      },
-    )
-  }
-
-  const totalBrooms =
-    Object.values(
-      broomQuantities,
-    ).reduce(
-      (sum, value) =>
-        sum + value,
-      0,
-    )
-
-  /*
-   * =========================================================
-   * ТЕКСТ SERVICES
-   * =========================================================
-   */
-
-  /*
-   * Дополнительная защита:
-   *
-   * даже если старое состояние каким-то образом
-   * содержит название веника, мы его здесь убираем.
-   */
-
-  const safeSelectedServices =
-    selectedServices.filter(
-      (service) =>
-        !broomNames.includes(
-          service
-            .trim()
-            .toLowerCase(),
-        ),
-    )
-
-  const selectedServicesText =
-    safeSelectedServices.length === 0
-      ? 'Choose services'
-      : safeSelectedServices.length === 1
-        ? safeSelectedServices[0]
-        : `${safeSelectedServices.length} services selected`
-
-  /*
-   * =========================================================
-   * ТЕКСТ ВЕНИКОВ
-   * =========================================================
-   */
-
-  const selectedBroomsText =
-    totalBrooms === 0
-      ? 'Choose bath brooms'
-      : totalBrooms === 1
-        ? '1 broom selected'
-        : `${totalBrooms} brooms selected`
-
-  /*
-   * =========================================================
-   * SUBMIT
-   * =========================================================
-   */
-
-  const handleSubmit = (
-    event: React.FormEvent<HTMLFormElement>,
-  ) => {
-    event.preventDefault()
-
-    if (!selectedDate) {
-      setOpenDropdown('date')
-      return
-    }
-
-    if (!selectedTime) {
-      setOpenDropdown('time')
-      return
-    }
-
-    setOpenDropdown(null)
-    setSubmitted(true)
-  }
-
-  /*
-   * =========================================================
-   * RENDER
-   * =========================================================
-   */
-
-  return (
-    <div
-      className="fixed inset-0 z-[100] flex items-end justify-center overflow-y-auto bg-black/80 p-0 backdrop-blur-sm sm:items-center sm:p-6"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Reserve your visit"
-    >
-      {/* BACKGROUND */}
-
-      <button
-        type="button"
-        aria-label="Close booking form"
-        onClick={() => {
-          setOpenDropdown(null)
-          onClose()
-        }}
-        className="fixed inset-0 h-full w-full cursor-default"
-      />
-
-      {/* MODAL */}
-
-      <div
-        ref={dialogRef}
-        className="relative z-10 w-full max-w-2xl rounded-t-2xl border border-[#b28d20]/50 bg-[#080808] p-6 shadow-2xl sm:rounded-2xl sm:p-8"
-      >
-        {/* CLOSE */}
-
-        <button
-          type="button"
-          onClick={() => {
-            setOpenDropdown(null)
-            onClose()
-          }}
-          className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-white/50 transition-all hover:border-[#b28d20] hover:text-[#b28d20]"
-        >
-          <X className="h-4 w-4" />
-        </button>
-
-        {submitted ? (
-          <div className="flex flex-col items-center py-12 text-center">
-            <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#b28d20]/15 text-[#b28d20]">
-              <Check className="h-7 w-7" />
-            </div>
-
-            <h3 className="font-serif text-3xl font-light text-white">
-              Your request is received
-            </h3>
-
-            <p className="mt-3 max-w-md leading-relaxed text-white/50">
-              Thank you. Our concierge
-              will confirm your private
-              session within a few hours.
-            </p>
-
-            <button
-              type="button"
-              onClick={onClose}
-              className="mt-8 rounded-full bg-[#b28d20] px-8 py-3 text-sm font-medium uppercase tracking-widest text-black transition-colors hover:bg-[#c9a42d]"
-            >
-              Close
-            </button>
-          </div>
-        ) : (
-          <>
-            {/* HEADER */}
-
-            <p className="text-xs font-medium uppercase tracking-[0.3em] text-[#b28d20]">
-              Reserve your visit
-            </p>
-
-            <h3 className="mt-2 font-serif text-3xl font-light text-white sm:text-4xl">
-              Request a private session
-            </h3>
-
-            <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-[#b28d20]/40 bg-black px-3 py-1.5 text-xs text-white/50">
-              <Clock className="h-3.5 w-3.5 text-[#b28d20]" />
-
-              Reservations are available
-              for a minimum of 3 hours
-            </div>
-
-            {/* FORM */}
-
-            <form
-              onSubmit={handleSubmit}
-              className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2"
-            >
-              {/* NAME */}
-
-              <Field
-                label="Full name"
-                htmlFor="name"
-              >
-                <input
-                  id="name"
-                  name="name"
-                  required
-                  autoComplete="name"
-                  placeholder="Your name"
-                  className={inputClass}
-                />
-              </Field>
-
-              {/* PHONE */}
-
-              <Field
-                label="Phone"
-                htmlFor="phone"
-              >
-                <input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  required
-                  autoComplete="tel"
-                  placeholder="+00 000 000 000"
-                  className={inputClass}
-                />
-              </Field>
-
-              {/* EMAIL */}
-
-              <Field
-                label="Email"
-                htmlFor="email"
-                className="sm:col-span-2"
-              >
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  autoComplete="email"
-                  placeholder="you@email.com"
-                  className={inputClass}
-                />
-              </Field>
-
-              {/* DATE */}
-
-              <Field
-                label="Date"
-                htmlFor="date"
-              >
-                <div className="relative">
-                  <button
-                    id="date"
-                    type="button"
-                    data-booking-trigger
-                    onClick={() =>
-                      toggleDropdown(
-                        'date',
-                      )
-                    }
-                    className={
-                      selectButtonClass
-                    }
-                  >
-                    <span
-                      className={
-                        selectedDate
-                          ? 'text-white'
-                          : 'text-white/35'
-                      }
-                    >
-                      {selectedDate ||
-                        'dd/mm/yyyy'}
-                    </span>
-
-                    <Calendar className="h-4 w-4 text-[#b28d20]" />
-                  </button>
-
-                  {openDropdown ===
-                    'date' && (
-                    <DatePicker
-                      selectedDate={
-                        selectedDate
-                      }
-                      month={
-                        calendarMonth
-                      }
-                      onMonthChange={
-                        setCalendarMonth
-                      }
-                      onSelect={(
-                        date,
-                      ) => {
-                        setSelectedDate(
-                          date,
-                        )
-                        setOpenDropdown(
-                          null,
-                        )
-                      }}
-                    />
-                  )}
-                </div>
-              </Field>
-
-              {/* TIME */}
-
-              <Field
-                label="Preferred time"
-                htmlFor="time"
-              >
-                <div className="relative">
-                  <button
-                    id="time"
-                    type="button"
-                    data-booking-trigger
-                    onClick={() =>
-                      toggleDropdown(
-                        'time',
-                      )
-                    }
-                    className={
-                      selectButtonClass
-                    }
-                  >
-                    <span
-                      className={
-                        selectedTime
-                          ? 'text-white'
-                          : 'text-white/35'
-                      }
-                    >
-                      {selectedTime ||
-                        '--:--'}
-                    </span>
-
-                    <Clock className="h-4 w-4 text-[#b28d20]" />
-                  </button>
-
-                  {openDropdown ===
-                    'time' && (
-                    <TimePicker
-                      selectedTime={
-                        selectedTime
-                      }
-                      onSelect={(
-                        time,
-                      ) => {
-                        setSelectedTime(
-                          time,
-                        )
-                        setOpenDropdown(
-                          null,
-                        )
-                      }}
-                    />
-                  )}
-                </div>
-              </Field>
-
-              {/* DURATION */}
-
-              <Field
-                label="Duration"
-                htmlFor="duration"
-              >
-                <div className="relative">
-                  <button
-                    id="duration"
-                    type="button"
-                    data-booking-trigger
-                    onClick={() =>
-                      toggleDropdown(
-                        'duration',
-                      )
-                    }
-                    className={
-                      selectButtonClass
-                    }
-                  >
-                    <span>
-                      {duration}
-                    </span>
-
-                    <ChevronDown
-                      className={`h-4 w-4 text-[#b28d20] transition-transform ${
-                        openDropdown ===
-                        'duration'
-                          ? 'rotate-180'
-                          : ''
-                      }`}
-                    />
-                  </button>
-
-                  {openDropdown ===
-                    'duration' && (
-                    <DropdownMenu>
-                      {[
-                        '3 hours',
-                        '4 hours',
-                        '5 hours',
-                        '6 hours',
-                        'Full evening',
-                      ].map(
-                        (item) => (
-                          <Choice
-                            key={item}
-                            text={item}
-                            selected={
-                              duration ===
-                              item
-                            }
-                            onClick={() => {
-                              setDuration(
-                                item,
-                              )
-                              setOpenDropdown(
-                                null,
-                              )
-                            }}
-                          />
-                        ),
-                      )}
-                    </DropdownMenu>
-                  )}
-                </div>
-              </Field>
-
-              {/* GUESTS */}
-
-              <Field
-                label="Guests"
-                htmlFor="guests"
-              >
-                <div className="relative">
-                  <button
-                    id="guests"
-                    type="button"
-                    data-booking-trigger
-                    onClick={() =>
-                      toggleDropdown(
-                        'guests',
-                      )
-                    }
-                    className={
-                      selectButtonClass
-                    }
-                  >
-                    <span>
-                      {guests}{' '}
-                      {guests === 1
-                        ? 'guest'
-                        : 'guests'}
-                    </span>
-
-                    <ChevronDown
-                      className={`h-4 w-4 text-[#b28d20] transition-transform ${
-                        openDropdown ===
-                        'guests'
-                          ? 'rotate-180'
-                          : ''
-                      }`}
-                    />
-                  </button>
-
-                  {openDropdown ===
-                    'guests' && (
-                    <DropdownMenu>
-                      {[
-                        1,
-                        2,
-                        3,
-                        4,
-                        5,
-                        6,
-                        7,
-                        8,
-                      ].map(
-                        (number) => (
-                          <Choice
-                            key={number}
-                            text={`${number} ${
-                              number ===
-                              1
-                                ? 'guest'
-                                : 'guests'
-                            }`}
-                            selected={
-                              guests ===
-                              number
-                            }
-                            onClick={() => {
-                              setGuests(
-                                number,
-                              )
-                              setOpenDropdown(
-                                null,
-                              )
-                            }}
-                          />
-                        ),
-                      )}
-                    </DropdownMenu>
-                  )}
-                </div>
-              </Field>
-
-              {/* SERVICES */}
-
-              <div className="sm:col-span-2">
-                <label
-                  className={labelClass}
-                >
-                  Services
-                </label>
-
-                <div className="relative">
-                  <button
-                    type="button"
-                    data-booking-trigger
-                    onClick={() =>
-                      toggleDropdown(
-                        'services',
-                      )
-                    }
-                    className={
-                      selectButtonClass
-                    }
-                  >
-                    <span>
-                      {
-                        selectedServicesText
-                      }
-                    </span>
-
-                    <ChevronDown
-                      className={`h-4 w-4 text-[#b28d20] transition-transform ${
-                        openDropdown ===
-                        'services'
-                          ? 'rotate-180'
-                          : ''
-                      }`}
-                    />
-                  </button>
-
-                  {openDropdown ===
-                    'services' && (
-                    <DropdownMenu>
-                      <div className="max-h-64 overflow-y-auto">
-                        {serviceOptions
-                          /*
-                           * ВАЖНО:
-                           * дополнительно убираем
-                           * все веники из Services.
-                           */
-                          .filter(
-                            (service) =>
-                              !broomNames.includes(
-                                service
-                                  .trim()
-                                  .toLowerCase(),
-                              ),
-                          )
-                          .map(
-                            (
-                              service,
-                            ) => (
-                              <Choice
-                                key={
-                                  service
-                                }
-                                text={
-                                  service
-                                }
-                                selected={safeSelectedServices.includes(
-                                  service,
-                                )}
-                                onClick={() =>
-                                  toggleService(
-                                    service,
-                                  )
-                                }
-                              />
-                            ),
-                          )}
-                      </div>
-
-                      <DoneButton
-                        onClick={() =>
-                          setOpenDropdown(
-                            null,
-                          )
-                        }
-                      />
-                    </DropdownMenu>
-                  )}
-                </div>
-              </div>
-
-              {/* BATH BROOMS */}
-
-              <div className="sm:col-span-2">
-                <label
-                  className={labelClass}
-                >
-                  Bath brooms
-                </label>
-
-                <div className="relative">
-                  <button
-                    type="button"
-                    data-booking-trigger
-                    onClick={() =>
-                      toggleDropdown(
-                        'brooms',
-                      )
-                    }
-                    className={
-                      selectButtonClass
-                    }
-                  >
-                    <span>
-                      {
-                        selectedBroomsText
-                      }
-                    </span>
-
-                    <ChevronDown
-                      className={`h-4 w-4 text-[#b28d20] transition-transform ${
-                        openDropdown ===
-                        'brooms'
-                          ? 'rotate-180'
-                          : ''
-                      }`}
-                    />
-                  </button>
-
-                  {openDropdown ===
-                    'brooms' && (
-                    <DropdownMenu>
-                      <div className="max-h-72 overflow-y-auto">
-                        {brooms.map(
-                          (broom) => {
-                            const quantity =
-                              broomQuantities[
-                                broom.name
-                              ] || 0
-
-                            const canAdd =
-                              totalBrooms <
-                              10
-
-                            return (
-                              <div
-                                key={
-                                  broom.id
-                                }
-                                className={`flex items-center justify-between border-b border-white/10 px-4 py-3 transition-all ${
-                                  quantity >
-                                  0
-                                    ? 'bg-[#b28d20]/10'
-                                    : 'hover:bg-[#b28d20]/5'
-                                }`}
-                              >
-                                <span
-                                  className={`text-sm ${
-                                    quantity >
-                                    0
-                                      ? 'text-[#b28d20]'
-                                      : 'text-white/70'
-                                  }`}
-                                >
-                                  {
-                                    broom.name
-                                  }
-                                </span>
-
-                                <div className="flex items-center gap-2">
-                                  {/* MINUS */}
-
-                                  <button
-                                    type="button"
-                                    onClick={() =>
-                                      changeBroomQuantity(
-                                        broom.name,
-                                        -1,
-                                      )
-                                    }
-                                    disabled={
-                                      quantity ===
-                                      0
-                                    }
-                                    className="flex h-7 w-7 items-center justify-center rounded-full border border-white/20 text-white/60 transition-all hover:border-[#b28d20] hover:text-[#b28d20] disabled:cursor-not-allowed disabled:opacity-20"
-                                  >
-                                    −
-                                  </button>
-
-                                  {/* NUMBER */}
-
-                                  <span
-                                    className={`flex h-7 min-w-[28px] items-center justify-center text-sm font-medium ${
-                                      quantity >
-                                      0
-                                        ? 'text-[#b28d20]'
-                                        : 'text-white/30'
-                                    }`}
-                                  >
-                                    {
-                                      quantity
-                                    }
-                                  </span>
-
-                                  {/* PLUS */}
-
-                                  <button
-                                    type="button"
-                                    onClick={() =>
-                                      changeBroomQuantity(
-                                        broom.name,
-                                        1,
-                                      )
-                                    }
-                                    disabled={
-                                      !canAdd
-                                    }
-                                    className="flex h-7 w-7 items-center justify-center rounded-full border border-white/20 text-white/60 transition-all hover:border-[#b28d20] hover:text-[#b28d20] disabled:cursor-not-allowed disabled:opacity-20"
-                                  >
-                                    +
-                                  </button>
-                                </div>
-                              </div>
-                            )
-                          },
-                        )}
-                      </div>
-
-                      <div className="flex items-center justify-between border-t border-white/10 px-3 py-2">
-                        <span className="text-xs text-white/30">
-                          {totalBrooms}/10
-                        </span>
-
-                        <DoneButton
-                          onClick={() =>
-                            setOpenDropdown(
-                              null,
-                            )
-                          }
-                        />
-                      </div>
-                    </DropdownMenu>
-                  )}
-                </div>
-              </div>
-
-              {/* NOTES */}
-
-              <Field
-                label="Notes & dining requests"
-                htmlFor="notes"
-                className="sm:col-span-2"
-              >
-                <textarea
-                  id="notes"
-                  name="notes"
-                  rows={3}
-                  placeholder="Dietary preferences, a lunch or dinner prepared before arrival, special occasions…"
-                  className={`${inputClass} resize-none`}
-                />
-              </Field>
-
-              {/* SUBMIT */}
-
-              <button
-                type="submit"
-                className="mt-2 w-full rounded-full bg-[#b28d20] px-8 py-4 text-sm font-medium uppercase tracking-widest text-black transition-all hover:bg-[#c9a42d] hover:shadow-[0_0_25px_rgba(178,141,32,0.25)] sm:col-span-2"
-              >
-                Request reservation
-              </button>
-            </form>
-          </>
-        )}
-      </div>
-    </div>
-  )
-}
-
-/* =========================================================
-   DATE PICKER
-========================================================= */
-
-function DatePicker({
-  selectedDate,
-  month,
-  onMonthChange,
-  onSelect,
-}: {
-  selectedDate: string
-  month: Date
-  onMonthChange: (date: Date) => void
-  onSelect: (date: string) => void
-}) {
-  const year =
-    month.getFullYear()
-
-  const monthIndex =
-    month.getMonth()
-
-  const monthName =
-    month.toLocaleDateString(
-      'en-US',
-      {
-        month: 'long',
-      },
-    )
-
-  const firstDay =
-    new Date(
-      year,
-      monthIndex,
-      1,
-    ).getDay()
-
-  const offset =
-    firstDay === 0
-      ? 6
-      : firstDay - 1
-
-  const daysInMonth =
-    new Date(
-      year,
-      monthIndex + 1,
-      0,
-    ).getDate()
-
-  const cells: Array<{
-    day: number
-    date: string
-    current: boolean
-  }> = []
-
-  const previousMonthDays =
-    new Date(
-      year,
-      monthIndex,
-      0,
-    ).getDate()
-
-  for (
-    let i = offset - 1;
-    i >= 0;
-    i--
-  ) {
-    const day =
-      previousMonthDays - i
-
-    cells.push({
+  for (let day = 1; day <= daysInMonth; day++) {
+    days.push({
       day,
-      date: makeDate(
-        new Date(
-          year,
-          monthIndex - 1,
-          day,
-        ),
-      ),
-      current: false,
-    })
-  }
-
-  for (
-    let day = 1;
-    day <= daysInMonth;
-    day++
-  ) {
-    cells.push({
-      day,
-      date: makeDate(
-        new Date(
-          year,
-          monthIndex,
-          day,
-        ),
-      ),
-      current: true,
+      currentMonth: true,
+      date: new Date(year, month, day),
     })
   }
 
   let nextDay = 1
 
-  while (cells.length < 42) {
-    cells.push({
+  while (days.length < 42) {
+    days.push({
       day: nextDay,
-      date: makeDate(
-        new Date(
-          year,
-          monthIndex + 1,
-          nextDay,
-        ),
-      ),
-      current: false,
+      currentMonth: false,
+      date: new Date(year, month + 1, nextDay),
     })
 
     nextDay++
   }
 
-  const today =
-    makeDate(new Date())
-
-  return (
-    <div
-      data-booking-dropdown
-      className="absolute left-0 right-0 top-full z-[100] mt-1 overflow-hidden rounded-md border border-[#b28d20] bg-[#080808] shadow-2xl"
-    >
-      {/* MONTH */}
-
-      <div className="flex items-center justify-between border-b border-white/10 px-3 py-3">
-        <button
-          type="button"
-          onClick={() =>
-            onMonthChange(
-              new Date(
-                year,
-                monthIndex - 1,
-                1,
-              ),
-            )
-          }
-          className="flex h-8 w-8 items-center justify-center rounded-full text-white/40 transition-colors hover:bg-[#b28d20]/10 hover:text-[#b28d20]"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </button>
-
-        <span className="text-sm text-white">
-          {monthName} {year}
-        </span>
-
-        <button
-          type="button"
-          onClick={() =>
-            onMonthChange(
-              new Date(
-                year,
-                monthIndex + 1,
-                1,
-              ),
-            )
-          }
-          className="flex h-8 w-8 items-center justify-center rounded-full text-white/40 transition-colors hover:bg-[#b28d20]/10 hover:text-[#b28d20]"
-        >
-          <ChevronRight className="h-4 w-4" />
-        </button>
-      </div>
-
-      {/* WEEK */}
-
-      <div className="grid grid-cols-7 px-2 pt-2">
-        {[
-          'Mo',
-          'Tu',
-          'We',
-          'Th',
-          'Fr',
-          'Sa',
-          'Su',
-        ].map((day) => (
-          <span
-            key={day}
-            className="text-center text-[10px] uppercase tracking-wider text-white/30"
-          >
-            {day}
-          </span>
-        ))}
-      </div>
-
-      {/* DAYS */}
-
-      <div className="grid grid-cols-7 gap-1 p-2">
-        {cells.map(
-          (
-            cell,
-            index,
-          ) => {
-            const selected =
-              selectedDate ===
-              cell.date
-
-            const isToday =
-              today ===
-              cell.date
-
-            return (
-              <button
-                key={`${cell.date}-${index}`}
-                type="button"
-                onClick={() =>
-                  onSelect(
-                    cell.date,
-                  )
-                }
-                className={`flex h-9 items-center justify-center rounded-md text-xs transition-all ${
-                  selected
-                    ? 'bg-[#b28d20] text-black'
-                    : cell.current
-                      ? 'text-white/80 hover:bg-[#b28d20]/15 hover:text-[#b28d20]'
-                      : 'text-white/20 hover:bg-white/5'
-                } ${
-                  isToday &&
-                  !selected
-                    ? 'ring-1 ring-[#b28d20]'
-                    : ''
-                }`}
-              >
-                {cell.day}
-              </button>
-            )
-          },
-        )}
-      </div>
-
-      {/* FOOTER */}
-
-      <div className="flex items-center justify-between border-t border-white/10 px-3 py-2">
-        <button
-          type="button"
-          onClick={() =>
-            onSelect('')
-          }
-          className="text-xs text-white/30 transition-colors hover:text-white"
-        >
-          Clear
-        </button>
-
-        <button
-          type="button"
-          onClick={() =>
-            onSelect(today)
-          }
-          className="text-xs uppercase tracking-widest text-[#b28d20] transition-colors hover:text-[#c9a42d]"
-        >
-          Today
-        </button>
-      </div>
-    </div>
-  )
+  return days
 }
 
-/* =========================================================
-   TIME PICKER
-========================================================= */
+export function BookingModal({
+  open,
+  onClose,
+  cart,
+  cartTotal,
+}: BookingModalProps) {
+  const {
+    increaseQuantity,
+    decreaseQuantity,
+    removeFromCart,
+  } = useBooking()
 
-function TimePicker({
-  selectedTime,
-  onSelect,
-}: {
-  selectedTime: string
-  onSelect: (
-    time: string,
-  ) => void
-}) {
-  const times: string[] = []
+  const { t } = useLanguage()
 
-  for (
-    let hour = 0;
-    hour < 24;
-    hour++
-  ) {
-    for (
-      let minute = 0;
-      minute < 60;
-      minute += 30
-    ) {
-      times.push(
-        `${String(
-          hour,
-        ).padStart(
-          2,
-          '0',
-        )}:${String(
+  const [guests, setGuests] = useState(2)
+
+  const [selectedDate, setSelectedDate] = useState('')
+  const [selectedTime, setSelectedTime] = useState('')
+
+  const [dateOpen, setDateOpen] = useState(false)
+  const [timeOpen, setTimeOpen] = useState(false)
+  const [guestsOpen, setGuestsOpen] = useState(false)
+
+  const [calendarMonth, setCalendarMonth] = useState(
+    new Date(),
+  )
+
+  const extraGuests = Math.max(0, guests - 8)
+
+  const guestSurcharge = extraGuests * 50
+
+  const finalTotal = cartTotal + guestSurcharge
+
+  const today = getTodayString()
+
+  const calendarDays = getCalendarDays(calendarMonth)
+
+  // Без "Г." после года
+  const monthName =
+    calendarMonth.toLocaleDateString('ru-RU', {
+      month: 'long',
+    }) + ` ${calendarMonth.getFullYear()}`
+
+  const timeOptions: string[] = []
+
+  for (let hour = 8; hour <= 23; hour++) {
+    for (const minute of [0, 30]) {
+      if (hour === 23 && minute === 30) continue
+
+      timeOptions.push(
+        `${String(hour).padStart(2, '0')}:${String(
           minute,
-        ).padStart(
-          2,
-          '0',
-        )}`,
+        ).padStart(2, '0')}`,
       )
     }
   }
 
+  if (!open) {
+    return null
+  }
+
+  const handleReserve = (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault()
+
+    if (!selectedDate) {
+      setDateOpen(true)
+      return
+    }
+
+    if (!selectedTime) {
+      setTimeOpen(true)
+      return
+    }
+
+    const formData = new FormData(event.currentTarget)
+
+    const booking = {
+      name: formData.get('name'),
+      phone: formData.get('phone'),
+      date: selectedDate,
+      time: selectedTime,
+      guests,
+      guestSurcharge,
+      message: formData.get('message'),
+      cart,
+      subtotal: cartTotal,
+      total: finalTotal,
+    }
+
+    console.log('BOOKING:', booking)
+
+    alert(t.booking.thankYou)
+  }
+
+  const selectDate = (date: Date) => {
+    const value = dateToString(date)
+
+    if (value < today) {
+      return
+    }
+
+    setSelectedDate(value)
+    setDateOpen(false)
+  }
+
+  const previousMonth = () => {
+    setCalendarMonth(
+      new Date(
+        calendarMonth.getFullYear(),
+        calendarMonth.getMonth() - 1,
+        1,
+      ),
+    )
+  }
+
+  const nextMonth = () => {
+    setCalendarMonth(
+      new Date(
+        calendarMonth.getFullYear(),
+        calendarMonth.getMonth() + 1,
+        1,
+      ),
+    )
+  }
+
   return (
     <div
-      data-booking-dropdown
-      className="absolute left-0 right-0 top-full z-[100] mt-1 overflow-hidden rounded-md border border-[#b28d20] bg-[#080808] shadow-2xl"
+      className="fixed inset-0 z-[100] flex items-end justify-center bg-black/75 p-0 backdrop-blur-sm sm:items-center sm:p-6"
+      onClick={onClose}
     >
-      <div className="grid max-h-64 grid-cols-2 gap-1 overflow-y-auto p-2">
-        {times.map(
-          (time) => {
-            const selected =
-              selectedTime ===
-              time
+      <div
+        className="relative flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-t-2xl border border-primary/20 bg-[#110d0b] text-foreground shadow-2xl sm:rounded-2xl"
+        onClick={(event) =>
+          event.stopPropagation()
+        }
+      >
+        {/* HEADER */}
 
-            return (
-              <button
-                key={time}
-                type="button"
-                onClick={() =>
-                  onSelect(
-                    time,
+        <div className="flex shrink-0 items-center justify-between border-b border-primary/15 px-6 py-5 sm:px-8">
+          <div className="flex items-center gap-3">
+            <ShoppingBag className="h-5 w-5 text-primary" />
+
+            <h2 className="font-serif text-2xl font-light">
+              {t.booking.title}
+            </h2>
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/30 text-muted-foreground transition-all hover:border-primary hover:bg-primary hover:text-primary-foreground"
+            aria-label={t.booking.close}
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        {/* SCROLLABLE CONTENT */}
+
+        <div className="flex-1 overflow-y-auto">
+
+          {/* CART */}
+
+          <div className="px-6 py-5 sm:px-8">
+            {cart.length === 0 ? (
+              <div className="py-12 text-center">
+                <ShoppingBag className="mx-auto h-10 w-10 text-muted-foreground" />
+
+                <p className="mt-4 font-serif text-xl">
+                  {t.booking.emptyTitle}
+                </p>
+
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {t.booking.emptyDescription}
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+
+                {cart.map((item) => {
+                  const isBroom =
+                    item.type === 'broom'
+
+                  const isSauna =
+                    item.type === 'sauna'
+
+                  const atMinimum =
+                    isSauna &&
+                    item.quantity <= 3
+
+                  const atMaximum =
+                    item.maxQuantity !==
+                      undefined &&
+                    item.quantity >=
+                      item.maxQuantity
+
+                  return (
+                    <div
+                      key={item.id}
+                      className="rounded-xl border border-primary/15 bg-[#15100e] px-4 py-4"
+                    >
+                      <div className="flex items-center gap-3 sm:gap-4">
+
+                        {/* NAME */}
+
+                        <div className="min-w-0 flex-1">
+                          <p className="font-serif text-lg font-light">
+                            {item.name}
+                          </p>
+
+                          <p className="mt-1 text-sm text-muted-foreground">
+                            €{item.price} ×{' '}
+                            {item.quantity}
+                          </p>
+
+                          {isBroom && (
+                            <p className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground">
+                              {t.booking.maximum}
+                            </p>
+                          )}
+
+                          {isSauna && (
+                            <p className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground">
+                              {t.booking.minimum}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* QUANTITY */}
+
+                        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+
+                          <button
+                            type="button"
+                            onClick={() =>
+                              decreaseQuantity(
+                                item.id,
+                              )
+                            }
+                            disabled={atMinimum}
+                            className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/25 transition-all hover:border-primary hover:bg-primary hover:text-primary-foreground disabled:cursor-not-allowed disabled:opacity-30"
+                          >
+                            <Minus className="h-4 w-4" />
+                          </button>
+
+                          <span className="w-7 text-center font-serif text-lg">
+                            {item.quantity}
+                          </span>
+
+                          <button
+                            type="button"
+                            onClick={() =>
+                              increaseQuantity(
+                                item.id,
+                              )
+                            }
+                            disabled={atMaximum}
+                            className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/25 transition-all hover:border-primary hover:bg-primary hover:text-primary-foreground disabled:cursor-not-allowed disabled:opacity-30"
+                          >
+                            <Plus className="h-4 w-4" />
+                          </button>
+
+                        </div>
+
+                        {/* TOTAL */}
+
+                        <div className="hidden w-24 shrink-0 text-right font-serif text-xl text-primary sm:block">
+                          €
+                          {(
+                            item.price *
+                            item.quantity
+                          ).toFixed(2)}
+                        </div>
+
+                        {/* DELETE */}
+
+                        {!isSauna && (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              removeFromCart(
+                                item.id,
+                              )
+                            }
+                            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-primary/20 text-muted-foreground transition-all hover:border-red-500 hover:bg-red-500 hover:text-white"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        )}
+
+                      </div>
+
+                      <div className="mt-3 border-t border-primary/10 pt-3 text-right font-serif text-lg text-primary sm:hidden">
+                        €
+                        {(
+                          item.price *
+                          item.quantity
+                        ).toFixed(2)}
+                      </div>
+
+                    </div>
                   )
-                }
-                className={`group flex items-center justify-between rounded-md px-3 py-3 text-sm transition-all ${
-                  selected
-                    ? 'bg-[#b28d20]/15 text-[#b28d20]'
-                    : 'text-white/70 hover:bg-[#b28d20]/10 hover:text-[#b28d20]'
-                }`}
-              >
-                <span>
-                  {time}
+                })}
+
+              </div>
+            )}
+          </div>
+
+          {/* TOTAL */}
+
+          {cart.length > 0 && (
+            <div className="border-t border-primary/15 px-6 py-4 sm:px-8">
+
+              <div className="flex items-center justify-between">
+
+                <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+                  {t.booking.total}
                 </span>
 
-                <SelectionCircle
-                  selected={
-                    selected
-                  }
-                />
+                <span className="font-serif text-3xl text-primary">
+                  €{finalTotal.toFixed(2)}
+                </span>
+
+              </div>
+
+              {guestSurcharge > 0 && (
+                <div className="mt-2 flex items-center justify-between text-sm">
+
+                  <span className="text-muted-foreground">
+                    Extra guests ({extraGuests} ×
+                    €50)
+                  </span>
+
+                  <span className="font-medium text-primary">
+                    +€
+                    {guestSurcharge.toFixed(2)}
+                  </span>
+
+                </div>
+              )}
+
+            </div>
+          )}
+
+          {/* BOOKING FORM */}
+
+          {cart.length > 0 && (
+            <form
+              id="booking-form"
+              onSubmit={handleReserve}
+              className="border-t border-primary/15 px-6 py-6 sm:px-8"
+            >
+
+              {/* FORM HEADING */}
+
+              <div className="mb-6">
+
+                <p className="text-xs font-medium uppercase tracking-[0.3em] text-primary">
+                  {t.booking.reservation}
+                </p>
+
+                <h3 className="mt-2 font-serif text-3xl font-light">
+                  {t.booking.yourDetails}
+                </h3>
+
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {t.booking.detailsDescription}
+                </p>
+
+              </div>
+
+              <div className="space-y-5">
+
+                {/* FULL NAME */}
+
+                <div>
+
+                  <label
+                    htmlFor="booking-name"
+                    className="mb-2 block text-xs font-medium uppercase tracking-widest text-muted-foreground"
+                  >
+                    {t.booking.fullName}
+                  </label>
+
+                  <input
+                    id="booking-name"
+                    name="name"
+                    type="text"
+                    required
+                    placeholder={
+                      t.booking
+                        .fullNamePlaceholder
+                    }
+                    className="h-[54px] w-full rounded-xl border border-primary/20 bg-[#0e0a08] px-4 text-sm outline-none transition-all placeholder:text-muted-foreground/60 focus:border-primary focus:ring-1 focus:ring-primary/20"
+                  />
+
+                </div>
+
+                {/* PHONE */}
+
+                <div>
+
+                  <label
+                    htmlFor="booking-phone"
+                    className="mb-2 block text-xs font-medium uppercase tracking-widest text-muted-foreground"
+                  >
+                    {t.booking.phone}
+                  </label>
+
+                  <div className="flex h-[54px] w-full overflow-hidden rounded-xl border border-primary/20 bg-[#0e0a08] transition-all focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20">
+
+                    <div className="flex shrink-0 items-center border-r border-primary/15 px-4 text-sm font-medium text-primary">
+                      +
+                    </div>
+
+                    <input
+                      id="booking-phone"
+                      name="phone"
+                      type="tel"
+                      required
+                      inputMode="tel"
+                      className="min-w-0 flex-1 bg-transparent px-4 text-sm outline-none"
+                    />
+
+                  </div>
+
+                </div>
+
+                {/* DATE + TIME */}
+
+                <div className="grid gap-4 sm:grid-cols-2">
+
+                  {/* DATE */}
+
+                  <div className="relative">
+
+                    <label
+                      htmlFor="booking-date"
+                      className="mb-2 block text-xs font-medium uppercase tracking-widest text-muted-foreground"
+                    >
+                      {t.booking.date}
+                    </label>
+
+                    <button
+                      type="button"
+                      id="booking-date"
+                      onClick={() => {
+                        setDateOpen(
+                          !dateOpen,
+                        )
+                        setTimeOpen(false)
+                        setGuestsOpen(false)
+                      }}
+                      className="flex h-[54px] w-full items-center rounded-xl border border-primary/20 bg-[#0e0a08] px-4 text-left text-sm outline-none transition-all hover:border-primary focus:border-primary"
+                    >
+
+                      <CalendarDays className="mr-3 h-[18px] w-[18px] shrink-0 text-primary" />
+
+                      <span
+                        className={
+                          selectedDate
+                            ? 'text-foreground'
+                            : 'text-muted-foreground'
+                        }
+                      >
+                        {selectedDate
+                          ? formatDate(
+                              selectedDate,
+                            )
+                          : 'дд.мм.гггг'}
+                      </span>
+
+                      <ChevronDown
+                        className={`ml-auto h-[18px] w-[18px] text-primary transition-transform ${
+                          dateOpen
+                            ? 'rotate-180'
+                            : ''
+                        }`}
+                      />
+
+                    </button>
+
+                    <input
+                      type="hidden"
+                      name="date"
+                      value={selectedDate}
+                    />
+
+                    {/* CALENDAR */}
+
+                    {dateOpen && (
+                      <div className="absolute left-0 right-0 top-[82px] z-50 overflow-hidden rounded-2xl border border-primary/30 bg-[#17110e] p-4 shadow-2xl">
+
+                        {/* CALENDAR HEADER */}
+
+                        <div className="mb-4 flex items-center justify-between">
+
+                          <button
+                            type="button"
+                            onClick={
+                              previousMonth
+                            }
+                            className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/20 text-primary transition hover:border-primary hover:bg-primary hover:text-black"
+                          >
+                            <ChevronLeft className="h-4 w-4" />
+                          </button>
+
+                          <span className="font-serif text-lg capitalize text-foreground">
+                            {monthName}
+                          </span>
+
+                          <button
+                            type="button"
+                            onClick={
+                              nextMonth
+                            }
+                            className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/20 text-primary transition hover:border-primary hover:bg-primary hover:text-black"
+                          >
+                            <ChevronRight className="h-4 w-4" />
+                          </button>
+
+                        </div>
+
+                        {/* WEEKDAYS */}
+
+                        <div className="mb-2 grid grid-cols-7 text-center text-[10px] font-semibold uppercase tracking-widest text-primary">
+
+                          {[
+                            'ПН',
+                            'ВТ',
+                            'СР',
+                            'ЧТ',
+                            'ПТ',
+                            'СБ',
+                            'ВС',
+                          ].map(
+                            (day) => (
+                              <span
+                                key={day}
+                                className="py-2"
+                              >
+                                {day}
+                              </span>
+                            ),
+                          )}
+
+                        </div>
+
+                        {/* DAYS */}
+
+                        <div className="grid grid-cols-7 gap-1">
+
+                          {calendarDays.map(
+                            ({
+                              day,
+                              currentMonth,
+                              date,
+                            }) => {
+
+                              const value =
+                                dateToString(
+                                  date,
+                                )
+
+                              const disabled =
+                                value < today
+
+                              const selected =
+                                value ===
+                                selectedDate
+
+                              return (
+                                <button
+                                  key={`${value}-${day}`}
+                                  type="button"
+                                  disabled={
+                                    disabled
+                                  }
+                                  onClick={() =>
+                                    selectDate(
+                                      date,
+                                    )
+                                  }
+                                  className={`
+                                    flex h-9 items-center justify-center rounded-lg text-xs transition-all
+                                    ${
+                                      !currentMonth
+                                        ? 'text-muted-foreground/30'
+                                        : ''
+                                    }
+                                    ${
+                                      disabled
+                                        ? 'cursor-not-allowed text-muted-foreground/20'
+                                        : 'hover:bg-primary/20 hover:text-primary'
+                                    }
+                                    ${
+                                      selected
+                                        ? 'bg-primary text-black font-semibold hover:bg-primary'
+                                        : ''
+                                    }
+                                  `}
+                                >
+                                  {day}
+                                </button>
+                              )
+                            },
+                          )}
+
+                        </div>
+
+                      </div>
+                    )}
+
+                  </div>
+
+                  {/* TIME */}
+
+                  <div className="relative">
+
+                    <label
+                      htmlFor="booking-time"
+                      className="mb-2 block text-xs font-medium uppercase tracking-widest text-muted-foreground"
+                    >
+                      {t.booking.time}
+                    </label>
+
+                    <button
+                      type="button"
+                      id="booking-time"
+                      onClick={() => {
+                        setTimeOpen(
+                          !timeOpen,
+                        )
+                        setDateOpen(false)
+                        setGuestsOpen(false)
+                      }}
+                      className="flex h-[54px] w-full items-center rounded-xl border border-primary/20 bg-[#0e0a08] px-4 text-left text-sm outline-none transition-all hover:border-primary focus:border-primary"
+                    >
+
+                      <Clock3 className="mr-3 h-[18px] w-[18px] shrink-0 text-primary" />
+
+                      <span
+                        className={
+                          selectedTime
+                            ? 'text-foreground'
+                            : 'text-muted-foreground'
+                        }
+                      >
+                        {selectedTime ||
+                          '--:--'}
+                      </span>
+
+                      <ChevronDown
+                        className={`ml-auto h-[18px] w-[18px] text-primary transition-transform ${
+                          timeOpen
+                            ? 'rotate-180'
+                            : ''
+                        }`}
+                      />
+
+                    </button>
+
+                    <input
+                      type="hidden"
+                      name="time"
+                      value={selectedTime}
+                    />
+
+                    {/* TIME PICKER */}
+
+                    {timeOpen && (
+                      <div className="absolute left-0 right-0 top-[82px] z-50 rounded-2xl border border-primary/30 bg-[#17110e] p-4 shadow-2xl">
+
+                        <div className="mb-3 text-center text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
+                          {t.booking.time}
+                        </div>
+
+                        <div className="grid max-h-[260px] grid-cols-3 gap-2 overflow-y-auto pr-1">
+
+                          {timeOptions.map(
+                            (time) => (
+                              <button
+                                key={time}
+                                type="button"
+                                onClick={() => {
+                                  setSelectedTime(
+                                    time,
+                                  )
+                                  setTimeOpen(
+                                    false,
+                                  )
+                                }}
+                                className={`
+                                  rounded-lg border px-3 py-2.5 text-sm transition-all
+                                  ${
+                                    selectedTime ===
+                                    time
+                                      ? 'border-primary bg-primary text-black'
+                                      : 'border-primary/15 bg-[#0e0a08] text-foreground hover:border-primary hover:text-primary'
+                                  }
+                                `}
+                              >
+                                {time}
+                              </button>
+                            ),
+                          )}
+
+                        </div>
+
+                      </div>
+                    )}
+
+                  </div>
+
+                </div>
+
+                {/* GUESTS */}
+
+                <div className="relative">
+
+                  <label
+                    htmlFor="booking-guests"
+                    className="mb-2 block text-xs font-medium uppercase tracking-widest text-muted-foreground"
+                  >
+                    {t.booking.guests}
+                  </label>
+
+                  <button
+                    type="button"
+                    id="booking-guests"
+                    onClick={() => {
+                      setGuestsOpen(
+                        !guestsOpen,
+                      )
+                      setDateOpen(false)
+                      setTimeOpen(false)
+                    }}
+                    className="flex h-[54px] w-full items-center rounded-xl border border-primary/20 bg-[#0e0a08] px-4 text-left text-sm outline-none transition-all hover:border-primary focus:border-primary"
+                  >
+
+                    <span className="text-foreground">
+                      {guests}{' '}
+                      {guests === 1
+                        ? t.booking
+                            .guest
+                        : t.booking
+                            .guestsPlural}
+                    </span>
+
+                    <ChevronDown
+                      className={`ml-auto h-[18px] w-[18px] text-primary transition-transform ${
+                        guestsOpen
+                          ? 'rotate-180'
+                          : ''
+                      }`}
+                    />
+
+                  </button>
+
+                  <input
+                    type="hidden"
+                    name="guests"
+                    value={guests}
+                  />
+
+                  {/* GUEST PICKER */}
+
+                  {guestsOpen && (
+                    <div className="absolute left-0 right-0 top-[82px] z-50 rounded-2xl border border-primary/30 bg-[#17110e] p-3 shadow-2xl">
+
+                      <div className="mb-2 px-2 py-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
+                        {t.booking.guests}
+                      </div>
+
+                      <div className="grid max-h-[250px] grid-cols-2 gap-1 overflow-y-auto">
+
+                        {Array.from(
+                          {
+                            length: 17,
+                          },
+                          (
+                            _,
+                            index,
+                          ) =>
+                            index + 1,
+                        ).map(
+                          (number) => (
+                            <button
+                              key={number}
+                              type="button"
+                              onClick={() => {
+                                setGuests(
+                                  number,
+                                )
+                                setGuestsOpen(
+                                  false,
+                                )
+                              }}
+                              className={`
+                                flex items-center justify-between rounded-lg px-3 py-3 text-sm transition-all
+                                ${
+                                  guests ===
+                                  number
+                                    ? 'bg-primary text-black'
+                                    : 'text-foreground hover:bg-primary/10 hover:text-primary'
+                                }
+                              `}
+                            >
+
+                              <span>
+                                {number}{' '}
+                                {number ===
+                                1
+                                  ? t
+                                      .booking
+                                      .guest
+                                  : t
+                                      .booking
+                                      .guestsPlural}
+                              </span>
+
+                              {guests ===
+                                number && (
+                                <span className="text-xs">
+                                  ✓
+                                </span>
+                              )}
+
+                            </button>
+                          ),
+                        )}
+
+                      </div>
+
+                    </div>
+                  )}
+
+                  {/* SURCHARGE */}
+
+                  {guestSurcharge > 0 && (
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      {extraGuests}{' '}
+                      extra guest
+                      {extraGuests > 1
+                        ? 's'
+                        : ''}{' '}
+                      × €50 = €
+                      {guestSurcharge}
+                    </p>
+                  )}
+
+                </div>
+
+                {/* ADDITIONAL INFORMATION */}
+
+                <div className="mt-6">
+
+                  <label
+                    htmlFor="booking-message"
+                    className="mb-2 block text-xs font-medium uppercase tracking-widest text-muted-foreground"
+                  >
+                    {
+                      t.booking
+                        .additionalInformation
+                    }
+                  </label>
+
+                  <textarea
+                    id="booking-message"
+                    name="message"
+                    rows={4}
+                    placeholder={
+                      t.booking
+                        .additionalInformationPlaceholder
+                    }
+                    className="w-full resize-none rounded-xl border border-primary/20 bg-[#0e0a08] px-4 py-3.5 text-sm outline-none transition-all placeholder:text-muted-foreground/60 focus:border-primary focus:ring-1 focus:ring-primary/20"
+                  />
+
+                </div>
+
+              </div>
+
+              {/* FINAL TOTAL */}
+
+              <div className="mt-6 rounded-xl border border-primary/20 bg-[#15100e] px-5 py-4">
+
+                <div className="flex items-center justify-between">
+
+                  <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+                    {t.booking.total}
+                  </span>
+
+                  <span className="font-serif text-2xl text-primary">
+                    €
+                    {finalTotal.toFixed(
+                      2,
+                    )}
+                  </span>
+
+                </div>
+
+              </div>
+
+              {/* SUBMIT */}
+
+              <button
+                type="submit"
+                className="mt-4 w-full rounded-full border border-primary/40 bg-primary px-6 py-4 text-xs font-medium uppercase tracking-widest text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-[0_0_25px_rgba(178,141,32,0.15)]"
+              >
+                {t.booking.confirm}
               </button>
-            )
-          },
-        )}
+
+            </form>
+          )}
+
+        </div>
+
       </div>
     </div>
   )
-}
-
-/* =========================================================
-   DROPDOWN
-========================================================= */
-
-function DropdownMenu({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  return (
-    <div
-      data-booking-dropdown
-      className="absolute left-0 right-0 top-full z-[100] mt-1 overflow-hidden rounded-md border border-[#b28d20] bg-[#080808] shadow-2xl"
-    >
-      {children}
-    </div>
-  )
-}
-
-/* =========================================================
-   CHOICE
-========================================================= */
-
-function Choice({
-  text,
-  selected,
-  onClick,
-}: {
-  text: string
-  selected: boolean
-  onClick: () => void
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`group flex w-full items-center justify-between rounded-md border-b border-white/10 px-4 py-3 text-left text-sm transition-all duration-200 last:border-b-0 ${
-        selected
-          ? 'border border-[#b28d20] bg-[#b28d20]/10 text-[#b28d20]'
-          : 'border border-transparent text-white/70 hover:border-[#b28d20] hover:bg-[#b28d20]/10 hover:text-[#b28d20]'
-      }`}
-    >
-      <span>
-        {text}
-      </span>
-
-      <SelectionCircle
-        selected={selected}
-      />
-    </button>
-  )
-}
-
-/* =========================================================
-   CIRCLE
-========================================================= */
-
-function SelectionCircle({
-  selected,
-}: {
-  selected: boolean
-}) {
-  return (
-    <span
-      className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-all duration-200 ${
-        selected
-          ? 'border-[#b28d20] bg-[#b28d20]'
-          : 'border-white/30 group-hover:border-[#b28d20]'
-      }`}
-    >
-      {selected && (
-        <Check className="h-3 w-3 text-black" />
-      )}
-    </span>
-  )
-}
-
-/* =========================================================
-   DONE
-========================================================= */
-
-function DoneButton({
-  onClick,
-}: {
-  onClick: () => void
-}) {
-  return (
-    <div className="border-t border-white/10 p-2">
-      <button
-        type="button"
-        onClick={onClick}
-        className="w-full rounded-md py-2 text-xs uppercase tracking-widest text-[#b28d20] transition-colors hover:bg-[#b28d20]/10"
-      >
-        Done
-      </button>
-    </div>
-  )
-}
-
-/* =========================================================
-   FIELD
-========================================================= */
-
-function Field({
-  label,
-  htmlFor,
-  className,
-  children,
-}: {
-  label: string
-  htmlFor: string
-  className?: string
-  children: React.ReactNode
-}) {
-  return (
-    <div
-      className={className}
-    >
-      <label
-        htmlFor={htmlFor}
-        className={labelClass}
-      >
-        {label}
-      </label>
-
-      {children}
-    </div>
-  )
-}
-
-/* =========================================================
-   STYLES
-========================================================= */
-
-const labelClass =
-  'mb-1.5 block text-xs uppercase tracking-widest text-white/50'
-
-const inputClass =
-  'w-full rounded-md border border-white/10 bg-black px-4 py-3 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/30 hover:border-[#b28d20] focus:border-[#b28d20] focus:ring-1 focus:ring-[#b28d20]'
-
-const selectButtonClass =
-  'flex min-h-[46px] w-full items-center justify-between rounded-md border border-white/10 bg-black px-4 py-3 text-sm text-white outline-none transition-all duration-200 hover:border-[#b28d20] focus:border-[#b28d20]'
-
-/* =========================================================
-   DATE HELPER
-========================================================= */
-
-function makeDate(
-  date: Date,
-) {
-  const day =
-    String(
-      date.getDate(),
-    ).padStart(2, '0')
-
-  const month =
-    String(
-      date.getMonth() + 1,
-    ).padStart(2, '0')
-
-  const year =
-    date.getFullYear()
-
-  return `${day}/${month}/${year}`
 }

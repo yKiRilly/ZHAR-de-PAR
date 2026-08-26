@@ -82,14 +82,13 @@ export function Philosophy() {
           </Reveal>
 
           {/* Slavic slogan */}
-          <Reveal delay={200}>
-            <div className="mt-10 border-t border-border/60 pt-8 text-center">
-              <p className="font-serif text-xl leading-tight text-primary sm:text-2xl">
-                Slavic space for Slavic face
-              </p>
-            </div>
-          </Reveal>
-
+<Reveal delay={200}>
+  <div className="mt-10 border-t border-border/60 pt-8 text-center">
+    <p className="font-serif text-3xl leading-tight text-primary sm:text-3xl lg:text-4xl">
+      Slavic space for Slavic face :)
+    </p>
+  </div>
+</Reveal>
         </div>
       </div>
     </section>

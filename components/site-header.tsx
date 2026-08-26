@@ -1,10 +1,20 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Menu, X, ChevronDown } from 'lucide-react'
+
+import {
+  Menu,
+  X,
+  ChevronDown,
+  ShoppingBag,
+} from 'lucide-react'
+
 import { cn } from '@/lib/utils'
+
 import { useBooking } from '@/components/booking-provider'
+
 import { useLanguage } from '@/components/language-provider'
+
 import type { Language } from '@/lib/translations'
 
 const navLinks = [
@@ -23,7 +33,8 @@ const languages: { code: Language; label: string }[] = [
 ]
 
 export function SiteHeader() {
-  const { open } = useBooking()
+  const { open, cart } = useBooking()
+
   const { language, setLanguage, t } = useLanguage()
 
   const [scrolled, setScrolled] = useState(false)
@@ -35,13 +46,17 @@ export function SiteHeader() {
 
     onScroll()
 
-    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('scroll', onScroll, {
+      passive: true,
+    })
 
-    return () => window.removeEventListener('scroll', onScroll)
+    return () =>
+      window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const currentLanguage = languages.find(
-    (item) => item.code === language
+  const cartCount = cart.reduce(
+    (sum, item) => sum + item.quantity,
+    0,
   )
 
   return (
@@ -53,31 +68,31 @@ export function SiteHeader() {
           : 'border-b border-transparent',
       )}
     >
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8">
+      <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-5 sm:px-8">
 
         {/* Logo */}
         <a
           href="#top"
-          className="flex items-center gap-2.5"
-          aria-label="DUB home"
+          className="flex items-center"
+          aria-label="ZHAR de PAR home"
         >
           <img
             src="/photos/logos/logoof .PNG"
-            alt="DUB"
-            className="h-55 w-auto"
+            alt="ZHAR de PAR"
+            className="h-[235px] w-auto object-contain"
           />
         </a>
 
         {/* Desktop navigation */}
         <nav
-          className="hidden items-center gap-8 lg:flex"
+          className="hidden items-center gap-9 lg:flex"
           aria-label="Primary"
         >
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
-className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className="text-[17px] font-semibold text-foreground/85 transition-colors hover:text-foreground"
             >
               {t[link.label as keyof typeof t]}
             </a>
@@ -89,11 +104,12 @@ className="text-sm font-medium text-muted-foreground transition-colors hover:tex
 
           {/* Language selector */}
           <div className="relative hidden sm:block">
-
             <button
               type="button"
-              onClick={() => setLanguageOpen((value) => !value)}
-              className="flex items-center gap-2 rounded-full border border-border px-4 py-2.5 text-xs font-medium uppercase tracking-widest text-foreground transition-colors hover:border-primary hover:text-primary"
+              onClick={() =>
+                setLanguageOpen((value) => !value)
+              }
+              className="flex items-center gap-2 rounded-full border border-border px-4 py-2.5 text-sm font-medium uppercase tracking-widest text-foreground transition-colors hover:border-primary hover:text-primary"
               aria-expanded={languageOpen}
               aria-label="Select language"
             >
@@ -109,7 +125,6 @@ className="text-sm font-medium text-muted-foreground transition-colors hover:tex
 
             {languageOpen && (
               <div className="absolute right-0 top-full mt-2 min-w-[150px] overflow-hidden rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur-md">
-
                 {languages.map((item) => (
                   <button
                     key={item.code}
@@ -119,7 +134,7 @@ className="text-sm font-medium text-muted-foreground transition-colors hover:tex
                       setLanguageOpen(false)
                     }}
                     className={cn(
-                      'flex w-full items-center justify-between rounded-lg px-4 py-2.5 text-left text-xs transition-colors',
+                      'flex w-full items-center justify-between rounded-lg px-4 py-2.5 text-left text-sm transition-colors',
                       item.code === language
                         ? 'bg-primary text-primary-foreground'
                         : 'text-muted-foreground hover:bg-primary/10 hover:text-foreground',
@@ -132,25 +147,36 @@ className="text-sm font-medium text-muted-foreground transition-colors hover:tex
                     </span>
                   </button>
                 ))}
-
               </div>
             )}
-
           </div>
 
-          {/* Book Now */}
+          {/* Cart icon */}
           <button
+            type="button"
             onClick={() => open()}
-            className="hidden rounded-full bg-primary px-6 py-2.5 text-xs font-medium uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary/90 sm:inline-flex"
+            className="relative flex h-11 w-11 items-center justify-center rounded-full border border-border text-foreground transition-all hover:border-primary hover:text-primary"
+            aria-label="Open cart"
           >
-            {t.bookNow}
+            <ShoppingBag className="h-5 w-5" />
+
+            {cartCount > 0 && (
+              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[10px] font-bold text-primary-foreground">
+                {cartCount}
+              </span>
+            )}
           </button>
 
           {/* Mobile menu */}
           <button
+            type="button"
             className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-foreground lg:hidden"
-            onClick={() => setMenuOpen((value) => !value)}
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            onClick={() =>
+              setMenuOpen((value) => !value)
+            }
+            aria-label={
+              menuOpen ? 'Close menu' : 'Open menu'
+            }
             aria-expanded={menuOpen}
           >
             {menuOpen ? (
@@ -169,36 +195,33 @@ className="text-sm font-medium text-muted-foreground transition-colors hover:tex
           className="border-t border-border bg-background/95 px-5 pb-6 pt-2 backdrop-blur-md lg:hidden"
           aria-label="Mobile"
         >
-
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
               onClick={() => setMenuOpen(false)}
-              className="block border-b border-border/50 py-3 text-sm text-muted-foreground transition-colors hover:text-foreground"
+              className="block border-b border-border/50 py-3 text-[17px] font-semibold text-foreground/85 transition-colors hover:text-foreground"
             >
               {t[link.label as keyof typeof t]}
             </a>
           ))}
 
-          {/* Mobile language selector */}
+          {/* Language */}
           <div className="mt-5 border-t border-border/50 pt-5">
-
             <p className="mb-3 text-xs font-medium uppercase tracking-[0.3em] text-primary">
               {t.language}
             </p>
 
             <div className="grid grid-cols-2 gap-2">
-
               {languages.map((item) => (
                 <button
                   key={item.code}
                   type="button"
-                  onClick={() => {
+                  onClick={() =>
                     setLanguage(item.code)
-                  }}
+                  }
                   className={cn(
-                    'rounded-full border px-4 py-2.5 text-xs uppercase tracking-widest transition-colors',
+                    'rounded-full border px-4 py-2.5 text-sm uppercase tracking-widest transition-colors',
                     item.code === language
                       ? 'border-primary bg-primary text-primary-foreground'
                       : 'border-border text-muted-foreground hover:border-primary hover:text-foreground',
@@ -207,21 +230,8 @@ className="text-sm font-medium text-muted-foreground transition-colors hover:tex
                   {item.code}
                 </button>
               ))}
-
             </div>
           </div>
-
-          {/* Mobile Book Now */}
-          <button
-            onClick={() => {
-              setMenuOpen(false)
-              open()
-            }}
-            className="mt-5 w-full rounded-full bg-primary px-6 py-3 text-xs font-medium uppercase tracking-widest text-primary-foreground"
-          >
-            {t.bookNow}
-          </button>
-
         </nav>
       )}
     </header>

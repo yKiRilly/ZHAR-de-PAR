@@ -1,14 +1,15 @@
+
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 export function VideoSection() {
   const [progress, setProgress] = useState(0)
+  const videoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
     const handleScroll = () => {
       const section = document.getElementById("video-section")
-
       if (!section) return
 
       const rect = section.getBoundingClientRect()
@@ -25,11 +26,45 @@ export function VideoSection() {
       setProgress(value)
     }
 
-    window.addEventListener("scroll", handleScroll, { passive: true })
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    })
+
     handleScroll()
 
     return () => {
       window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
+
+  useEffect(() => {
+    const video = videoRef.current
+    const section = document.getElementById("video-section")
+
+    if (!video || !section) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          // Видео появилось на экране — начинаем сначала
+          video.currentTime = 0
+
+          video.play().catch(() => {})
+        } else {
+          // Ушли от видео — останавливаем и сбрасываем
+          video.pause()
+          video.currentTime = 0
+        }
+      },
+      {
+        threshold: 0.5,
+      },
+    )
+
+    observer.observe(section)
+
+    return () => {
+      observer.disconnect()
     }
   }, [])
 
@@ -42,13 +77,13 @@ export function VideoSection() {
     >
       <div className="mx-auto w-full max-w-[1400px] px-6">
         <video
+          ref={videoRef}
           className="w-full h-[550px] md:h-[650px] rounded-2xl object-cover"
           src="/video/videobanya.mp4"
-          autoPlay
           muted
-          loop
           playsInline
           controls={false}
+          preload="auto"
           style={{
             transform: `scale(${scale})`,
             transformOrigin: "center center",

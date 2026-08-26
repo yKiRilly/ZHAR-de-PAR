@@ -2,13 +2,14 @@
 
 import Image from 'next/image'
 import { Plus } from 'lucide-react'
+
 import { brooms } from '@/lib/site-data'
 import { useBooking } from '@/components/booking-provider'
 import { useLanguage } from '@/components/language-provider'
 import { Reveal } from '@/components/reveal'
 
 export function BroomsSection() {
-  const { open } = useBooking()
+  const { addToCart } = useBooking()
   const { t } = useLanguage()
 
   return (
@@ -42,12 +43,21 @@ export function BroomsSection() {
         {/* Brooms */}
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {brooms.map((broom, i) => {
-            const translatedBroom = t.broomTypes[
-              broom.id as keyof typeof t.broomTypes
-            ]
+            const translatedBroom =
+              t.broomTypes[
+                broom.id as keyof typeof t.broomTypes
+              ]
+
+            // €15 -> 15
+            const price = Number(
+              broom.price.replace(/[^\d.,]/g, '').replace(',', '.'),
+            )
 
             return (
-              <Reveal key={broom.id} delay={i * 90}>
+              <Reveal
+                key={broom.id}
+                delay={i * 90}
+              >
                 <article
                   className="
                     group
@@ -65,6 +75,7 @@ export function BroomsSection() {
                     hover:border-primary/50
                   "
                 >
+
                   {/* Image */}
                   <div className="relative aspect-[4/3] shrink-0 overflow-hidden">
                     <Image
@@ -97,14 +108,18 @@ export function BroomsSection() {
                       {translatedBroom.description}
                     </p>
 
-                    {/* Button */}
+                    {/* Add to cart */}
                     <button
                       type="button"
                       onClick={() =>
-  open({
-    broom: translatedBroom.name,
-  })
-}
+                        addToCart({
+                          id: `broom-${broom.id}`,
+                          name: translatedBroom.name,
+                          price,
+                          canChangeQuantity: true,
+                          maxQuantity: 15,
+                        })
+                      }
                       className="
                         mt-auto
                         w-full
@@ -134,7 +149,6 @@ export function BroomsSection() {
             )
           })}
         </div>
-
       </div>
     </section>
   )

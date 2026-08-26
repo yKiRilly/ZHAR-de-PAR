@@ -1,6 +1,7 @@
 'use client'
 
 import { ArrowDown } from 'lucide-react'
+
 import { useBooking } from '@/components/booking-provider'
 import { useLanguage } from '@/components/language-provider'
 
@@ -29,13 +30,13 @@ export function Hero() {
         aria-hidden="true"
       />
 
-      {/* Light overlay */}
+      {/* Dark overlay */}
       <div
-        className="absolute inset-0 bg-black/20"
+        className="absolute inset-0 bg-black/30"
         aria-hidden="true"
       />
 
-      {/* Very subtle gradient */}
+      {/* Subtle gradient */}
       <div
         className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-background/35"
         aria-hidden="true"
@@ -63,27 +64,30 @@ export function Hero() {
       {/* Hero content */}
       <div className="relative z-10 mx-auto w-full max-w-6xl px-5 text-center">
         <p className="relative top-6 mb-6 animate-in fade-in slide-in-from-bottom-4 text-lg font-black uppercase tracking-[0.25em] text-primary duration-700 [text-shadow:0_0_1px_currentColor,0_0_1px_currentColor,0_0_1px_currentColor]">
-  {t.heroLabel}
-</p>
+          {t.heroLabel}
+        </p>
 
-       <h1 className="text-shadow-hero text-balance font-serif text-5xl font-bold leading-[1.05] text-[#b28d20] sm:text-7xl lg:text-8xl">
-  {t.heroTitle}
-</h1>
+        <h1 className="text-shadow-hero text-balance font-serif text-5xl font-bold leading-[1.05] text-[#b28d20] sm:text-7xl lg:text-8xl">
+          {t.heroTitle}
+        </h1>
 
         <p className="mx-auto mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-foreground/85 sm:text-xl">
-  {t.heroDescription}
-</p>
+          {t.heroDescription}
+        </p>
 
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          {/* Reserve */}
           <button
+            type="button"
             onClick={() => open()}
             className="w-full rounded-full bg-primary px-9 py-4 text-sm font-medium uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary/90 sm:w-auto"
           >
             {t.reserveRitual}
           </button>
 
+          {/* Explore rituals */}
           <a
-            href="#rituals"
+            href="#sauna-rental"
             className="w-full rounded-full border border-border/80 bg-background/20 px-9 py-4 text-sm font-medium uppercase tracking-widest text-foreground backdrop-blur-sm transition-colors hover:bg-background/40 sm:w-auto"
           >
             {t.exploreRituals}

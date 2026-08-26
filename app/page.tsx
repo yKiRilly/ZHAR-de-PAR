@@ -45,7 +45,6 @@ export default function Page() {
       <SiteHeader />
 
       <main>
-        {/* Structured data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -53,38 +52,30 @@ export default function Page() {
           }}
         />
 
-        {/* Hero */}
         <Hero />
 
-        {/* Philosophy */}
         <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
           <Philosophy />
         </section>
 
-        {/* Video */}
         <VideoSection />
 
-        {/* Services */}
         <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
           <ServicesSection />
         </section>
 
-        {/* Brooms */}
         <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
           <BroomsSection />
         </section>
 
-        {/* Gallery */}
         <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
           <GallerySection />
         </section>
 
-        {/* Testimonials */}
         <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
           <TestimonialsSection />
         </section>
 
-        {/* FAQ */}
         <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
           <FaqSection />
         </section>
