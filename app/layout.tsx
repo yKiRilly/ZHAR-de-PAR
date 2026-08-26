@@ -24,6 +24,9 @@ const siteUrl = 'https://www.zhardepar.com'
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+verification: {
+  google: 'L4RE2vGSQwVzUxglBVvdd0hZCZ6p0RAeLvyXBLNRV10',
+},
 
   title: {
     default: 'ZHAR de PAR — Slavic Banya in Spain',
