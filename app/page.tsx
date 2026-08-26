@@ -1,5 +1,4 @@
 import { BookingProvider } from '@/components/booking-provider'
-
 import { SiteHeader } from '@/components/site-header'
 import { Hero } from '@/components/hero'
 import { Philosophy } from '@/components/philosophy'
@@ -11,20 +10,38 @@ import { TestimonialsSection } from '@/components/testimonials-section'
 import { FaqSection } from '@/components/faq-section'
 import { SiteFooter } from '@/components/site-footer'
 import { BookNowFab } from '@/components/book-now-fab'
-
 import { faqs } from '@/lib/site-data'
+
+const siteUrl = 'https://www.zhardepar.com'
 
 const structuredData = {
   '@context': 'https://schema.org',
   '@graph': [
     {
-      '@type': 'HealthAndBeautyBusiness',
+      '@type': 'LocalBusiness',
+      '@id': `${siteUrl}/#business`,
       name: 'ZHAR de PAR',
+      url: siteUrl,
       description:
-        'A private Slavic sauna in nature offering traditional steam rituals, bath brooms, plunge pools, and private relaxation.',
+        'ZHAR de PAR is a private Slavic banya in Spain offering traditional steam rituals, bath brooms, sauna, jacuzzi, plunge pool and private relaxation in nature.',
       priceRange: '€€€',
+      image: `${siteUrl}/photos/view/viewgeneral.PNG`,
+      logo: `${siteUrl}/photos/logos/logoof.png`,
       openingHours: 'Mo-Su 10:00-24:00',
     },
+
+    {
+      '@type': 'WebSite',
+      '@id': `${siteUrl}/#website`,
+      url: siteUrl,
+      name: 'ZHAR de PAR',
+      description:
+        'Private Slavic banya in Spain with traditional steam rituals, bath brooms, sauna and private relaxation.',
+      publisher: {
+        '@id': `${siteUrl}/#business`,
+      },
+    },
+
     {
       '@type': 'FAQPage',
       mainEntity: faqs.map((faq) => ({
@@ -54,29 +71,47 @@ export default function Page() {
 
         <Hero />
 
-        <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
+        <section
+          id="philosophy"
+          className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8"
+        >
           <Philosophy />
         </section>
 
         <VideoSection />
 
-        <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
+        <section
+          id="services"
+          className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8"
+        >
           <ServicesSection />
         </section>
 
-        <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
+        <section
+          id="brooms"
+          className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8"
+        >
           <BroomsSection />
         </section>
 
-        <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
+        <section
+          id="gallery"
+          className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8"
+        >
           <GallerySection />
         </section>
 
-        <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
+        <section
+          id="testimonials"
+          className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8"
+        >
           <TestimonialsSection />
         </section>
 
-        <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
+        <section
+          id="faq"
+          className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8"
+        >
           <FaqSection />
         </section>
       </main>
