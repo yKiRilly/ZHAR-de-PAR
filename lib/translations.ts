@@ -3,49 +3,51 @@ export const translations = {
     // Header
     language: 'English',
     bookNow: 'Book Now',
-    reserve: 'Reserve',
+    reserve: 'Book Now',
     addToRitual: 'Add to ritual',
     philosophy: 'Philosophy',
     rituals: 'Rituals',
     brooms: 'Brooms',
     gallery: 'Gallery',
     journal: 'Questions',
-// Booking Modal
-booking: {
-  title: 'Your booking',
-  close: 'Close',
-  emptyTitle: 'Your basket is empty',
-  emptyDescription: 'Add a ritual and a bath broom to continue.',
-  maximum: 'Maximum 15',
-  minimum: 'Minimum 3 hours',
-  total: 'Total',
-  reservation: 'Reservation',
-  yourDetails: 'Your details',
-  detailsDescription:
-    'Fill in your details and we will contact you to confirm the booking.',
-  fullName: 'Name',
-  fullNamePlaceholder: 'Your name',
-  phone: 'Phone',
-  date: 'Date',
-  time: 'Time',
-  guests: 'Number of guests',
-  guest: 'guest',
-  guestsPlural: 'guests',
-  additionalInformation: 'Additional information',
-  additionalInformationPlaceholder:
-    'Your wishes or additional information...',
-  confirm: 'Confirm reservation',
-  thankYou: 'Thank you! We will contact you shortly.',
-},
+
+    // Booking Modal
+    booking: {
+      title: 'Your booking',
+      close: 'Close',
+      emptyTitle: 'Your basket is empty',
+      emptyDescription: 'Add a ritual and a bath broom to continue.',
+      maximum: 'Maximum 15',
+      minimum: 'Minimum 3 hours',
+      total: 'Total',
+      reservation: 'Reservation',
+      yourDetails: 'Your details',
+      detailsDescription:
+        'Fill in your details and we will contact you to confirm the booking.',
+      fullName: 'Name',
+      fullNamePlaceholder: 'Your name',
+      phone: 'Phone',
+      date: 'Date',
+      time: 'Time',
+      guests: 'Number of guests',
+      guest: 'guest',
+      guestsPlural: 'guests',
+      additionalInformation: 'Additional information',
+      additionalInformationPlaceholder:
+        'Your wishes or additional information...',
+      confirm: 'Confirm reservation',
+      thankYou: 'Thank you! We will contact you shortly.',
+    },
+
     // Hero
     heroLabel: '',
     heroTitle: 'YOUR BANYA IN NATURE',
     heroDescription:
       'Rent your own private space for relaxation, where time slows down and the bathing ritual becomes something special.',
-    reserveRitual: 'Reserve Your Ritual',
-    exploreRituals: 'Explore Rituals',
+    reserveRitual: 'Book a session',
+    exploreRituals: 'Explore rituals',
     scroll: 'Scroll',
-    scrollToPhilosophy: 'Scroll to philosophy',
+    scrollToPhilosophy: 'Go to philosophy',
 
     // Philosophy
     ourPhilosophy: 'Our Philosophy',
@@ -58,7 +60,7 @@ booking: {
       'ZHAR de PAR is a private space. You arrive with your own company and spend several hours in absolute seclusion. Heat gives way to coolness, steam to fresh air, noise to silence.',
     privacy: 'Complete privacy',
     slavicSauna: 'A real Slavic banya',
-    inNature: 'In the midst of nature',
+    inNature: 'Surrounded by nature',
     philosophyImageAlt: 'Traditional Slavic banya',
 
     // Rituals
@@ -66,15 +68,16 @@ booking: {
     saunaEstate: 'Private Banya Rental',
     perHour: '/ hour',
     saunaEstateDescription:
-      'A real Slavic banya reserved exclusively for your company. Complete privacy, the atmosphere of nature and relaxation without outside guests.',
+      'A real Slavic banya with a wood-burning stove, a 20 m² steam room, completely reserved for your company. Complete privacy, the atmosphere of nature and relaxation without outside guests.',
     bookingConditions: 'Booking Conditions',
     minimumRental: 'Minimum rental time — 3 hours',
     upToGuests: 'Up to 8 guests included',
     additionalGuest: 'Each additional guest — €50',
     deposit:
       'A €100 deposit is required to confirm the booking (non-refundable upon cancellation).',
-    forThoseWhoUnderstand:
-      'For those who appreciate bathing traditions and want to immerse themselves in this culture, we offer:',
+      broomHeading1: 'Not in the mood to swing a venik today?',
+broomHeading2: 'Or curious how we do it?',
+broomHeading3: 'Here is what we offer:',
     improvingProcedure: 'Complete Your Ritual',
 
     // Rental card
@@ -82,7 +85,6 @@ booking: {
     coldPlunge: 'COLD PLUNGE',
     jacuzzi: 'JACUZZI',
     bathAccessories: 'Bath Accessories',
-
     towelSheet: 'Towel & Sheet',
     towelSheetDescription:
       'Fresh bath towel and linen sheet for your bathing ritual.',
@@ -96,11 +98,10 @@ booking: {
         guests: 'Up to 4 guests',
         duration: '45 minutes',
         description:
-          'A traditional steam ritual in a relaxed atmosphere with aromatic bath brooms and approximately 10 minutes of gentle steam.',
+          'A traditional steam ritual in a relaxed atmosphere with aromatic bath brooms and approximately 10 minutes of gentle steam for deep renewal.',
         includes: [
-          'Aromatic broom treatment',
-          'Shared parilka session',
-          'Cold plunge access',
+          'Aromatic broom massage',
+          'Shared steam room session',
           'Aromatic steam',
         ],
       },
@@ -110,9 +111,9 @@ booking: {
         guests: '1 guest',
         duration: '30 minutes',
         description:
-          'A fully personalised steam ritual for those seeking a traditional premium experience under the guidance of a master banshchik.',
+          'A fully personalised steam ritual for those seeking a traditional premium experience under the guidance of a bath master.',
         includes: [
-          'Private parilka session',
+          'Private steam room session',
           'Personal broom master',
           'Herbal infusion pour',
           'Cooling ritual',
@@ -150,15 +151,15 @@ booking: {
       JACUZZI: {
         name: 'Jacuzzi',
         description:
-          'A slow relaxing massage with aromatic oils prepared in-house, helping to release tension and relax the body.',
+          'A warm and relaxing jacuzzi experience, perfect for slowing down, resting and enjoying the atmosphere after the steam room.',
       },
     },
 
     // Brooms
-    bathBroom: 'The Bath Broom',
-    heartOfRitual: 'The heart of the ritual — the venik',
+    bathBroom: 'Bath Broom',
+    heartOfRitual: 'The heart of the ritual — the broom',
     broomDescription:
-      'Hand-tied bundles of aromatic leaves used to distribute heat and gently work the body. Each broom is gathered in season and prepared before the session. Add a broom to your ritual — €15 each.',
+      'Each broom is gathered in season and steamed before the session according to your request. Add a broom to your ritual — €15 each.',
 
     broomTypes: {
       birch: {
@@ -188,7 +189,7 @@ booking: {
 
     // Gallery
     atmosphere: 'The Atmosphere',
-    galleryTitle: 'Steam. Fire. Water. Nature.',
+    galleryTitle: 'Fire. Water. Steam. Nature.',
     openImage: 'Open image',
     closeViewer: 'Close viewer',
     previousImage: 'Previous image',
@@ -197,7 +198,7 @@ booking: {
 
     // Testimonials
     inTheirWords: 'In Their Words',
-    guestTestimonials: 'Guest testimonials',
+    guestTestimonials: 'Guest Testimonials',
     previousTestimonial: 'Previous testimonial',
     nextTestimonial: 'Next testimonial',
     goToTestimonial: 'Go to testimonial',
@@ -205,26 +206,29 @@ booking: {
     testimonials: [
       {
         quote:
-          'It is a very beautiful place. I loved that the banya is truly surrounded by nature. After the steam ritual, we went to the cold plunge and then sat by the fire. The perfect evening.',
+          'It is a very beautiful place. I loved that the banya is truly surrounded by nature, rather than simply being a banya with an interior. After the steam session, we went to the cold plunge and then sat by the fire. The perfect evening.',
         name: 'Alina Necrasova',
         detail: '',
       },
+
       {
         quote:
           'ZHAR de PAR pleasantly surprised me. Quiet, green and without any fuss. The atmosphere itself is a separate pleasure: wood, fire and the scent of the steam room.',
         name: 'Michael Prohorov',
         detail: '',
       },
+
       {
         quote:
           'We were looking for a place where we could relax with a group without feeling like we were in an ordinary SPA. The atmosphere here is completely different. Very cosy, beautiful and genuine.',
         name: 'Ekaterina Chuiko',
         detail: '',
       },
+
       {
         quote:
           'It is a good banya, but that is not even the main thing here. Nature, silence, fire and cold water after the steam room — everything comes together into a truly proper rest.',
-        name: 'Artyom Minailov',
+        name: 'Anton Minailov',
         detail: '',
       },
     ],
@@ -233,7 +237,7 @@ booking: {
     faqLabel: 'Good to Know',
     faqTitle: 'Frequently Asked Questions',
     faqDescription:
-      'Everything you need to know before your visit. If you still have questions, our admistrator is always ready to help.',
+      'Everything you need to know before your visit. If you still have questions, our administrator is always ready to help.',
 
     faq: [
       {
@@ -241,26 +245,31 @@ booking: {
         answer:
           'Yes. By prior arrangement, you can rent the banya for more than 3 hours.',
       },
+
       {
         question: 'Will the banya be ready when we arrive?',
         answer:
           'Yes. We will prepare everything in advance for your arrival: heat the banya, prepare the relaxation area and take care of the necessary details. All you need to do is arrive at the appointed time and enjoy your stay. You will need to add firewood yourself. If any problem arises, we have someone who can help.',
       },
+
       {
         question: 'What should I bring with me?',
         answer:
-          'All you need is a good mood. We’ll provide everything you need for your stay. If you’d like to save, you’re welcome to bring everything you need with you.',
+          'All you need is a good mood. We will provide everything necessary for your stay. If you want to save money, you are welcome to bring everything you need with you.',
       },
+
       {
         question: 'Can we come with a large group?',
         answer:
-          'Yes, of course. We have a spacious private area with plenty of room to comfortably enjoy your time with a larger group. You can relax together, enjoy the sauna, the relaxation area and the outdoor space.',
+          'Yes, of course. We have a large private area with enough space to comfortably spend time with a large group. You can relax together, enjoy the banya, the relaxation area and the outdoor space.',
       },
+
       {
         question: 'How do I book the banya?',
         answer:
-          'Fill out the form on the website and leave your contact details. Our administrator will contact you. The prepayment is made after you have been contacted by our administrator.',
+          'Fill out the form on the website and leave your contact details. Our administrator will contact you. The prepayment is made after our administrator contacts you.',
       },
+
       {
         question: 'Can we order food?',
         answer:
@@ -269,16 +278,20 @@ booking: {
     ],
 
     // Footer
-    footerTitle: 'Your Private Escape Awaits',
-    footerSubtitle: 'Reserve the banya for an evening of real steam',
+    footerTitle: 'Book your time for a truly authentic steam',
+    footerSubtitle: '',
     footerDescription:
-      'Private sessions are held for a minimum of three hours. Choose your ritual, your brooms and your table — we will take care of everything else.',
+      'Choose your ritual, brooms and table — we will take care of everything else.',
     footerVisit: 'Address',
     footerHours: 'Daily · 24/7 · By reservation',
     footerConcierge: 'Contacts',
     footerRights: 'All rights reserved.',
     footerTagline: 'Created for stillness',
   },
+
+  // ============================================================
+  // SPANISH
+  // ============================================================
 
   es: {
     // Header
@@ -293,38 +306,39 @@ booking: {
     journal: 'Preguntas',
 
     // Booking Modal
-booking: {
-  title: 'Tu reserva',
-  close: 'Cerrar',
-  emptyTitle: 'Tu cesta está vacía',
-  emptyDescription: 'Añade un ritual y un venik para continuar.',
-  maximum: 'Máximo 15',
-  minimum: 'Mínimo 3 horas',
-  total: 'Total',
-  reservation: 'Reserva',
-  yourDetails: 'Tus datos',
-  detailsDescription:
-    'Introduce tus datos y nos pondremos en contacto contigo para confirmar la reserva.',
-  fullName: 'Nombre ',
-  fullNamePlaceholder: 'Tu nombre',
-  phone: 'Teléfono',
-  date: 'Fecha',
-  time: 'Hora',
-  guests: 'Número de personas',
-  guest: 'persona',
-  guestsPlural: 'personas',
-  additionalInformation: 'Información adicional',
-  additionalInformationPlaceholder:
-    'Tus deseos o información adicional...',
-  confirm: 'Confirmar reserva',
-  thankYou: '¡Gracias! Nos pondremos en contacto contigo en breve.',
-},
+    booking: {
+      title: 'Tu reserva',
+      close: 'Cerrar',
+      emptyTitle: 'Tu cesta está vacía',
+      emptyDescription: 'Añade un ritual y un venik para continuar.',
+      maximum: 'Máximo 15',
+      minimum: 'Mínimo 3 horas',
+      total: 'Total',
+      reservation: 'Reserva',
+      yourDetails: 'Tus datos',
+      detailsDescription:
+        'Introduce tus datos y nos pondremos en contacto contigo para confirmar la reserva.',
+      fullName: 'Nombre',
+      fullNamePlaceholder: 'Tu nombre',
+      phone: 'Teléfono',
+      date: 'Fecha',
+      time: 'Hora',
+      guests: 'Número de personas',
+      guest: 'persona',
+      guestsPlural: 'personas',
+      additionalInformation: 'Información adicional',
+      additionalInformationPlaceholder:
+        'Tus deseos o información adicional...',
+      confirm: 'Confirmar reserva',
+      thankYou: '¡Gracias! Nos pondremos en contacto contigo en breve.',
+    },
+
     // Hero
     heroLabel: '',
     heroTitle: 'VUESTRA BANYA EN LA NATURALEZA',
     heroDescription:
       'Alquila tu propio espacio privado para descansar, donde el tiempo se ralentiza y el ritual de baño se convierte en algo especial.',
-    reserveRitual: 'Reservar tu ritual',
+    reserveRitual: 'Reservar una sesión',
     exploreRituals: 'Explorar rituales',
     scroll: 'Deslizar',
     scrollToPhilosophy: 'Ir a la filosofía',
@@ -348,15 +362,16 @@ booking: {
     saunaEstate: 'Alquiler de la banya privada',
     perHour: '/ hora',
     saunaEstateDescription:
-      'Una auténtica banya eslava reservada exclusivamente para tu grupo. Privacidad total, naturaleza y descanso sin otros huéspedes.',
+      'Una auténtica banya eslava con estufa de leña, una sala de vapor de 20 m² y reservada completamente para tu grupo. Privacidad total, naturaleza y descanso sin otros huéspedes.',
     bookingConditions: 'Condiciones de reserva',
     minimumRental: 'Tiempo mínimo de alquiler — 3 horas',
     upToGuests: 'Hasta 8 personas incluidas',
     additionalGuest: 'Cada persona adicional — €50',
     deposit:
       'Se requiere un depósito de €100 para confirmar la reserva (no reembolsable en caso de cancelación).',
-    forThoseWhoUnderstand:
-      'Para quienes valoran las tradiciones de la banya y quieren sumergirse en esta cultura, ofrecemos:',
+      broomHeading1: '¿Hoy no te apetece usar el venik?',
+broomHeading2: '¿O quieres saber cómo lo hacemos nosotros?',
+broomHeading3: 'Esto es lo que ofrecemos:',
     improvingProcedure: 'Completa tu ritual',
 
     // Rental card
@@ -364,13 +379,12 @@ booking: {
     coldPlunge: 'PILETA FRÍA',
     jacuzzi: 'JACUZZI',
     bathAccessories: 'Accesorios de baño',
-
     towelSheet: 'Toalla y sábana',
     towelSheetDescription:
       'Toalla de baño fresca y sábana de lino para tu ritual de baño.',
-    slippersHat: 'Chanclas y gorro de baño',
+    slippersHat: 'Zapatillas y gorro de baño',
     slippersHatDescription:
-      'Chanclas cómodas y un gorro tradicional para disfrutar de tu estancia.',
+      'Zapatillas cómodas y un gorro tradicional para disfrutar de tu estancia.',
 
     services: {
       'group-steam-ritual': {
@@ -378,11 +392,10 @@ booking: {
         guests: 'Hasta 4 personas',
         duration: '45 minutos',
         description:
-          'Un ritual tradicional de vapor en un ambiente relajado, con veniks aromáticos y aproximadamente 10 minutos de vapor suave.',
+          'Un ritual tradicional de vapor en un ambiente relajado, con veniks aromáticos y aproximadamente 10 minutos de vapor suave para una renovación profunda.',
         includes: [
-          'Tratamiento con venik aromático',
-          'Sesión compartida en la parilka',
-          'Acceso a la pileta fría',
+          'Masaje con venik aromático',
+          'Sesión compartida en la sala de vapor',
           'Vapor aromático',
         ],
       },
@@ -394,7 +407,7 @@ booking: {
         description:
           'Un ritual de vapor totalmente personalizado para quienes buscan una experiencia tradicional premium bajo la guía de un maestro de banya.',
         includes: [
-          'Sesión privada en la parilka',
+          'Sesión privada en la sala de vapor',
           'Maestro de venik personal',
           'Vertido de infusión de hierbas',
           'Ritual de enfriamiento',
@@ -420,11 +433,11 @@ booking: {
       GRILL: {
         name: 'Barbacoa',
         description:
-          'Zona de barbacoa para una cena tranquila en plena naturaleza. Enciende el fuego, cocina carne o verduras, abre algo frío y simplemente disfruta de la tarde rodeado de naturaleza.',
+          'Zona para barbacoa y una cena tranquila en plena naturaleza. Enciende el fuego, cocina carne o verduras, abre algo frío y simplemente disfruta de la tarde rodeado de naturaleza.',
       },
 
       'BAPTISMAL FONT': {
-        name: 'Pileta fria',
+        name: 'Pileta fría',
         description:
           'Una pileta fría después de la sala de vapor ayuda a completar el ritual de baño y aporta una agradable sensación de energía. Vapor caliente, agua fresca y aire puro alrededor.',
       },
@@ -432,7 +445,7 @@ booking: {
       JACUZZI: {
         name: 'Jacuzzi',
         description:
-          'Un masaje lento y relajante con aceites aromáticos preparados en la casa, que ayuda a liberar la tensión y relajar el cuerpo.',
+          'Una experiencia cálida y relajante en el jacuzzi, perfecta para bajar el ritmo, descansar y disfrutar del ambiente después de la sala de vapor.',
       },
     },
 
@@ -440,7 +453,7 @@ booking: {
     bathBroom: 'El venik de baño',
     heartOfRitual: 'El corazón del ritual — el venik',
     broomDescription:
-      'Manojos de hojas aromáticas atados a mano, utilizados para distribuir el calor y trabajar suavemente el cuerpo. Cada venik se recoge en temporada y se prepara antes de la sesión. Añade uno a tu ritual — €15 cada uno.',
+      'Cada venik se recoge en temporada y se prepara al vapor antes de la sesión según tu petición. Añade un venik a tu ritual — €15 cada uno.',
 
     broomTypes: {
       birch: {
@@ -470,7 +483,7 @@ booking: {
 
     // Gallery
     atmosphere: 'La atmósfera',
-    galleryTitle: 'Vapor. Fuego. Agua. Naturaleza.',
+    galleryTitle: 'Fuego. Agua. Vapor. Naturaleza.',
     openImage: 'Abrir imagen',
     closeViewer: 'Cerrar visor',
     previousImage: 'Imagen anterior',
@@ -487,26 +500,29 @@ booking: {
     testimonials: [
       {
         quote:
-          'Es un lugar muy bonito. Me gustó que la banya estuviera realmente rodeada de naturaleza. Después del ritual fuimos a la pileta fría y luego nos sentamos junto al fuego. La velada perfecta.',
+          'Es un lugar muy bonito. Me gustó que la banya estuviera realmente rodeada de naturaleza, y no fuera simplemente una banya con un bonito interior. Después del ritual fuimos a la pileta fría y luego nos sentamos junto al fuego. La velada perfecta.',
         name: 'Alina Necrasova',
         detail: '',
       },
+
       {
         quote:
           'ZHAR de PAR me sorprendió gratamente. Tranquilo, verde y sin prisas. Un placer especial es la propia atmósfera: madera, fuego y el aroma de la sala de vapor.',
         name: 'Michael Prohorov',
         detail: '',
       },
+
       {
         quote:
           'Buscábamos un lugar donde poder descansar en compañía sin sentir que estábamos en un SPA normal. Aquí la atmósfera es completamente diferente. Muy acogedora, bonita y auténtica.',
         name: 'Ekaterina Chuiko',
         detail: '',
       },
+
       {
         quote:
           'Es una buena banya, pero ni siquiera eso es lo principal aquí. Naturaleza, silencio, fuego y agua fría después del vapor: todo se combina para crear un descanso de verdad.',
-        name: 'Artyom Minailov',
+        name: 'Anton Minailov',
         detail: '',
       },
     ],
@@ -523,44 +539,53 @@ booking: {
         answer:
           'Sí. Previa reserva, puedes alquilar la banya durante más de 3 horas.',
       },
+
       {
         question: '¿La banya estará preparada para nuestra llegada?',
         answer:
           'Sí. Prepararemos todo con antelación: calentaremos la banya, prepararemos la zona de descanso y nos ocuparemos de los detalles necesarios. Solo tendrás que llegar a la hora acordada y disfrutar de tu estancia. Tendrás que añadir la leña por tu cuenta. Si surge algún problema, tenemos a una persona que puede ayudarte.',
       },
+
       {
         question: '¿Qué debo llevar conmigo?',
         answer:
-          'Lo más importante es venir con buen ánimo. Nosotros proporcionaremos todo lo necesario para tu descanso. Si quieres ahorrar, puedes traer contigo todo lo que necesites.',
+          'Lo más importante es venir con buen ánimo. Nosotros proporcionaremos todo lo necesario para tu descanso. Si quieres ahorrar, puedes traer contigo todo lo necesario.',
       },
+
       {
         question: '¿Podemos venir con un grupo grande?',
         answer:
-          'Sí, por supuesto. Contamos con un amplio espacio privado, perfecto para disfrutar cómodamente en un grupo grande. Podéis relajaros juntos, disfrutar de la sauna, la zona de descanso y el espacio exterior.',
+          'Sí, por supuesto. Tenemos una amplia zona privada y suficiente espacio para disfrutar cómodamente en un grupo grande. Podéis relajaros juntos, disfrutar de la banya, la zona de descanso y el espacio exterior.',
       },
+
       {
         question: '¿Cómo puedo reservar la banya?',
         answer:
           'Completa el formulario en el sitio web y deja tus datos de contacto. Nuestro administrador se pondrá en contacto contigo. El pago por adelantado se realiza después de que nuestro administrador se haya puesto en contacto contigo.',
       },
+
       {
         question: '¿Podemos pedir comida?',
         answer:
-          'Sí, pero es mejor organizarlo con antelación para que la cena llegue a tiempo.',
+          'Sí, pero es mejor organizarlo con antelación para que tu cena llegue a tiempo.',
       },
     ],
 
     // Footer
-    footerTitle: 'Tu espacio privado te espera',
-    footerSubtitle: 'Reserva la banya para una tarde de auténtico vapor',
+    footerTitle: 'Reserva tu tiempo para disfrutar del auténtico vapor',
+    footerSubtitle: '',
     footerDescription:
-      'Las sesiones privadas tienen una duración mínima de tres horas. Elige tu ritual, tus veniks y tu mesa — nosotros nos ocuparemos del resto.',
+      'Elige tu ritual, tus veniks y tu mesa — nosotros nos ocuparemos del resto.',
     footerVisit: 'Dirección',
     footerHours: 'Todos los días · 24/7 · Con reserva',
     footerConcierge: 'Contactos',
     footerRights: 'Todos los derechos reservados.',
     footerTagline: 'Creado para la calma',
   },
+
+  // ============================================================
+  // RUSSIAN
+  // ============================================================
 
   ru: {
     // Header
@@ -574,33 +599,33 @@ booking: {
     gallery: 'Галерея',
     journal: 'Вопросы',
 
-// Booking Modal
-booking: {
-  title: 'Ваше бронирование',
-  close: 'Закрыть',
-  emptyTitle: 'Ваша корзина пуста',
-  emptyDescription: 'Добавьте ритуал и банный веник, чтобы продолжить.',
-  maximum: 'Максимум 15',
-  minimum: 'Минимум 3 часа',
-  total: 'Итого',
-  reservation: 'Бронирование',
-  yourDetails: 'Ваши данные',
-  detailsDescription:
-    'Заполните данные, и мы свяжемся с вами для подтверждения бронирования.',
-  fullName: 'Имя',
-  fullNamePlaceholder: 'Ваше имя',
-  phone: 'Телефон',
-  date: 'Дата',
-  time: 'Время',
-  guests: 'Количество гостей',
-  guest: 'гость',
-  guestsPlural: 'гостей',
-  additionalInformation: 'Дополнительная информация',
-  additionalInformationPlaceholder:
-    'Ваши пожелания или дополнительная информация...',
-  confirm: 'Подтвердить бронирование',
-  thankYou: 'Спасибо! Мы свяжемся с вами в ближайшее время.',
-},
+    // Booking Modal
+    booking: {
+      title: 'Ваше бронирование',
+      close: 'Закрыть',
+      emptyTitle: 'Ваша корзина пуста',
+      emptyDescription: 'Добавьте ритуал и банный веник, чтобы продолжить.',
+      maximum: 'Максимум 15',
+      minimum: 'Минимум 3 часа',
+      total: 'Итого',
+      reservation: 'Бронирование',
+      yourDetails: 'Ваши данные',
+      detailsDescription:
+        'Заполните данные, и мы свяжемся с вами для подтверждения бронирования.',
+      fullName: 'Имя',
+      fullNamePlaceholder: 'Ваше имя',
+      phone: 'Телефон',
+      date: 'Дата',
+      time: 'Время',
+      guests: 'Количество гостей',
+      guest: 'гость',
+      guestsPlural: 'гостей',
+      additionalInformation: 'Дополнительная информация',
+      additionalInformationPlaceholder:
+        'Ваши пожелания или дополнительная информация...',
+      confirm: 'Подтвердить бронирование',
+      thankYou: 'Спасибо! Мы свяжемся с вами в ближайшее время.',
+    },
 
     // Hero
     heroLabel: '',
@@ -616,11 +641,11 @@ booking: {
     ourPhilosophy: 'Наша философия',
     philosophyTitle: 'ЖАР рождается из ПАРА',
     philosophyText1:
-      'Именно в этом заключается наша идея: сохранить характер славянской бани и попытаться вписать его в испанскую природу. Здесь встречаются две культуры, чтобы создать одно состояние – тепло, спокойствие и полное присутствие в моменте.',
+      'Именно в этом заключается наша идея: сохранить характер славянской бани и попытаться вписать его в испанскую природу. Здесь встречаются две культуры, чтобы создать одно состояние — тепло, спокойствие и полное присутствие в моменте.',
     philosophyText2:
       'Мы попытались создать не просто баню, а саму культуру банного отдыха. Тепло дерева, аромат веников, живой огонь, прохладный воздух и тишина становятся частью одного ритуала. Здесь не нужно никуда спешить: можно париться, отдыхать, разговаривать, смеяться или просто молчать.',
     philosophyText3:
-      'ZHAR de PAR – приватное пространство. Вы приезжаете своей компанией и на несколько часов остаетесь в абсолютном уединении. Жар сменяется прохладой, пар – свежим воздухом, шум – тишиной.',
+      'ZHAR de PAR — приватное пространство. Вы приезжаете своей компанией и на несколько часов остаетесь в абсолютном уединении. Жар сменяется прохладой, пар — свежим воздухом, шум — тишиной.',
     privacy: 'Полная приватность',
     slavicSauna: 'Настоящая славянская баня',
     inNature: 'Посреди природы',
@@ -631,23 +656,23 @@ booking: {
     saunaEstate: 'Аренда банного пространства',
     perHour: '/ час',
     saunaEstateDescription:
-      'Настоящая славянская баня с печью на дубовых дровах, с площадью парной 20м², полностью забронированная только для вашей компании. Полная приватность, атмосфера природы и отдых без посторонних гостей.',
+      'Настоящая славянская баня с печью на дубовых дровах, с площадью парной 20 м², полностью забронированная только для вашей компании. Полная приватность, атмосфера природы и отдых без посторонних гостей.',
     bookingConditions: 'Условия бронирования',
     minimumRental: 'Минимальное время аренды — 3 часа',
     upToGuests: 'До 8 гостей включено',
     additionalGuest: 'Каждый дополнительный гость — €50',
     deposit:
-      'Для подтверждения бронирования требуется депозит €100 (не возвращается при отмене)',
-    forThoseWhoUnderstand:
-      'Для тех, кто ценит банные традиции и хочет окунуться в эту культуру, мы предлагаем:',
-    improvingProcedure: 'Дополните свой ритуал',
+      'Для подтверждения бронирования требуется депозит €100 (не возвращается при отмене).',
+    broomHeading1: 'Не в настроении сегодня махать веником?',
+broomHeading2: 'Или интересно, как это делаем мы?',
+broomHeading3: 'Наше предложение:',
+      improvingProcedure: 'Дополните свой ритуал',
 
     // Rental card
     grill: 'Мангал',
     coldPlunge: 'Купель',
     jacuzzi: 'Джакузи',
     bathAccessories: 'Банные принадлежности',
-
     towelSheet: 'Полотенце и простыня',
     towelSheetDescription:
       'Свежее банное полотенце и льняная простыня для вашего банного ритуала.',
@@ -674,7 +699,7 @@ booking: {
         guests: '1 гость',
         duration: '30 минут',
         description:
-          'Полностью персонализированный паровой ритуал для тех, кто хочет получить традиционный премиальный опыт под руководством мастера-банщика.',
+          'Полностью персонализированный паровой ритуал для тех, кто хочет получить традиционный премиальный опыт под руководством мастера.',
         includes: [
           'Приватный сеанс в парилке',
           'Персональный мастер веников',
@@ -693,6 +718,7 @@ booking: {
           'Минеральный солевой скраб',
           'Тёплое ополаскивание',
           'Натуральный мёд',
+          'Глубокое обновление кожи',
         ],
       },
     },
@@ -713,7 +739,7 @@ booking: {
       JACUZZI: {
         name: 'Джакузи',
         description:
-          'Медленный расслабляющий массаж с ароматическими маслами собственного приготовления, который помогает снять напряжение и расслабить тело.',
+          'Тёплое и расслабляющее джакузи, созданное для того, чтобы замедлиться, отдохнуть и насладиться атмосферой после парной.',
       },
     },
 
@@ -751,7 +777,7 @@ booking: {
 
     // Gallery
     atmosphere: 'Атмосфера',
-    galleryTitle: 'Пар. Огонь. Вода. Природа.',
+    galleryTitle: 'Огонь. Вода. Пар. Природа.',
     openImage: 'Открыть изображение',
     closeViewer: 'Закрыть просмотр',
     previousImage: 'Предыдущее изображение',
@@ -811,7 +837,7 @@ booking: {
       {
         question: 'Будет ли баня готова к нашему приезду?',
         answer:
-          'Да. Мы заранее подготовим всё к вашему приезду: растопим баню, подготовим зону отдыха и позаботимся о необходимых деталях. Вам останется только приехать к назначенному времени и наслаждаться отдыхом. Дрова вам нужно будет подкидывать самостоятельно. Если возникнет проблема, у нас есть человек, который сможет помочь.',
+          'Обязательно. Мы заранее подготовим всё к вашему приезду: растопим баню, подготовим зону отдыха и позаботимся о необходимых деталях. Вам останется только приехать к назначенному времени и наслаждаться отдыхом. Дрова вам нужно будет подкидывать самостоятельно. Если возникнет проблема, у нас есть человек, который сможет помочь.',
       },
 
       {
@@ -840,16 +866,20 @@ booking: {
     ],
 
     // Footer
-    footerTitle: 'Ваше приватное пространство ждёт вас',
-    footerSubtitle: 'Забронируйте баню для вечера настоящего пара',
+    footerTitle: 'Забронируйте ваше время попариться по-настоящему',
+    footerSubtitle: '',
     footerDescription:
-      'Приватные сеансы проводятся минимум три часа. Выберите свой ритуал, веники и стол — обо всём остальном позаботимся мы.',
+      'Выберите свой ритуал, веники и стол — обо всём остальном позаботимся мы.',
     footerVisit: 'Адрес',
     footerHours: 'Ежедневно · 24/7 · По бронированию',
     footerConcierge: 'Контакты',
     footerRights: 'Все права защищены.',
     footerTagline: 'Создано для тишины',
   },
+
+  // ============================================================
+  // UKRAINIAN
+  // ============================================================
 
   uk: {
     // Header
@@ -863,33 +893,33 @@ booking: {
     gallery: 'Галерея',
     journal: 'Питання',
 
-// Booking Modal
-booking: {
-  title: 'Ваше бронювання',
-  close: 'Закрити',
-  emptyTitle: 'Ваш кошик порожній',
-  emptyDescription: 'Додайте ритуал та банний віник, щоб продовжити.',
-  maximum: 'Максимум 15',
-  minimum: 'Мінімум 3 години',
-  total: 'Разом',
-  reservation: 'Бронювання',
-  yourDetails: 'Ваші дані',
-  detailsDescription:
-    'Заповніть свої дані, і ми зв’яжемося з вами для підтвердження бронювання.',
-  fullName: 'Ім’я',
-  fullNamePlaceholder: 'Ваше ім’я',
-  phone: 'Телефон',
-  date: 'Дата',
-  time: 'Час',
-  guests: 'Кількість гостей',
-  guest: 'гість',
-  guestsPlural: 'гостей',
-  additionalInformation: 'Додаткова інформація',
-  additionalInformationPlaceholder:
-    'Ваші побажання або додаткова інформація...',
-  confirm: 'Підтвердити бронювання',
-  thankYou: 'Дякуємо! Ми зв’яжемося з вами найближчим часом.',
-},
+    // Booking Modal
+    booking: {
+      title: 'Ваше бронювання',
+      close: 'Закрити',
+      emptyTitle: 'Ваш кошик порожній',
+      emptyDescription: 'Додайте ритуал та банний віник, щоб продовжити.',
+      maximum: 'Максимум 15',
+      minimum: 'Мінімум 3 години',
+      total: 'Разом',
+      reservation: 'Бронювання',
+      yourDetails: 'Ваші дані',
+      detailsDescription:
+        'Заповніть свої дані, і ми зв’яжемося з вами для підтвердження бронювання.',
+      fullName: 'Ім’я',
+      fullNamePlaceholder: 'Ваше ім’я',
+      phone: 'Телефон',
+      date: 'Дата',
+      time: 'Час',
+      guests: 'Кількість гостей',
+      guest: 'гість',
+      guestsPlural: 'гостей',
+      additionalInformation: 'Додаткова інформація',
+      additionalInformationPlaceholder:
+        'Ваші побажання або додаткова інформація...',
+      confirm: 'Підтвердити бронювання',
+      thankYou: 'Дякуємо! Ми зв’яжемося з вами найближчим часом.',
+    },
 
     // Hero
     heroLabel: '',
@@ -920,23 +950,23 @@ booking: {
     saunaEstate: 'Оренда банного простору',
     perHour: '/ годину',
     saunaEstateDescription:
-      'Справжня слов’янська лазня, повністю заброньована тільки для вашої компанії. Повна приватність, атмосфера природи та відпочинок без сторонніх гостей.',
+      'Справжня слов’янська лазня з піччю на дубових дровах, з площею парної 20 м², повністю заброньована тільки для вашої компанії. Повна приватність, атмосфера природи та відпочинок без сторонніх гостей.',
     bookingConditions: 'Умови бронювання',
     minimumRental: 'Мінімальний час оренди — 3 години',
     upToGuests: 'До 8 гостей включено',
     additionalGuest: 'Кожен додатковий гість — €50',
     deposit:
-      'Для підтвердження бронювання потрібен депозит €100 (не повертається у разі скасування)',
-    forThoseWhoUnderstand:
-      'Для тих, хто цінує банні традиції і хоче зануритися в цю культуру, ми пропонуємо:',
-    improvingProcedure: 'Доповніть свій ритуал',
+      'Для підтвердження бронювання потрібен депозит €100 (не повертається у разі скасування).',
+    broomHeading1: 'Не маєш сьогодні настрою махати віником?',
+broomHeading2: 'Або цікаво, як це робимо ми?',
+broomHeading3: 'Ось наша пропозиція:',
+      improvingProcedure: 'Доповніть свій ритуал',
 
     // Rental card
-    grill: 'ГРИЛЬ',
+    grill: 'МАНГАЛ',
     coldPlunge: 'КУПІЛЬ',
     jacuzzi: 'ДЖАКУЗІ',
-    bathAccessories: 'Банне приладдя',
-
+    bathAccessories: 'Банні аксесуари',
     towelSheet: 'Рушник і простирадло',
     towelSheetDescription:
       'Свіжий банний рушник і лляне простирадло для вашого банного ритуалу.',
@@ -950,11 +980,10 @@ booking: {
         guests: 'До 4 гостей',
         duration: '45 хвилин',
         description:
-          'Традиційний парний ритуал у розслабленій атмосфері з ароматними віниками та приблизно 10 хвилинами м’якої пари.',
+          'Традиційний парний ритуал у розслабленій атмосфері з ароматними віниками та приблизно 10 хвилинами м’якої пари для глибокого оновлення.',
         includes: [
           'Ароматний масаж віником',
           'Спільний сеанс у парній',
-          'Доступ до холодної купелі',
           'Ароматна пара',
         ],
       },
@@ -1004,7 +1033,7 @@ booking: {
       JACUZZI: {
         name: 'Джакузі',
         description:
-          'Повільний розслаблювальний масаж з ароматичними оліями власного приготування, який допомагає зняти напругу та розслабити тіло.',
+          'Тепле та розслаблююче джакузі, створене для того, щоб сповільнитися, відпочити та насолодитися атмосферою після парної.',
       },
     },
 
@@ -1012,7 +1041,7 @@ booking: {
     bathBroom: 'Банний віник',
     heartOfRitual: 'Серце ритуалу — віник',
     broomDescription:
-      'Пов’язані вручну пучки ароматного листя, які використовуються для розподілу жару та м’якої роботи з тілом. Кожен віник збирається в сезон і готується перед сеансом. Додайте віник до свого ритуалу — €15 за штуку.',
+      'Кожен віник збирається в сезон і запарюється перед сеансом за вашим запитом. Додайте віник до свого ритуалу — €15 за штуку.',
 
     broomTypes: {
       birch: {
@@ -1042,7 +1071,7 @@ booking: {
 
     // Gallery
     atmosphere: 'Атмосфера',
-    galleryTitle: 'Пара. Вогонь. Вода. Природа.',
+    galleryTitle: 'Вогонь. Вода. Пара. Природа.',
     openImage: 'Відкрити зображення',
     closeViewer: 'Закрити перегляд',
     previousImage: 'Попереднє зображення',
@@ -1114,7 +1143,7 @@ booking: {
       {
         question: 'Чи можна приїхати великою компанією?',
         answer:
-          'Так, звісно. У нас велика приватна територія та достатньо простору, щоб комфортно провести час великою компанією. Можна відпочивати разом, насолоджуватися лазнею, зоною відпочинку та відкритим простором.',
+          'Так, звісно. У нас велика територія та достатньо простору, щоб комфортно провести час великою компанією. Можна відпочивати разом, насолоджуватися лазнею, зоною відпочинку та відкритим простором.',
       },
 
       {
@@ -1134,7 +1163,7 @@ booking: {
     footerTitle: 'Ваш приватний простір чекає на вас',
     footerSubtitle: 'Забронюйте лазню для вечора справжньої пари',
     footerDescription:
-      'Приватні сеанси проводяться мінімум три години. Оберіть свій ритуал, віники та стіл — про все інше подбаємо ми.',
+      'Оберіть свій ритуал, віники та стіл — про все інше подбаємо ми.',
     footerVisit: 'Адреса',
     footerHours: 'Щодня · 24/7 · За бронюванням',
     footerConcierge: 'Контакти',

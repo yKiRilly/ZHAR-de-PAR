@@ -24,24 +24,115 @@ export function SiteFooter() {
         {/* Затемнение только фоновой картинки */}
         <div className="pointer-events-none absolute inset-0 bg-black/30" />
 
-        <div className="relative mx-auto flex min-h-[360px] max-w-7xl items-center justify-end px-5 py-16 sm:px-8">
-          <div className="w-full max-w-2xl text-center lg:mr-0 lg:translate-x-30 lg:text-left">
-            <h2 className="font-serif text-5xl font-bold leading-tight tracking-tight sm:text-6xl">
+        <div
+          className="
+            relative
+            mx-auto
+            flex
+            min-h-[380px]
+            max-w-7xl
+            items-center
+            justify-center
+            px-5
+            py-14
+
+            sm:min-h-[400px]
+            sm:px-8
+            sm:py-16
+
+            lg:min-h-[360px]
+            lg:justify-end
+            lg:px-10
+          "
+        >
+          <div
+            className="
+              w-full
+              max-w-2xl
+              text-center
+
+              lg:mr-0
+              lg:translate-x-8
+              lg:text-left
+            "
+          >
+            <h2
+              className="
+                font-serif
+                text-4xl
+                font-bold
+                leading-tight
+                tracking-tight
+
+                sm:text-5xl
+
+                lg:text-6xl
+              "
+            >
               {t.footerTitle}
             </h2>
 
-            <p className="mt-5 text-base font-semibold uppercase tracking-[0.2em] text-primary sm:text-lg">
-  {t.footerSubtitle}
-</p>
+            <p
+              className="
+                mt-5
+                text-sm
+                font-semibold
+                uppercase
+                tracking-[0.18em]
+                text-primary
 
-            <p className="mt-7 max-w-2xl text-base font-semibold leading-relaxed text-muted-foreground sm:text-lg">
+                sm:text-base
+                sm:tracking-[0.2em]
+
+                lg:text-lg
+              "
+            >
+              {t.footerSubtitle}
+            </p>
+
+            <p
+              className="
+                mx-auto
+                mt-6
+                max-w-xl
+                text-sm
+                font-semibold
+                leading-relaxed
+                text-muted-foreground
+
+                sm:mt-7
+                sm:text-base
+
+                lg:mx-0
+                lg:max-w-2xl
+                lg:text-lg
+              "
+            >
               {t.footerDescription}
             </p>
 
             <button
               type="button"
               onClick={() => open()}
-              className="mt-9 rounded-full bg-primary px-10 py-4 text-sm font-medium uppercase tracking-widest text-primary-foreground transition-colors hover:bg-primary/90"
+              className="
+                mt-8
+                rounded-full
+                bg-primary
+                px-9
+                py-3.5
+                text-xs
+                font-medium
+                uppercase
+                tracking-widest
+                text-primary-foreground
+                transition-colors
+                hover:bg-primary/90
+
+                sm:mt-9
+                sm:px-10
+                sm:py-4
+                sm:text-sm
+              "
             >
               {t.bookNow}
             </button>
@@ -50,63 +141,165 @@ export function SiteFooter() {
       </div>
 
       {/* Footer content */}
-      <div className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
+      <div
+        className="
+          mx-auto
+          max-w-7xl
+          px-5
+          py-8
+
+          sm:px-8
+          sm:py-10
+
+          lg:px-10
+          lg:py-8
+        "
+      >
         {/* Main footer columns */}
-        <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr_1fr]">
+        <div
+          className="
+            grid
+            gap-10
+
+            sm:grid-cols-2
+            sm:gap-x-10
+            sm:gap-y-12
+
+            lg:grid-cols-[1.2fr_1fr_1fr]
+            lg:items-start
+            lg:gap-8
+          "
+        >
           {/* Logo */}
-          <div className="-mt-20 flex items-start justify-start lg:translate-x-30">
+          <div
+            className="
+              flex
+              items-center
+              justify-center
+
+              sm:col-span-2
+
+              lg:col-span-1
+              lg:-mt-16
+              lg:items-start
+              lg:justify-start
+              lg:translate-x-8
+            "
+          >
             <Image
               src="/photos/logos/logogr.png"
-              alt="DUBъ"
+              alt="ZHAR de PAR"
               width={220}
               height={200}
-              className="h-auto w-[280px] object-contain"
+              className="
+                h-auto
+                w-[240px]
+                object-contain
+
+                sm:w-[260px]
+
+                lg:w-[280px]
+              "
             />
           </div>
 
           {/* Visit */}
-          <div>
+          <div
+            className="
+              text-center
+
+              sm:text-left
+            "
+          >
             <h3 className="text-xs font-medium uppercase tracking-[0.3em] text-primary">
               {t.footerVisit}
             </h3>
 
-            <ul className="mt-5 space-y-3 text-sm text-muted-foreground">
-              <li className="flex items-start gap-3">
+            <ul className="mt-5 space-y-4 text-sm text-muted-foreground">
+              <li
+                className="
+                  flex
+                  items-start
+                  justify-center
+                  gap-3
+
+                  sm:justify-start
+                "
+              >
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+
                 <span>MQPM+73, 17300 Blanes, Girona</span>
               </li>
 
-              <li className="flex items-start gap-3">
+              <li
+                className="
+                  flex
+                  items-start
+                  justify-center
+                  gap-3
+
+                  sm:justify-start
+                "
+              >
                 <Clock className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+
                 <span>{t.footerHours}</span>
               </li>
             </ul>
           </div>
 
           {/* Concierge */}
-          <div>
+          <div
+            className="
+              text-center
+
+              sm:text-left
+            "
+          >
             <h3 className="text-xs font-medium uppercase tracking-[0.3em] text-primary">
               {t.footerConcierge}
             </h3>
 
-            <ul className="mt-5 space-y-3 text-sm text-muted-foreground">
+            <ul className="mt-5 space-y-4 text-sm text-muted-foreground">
               <li>
                 <a
                   href="tel:+34614279511"
-                  className="flex items-center gap-3 transition-colors hover:text-foreground"
+                  className="
+                    flex
+                    items-center
+                    justify-center
+                    gap-3
+                    transition-colors
+                    hover:text-foreground
+
+                    sm:justify-start
+                  "
                 >
                   <Phone className="h-4 w-4 shrink-0 text-primary" />
-                  +34 614 279 511
+
+                  <span>+34 614 279 511</span>
                 </a>
               </li>
 
               <li>
                 <a
                   href="mailto:kirill2525225@gmail.com"
-                  className="flex items-center gap-3 transition-colors hover:text-foreground"
+                  className="
+                    flex
+                    items-center
+                    justify-center
+                    gap-3
+                    break-all
+                    transition-colors
+                    hover:text-foreground
+
+                    sm:justify-start
+                    sm:break-normal
+                  "
                 >
                   <Mail className="h-4 w-4 shrink-0 text-primary" />
-                  kirill2525225@gmail.com
+
+                  <span>kirill2525225@gmail.com</span>
                 </a>
               </li>
             </ul>
@@ -114,14 +307,42 @@ export function SiteFooter() {
         </div>
 
         {/* Social media */}
-        <div className="-mt-14 flex w-full items-center justify-center gap-4">
+        <div
+          className="
+            mt-10
+            flex
+            w-full
+            items-center
+            justify-center
+            gap-4
+
+            sm:mt-8
+
+            lg:-mt-10
+          "
+        >
           {/* Instagram */}
           <a
-            href="#"
+            href="https://www.instagram.com/banka_blanes/"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/40 text-primary transition-all duration-300 hover:border-primary hover:bg-primary hover:text-primary-foreground"
+            className="
+              flex
+              h-10
+              w-10
+              items-center
+              justify-center
+              rounded-full
+              border
+              border-primary/40
+              text-primary
+              transition-all
+              duration-300
+              hover:border-primary
+              hover:bg-primary
+              hover:text-primary-foreground
+            "
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -133,8 +354,20 @@ export function SiteFooter() {
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <rect x="3" y="3" width="18" height="18" rx="5" />
-              <circle cx="12" cy="12" r="4" />
+              <rect
+                x="3"
+                y="3"
+                width="18"
+                height="18"
+                rx="5"
+              />
+
+              <circle
+                cx="12"
+                cy="12"
+                r="4"
+              />
+
               <circle
                 cx="17.5"
                 cy="6.5"
@@ -151,7 +384,22 @@ export function SiteFooter() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="WhatsApp"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/40 text-primary transition-all duration-300 hover:border-primary hover:bg-primary hover:text-primary-foreground"
+            className="
+              flex
+              h-10
+              w-10
+              items-center
+              justify-center
+              rounded-full
+              border
+              border-primary/40
+              text-primary
+              transition-all
+              duration-300
+              hover:border-primary
+              hover:bg-primary
+              hover:text-primary-foreground
+            "
           >
             <svg
               viewBox="0 0 24 24"
@@ -164,7 +412,27 @@ export function SiteFooter() {
         </div>
 
         {/* Bottom */}
-        <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-border/60 pt-6 text-xs text-muted-foreground sm:flex-row">
+        <div
+          className="
+            mt-8
+            flex
+            flex-col
+            items-center
+            justify-between
+            gap-4
+            border-t
+            border-border/60
+            pt-6
+            text-center
+            text-xs
+            text-muted-foreground
+
+            sm:flex-row
+            sm:text-left
+
+            lg:mt-8
+          "
+        >
           <p>
             © {new Date().getFullYear()} DUBъ. {t.footerRights}
           </p>

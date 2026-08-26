@@ -104,7 +104,21 @@ export function BookingProvider({
   }, [])
 
   /*
-   * Получаем переведённое название товара.
+   * Перевод системного сообщения
+   */
+  const getSaunaRequiredMessage = useCallback(() => {
+    const messages = {
+      en: 'Please add a sauna first',
+      es: 'Primero añade la sauna',
+      ru: 'Сначала добавьте баню в корзину',
+      uk: 'Спочатку додайте баню до кошика',
+    }
+
+    return messages[language] ?? messages.en
+  }, [language])
+
+  /*
+   * Получаем переведённое название товара
    */
   const getTranslatedName = useCallback(
     (item: AddToCartItem) => {
@@ -169,9 +183,7 @@ export function BookingProvider({
        * пока не добавлена баня.
        */
       if (item.type !== 'sauna' && !hasSauna) {
-        showCartMessage(
-          'Сначала добавьте баню в корзину',
-        )
+        showCartMessage(getSaunaRequiredMessage())
         return
       }
 
@@ -188,6 +200,10 @@ export function BookingProvider({
             cartItem.id === translatedItem.id,
         )
 
+        /*
+         * Если товар уже есть,
+         * увеличиваем количество.
+         */
         if (existingItem) {
           const maxQuantity =
             existingItem.maxQuantity
@@ -210,6 +226,9 @@ export function BookingProvider({
           )
         }
 
+        /*
+         * Новый товар
+         */
         return [
           ...currentCart,
           {
@@ -220,7 +239,12 @@ export function BookingProvider({
         ]
       })
     },
-    [hasSauna, getTranslatedName, showCartMessage],
+    [
+      hasSauna,
+      getTranslatedName,
+      getSaunaRequiredMessage,
+      showCartMessage,
+    ],
   )
 
   /*
@@ -268,6 +292,9 @@ export function BookingProvider({
             const minQuantity =
               item.minQuantity ?? 1
 
+            /*
+             * Баню не удаляем через кнопку "-"
+             */
             if (item.quantity <= minQuantity) {
               return item.type === 'sauna'
                 ? item
@@ -380,11 +407,12 @@ export function BookingProvider({
       />
 
       {cartMessage && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none">
+        <div className="pointer-events-none fixed inset-0 z-[9999] flex items-center justify-center">
           <div
             className="
               rounded-xl
-              border border-[#B28D20]/40
+              border
+              border-[#B28D20]/40
               bg-[#110d0b]
               px-8
               py-5
