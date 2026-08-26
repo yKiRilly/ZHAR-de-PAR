@@ -119,7 +119,7 @@ export function SiteHeader() {
           onClick={closeMobileMenu}
         >
           <img
-            src="/photos/logos/logoof.png"
+            src="/photos/logos/logoof .png"
             alt="ZHAR de PAR"
             className="
               h-auto
