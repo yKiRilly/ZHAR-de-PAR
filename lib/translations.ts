@@ -10,6 +10,7 @@ export const translations = {
     brooms: 'Brooms',
     gallery: 'Gallery',
     journal: 'Questions',
+    chooseRitual: 'Choose your ritual',
 
     // Booking Modal
     booking: {
@@ -84,7 +85,7 @@ broomHeading3: 'Here is what we offer:',
     grill: 'GRILL',
     coldPlunge: 'COLD PLUNGE',
     jacuzzi: 'JACUZZI',
-    bathAccessories: 'Bath Accessories',
+    bathEssentials: 'Bath Accessories',
     towelSheet: 'Towel & Sheet',
     towelSheetDescription:
       'Fresh bath towel and linen sheet for your bathing ritual.',
@@ -188,7 +189,7 @@ broomHeading3: 'Here is what we offer:',
     },
 
     // Gallery
-    atmosphere: 'The Atmosphere',
+    galleryatmosphere: 'The Atmosphere',
     galleryTitle: 'Fire. Water. Steam. Nature.',
     openImage: 'Open image',
     closeViewer: 'Close viewer',
@@ -378,7 +379,7 @@ broomHeading3: 'Esto es lo que ofrecemos:',
     grill: 'BARBACOA',
     coldPlunge: 'PILETA FRÍA',
     jacuzzi: 'JACUZZI',
-    bathAccessories: 'Accesorios de baño',
+    bathEssentials: 'Accesorios de baño',
     towelSheet: 'Toalla y sábana',
     towelSheetDescription:
       'Toalla de baño fresca y sábana de lino para tu ritual de baño.',
@@ -482,7 +483,7 @@ broomHeading3: 'Esto es lo que ofrecemos:',
     },
 
     // Gallery
-    atmosphere: 'La atmósfera',
+    galleryatmosphere: 'La atmósfera',
     galleryTitle: 'Fuego. Agua. Vapor. Naturaleza.',
     openImage: 'Abrir imagen',
     closeViewer: 'Cerrar visor',
@@ -672,7 +673,7 @@ broomHeading3: 'Наше предложение:',
     grill: 'Мангал',
     coldPlunge: 'Купель',
     jacuzzi: 'Джакузи',
-    bathAccessories: 'Банные принадлежности',
+    bathEssentials: 'Банные принадлежности',
     towelSheet: 'Полотенце и простыня',
     towelSheetDescription:
       'Свежее банное полотенце и льняная простыня для вашего банного ритуала.',
@@ -776,7 +777,7 @@ broomHeading3: 'Наше предложение:',
     },
 
     // Gallery
-    atmosphere: 'Атмосфера',
+    galleryatmosphere: 'Атмосфера',
     galleryTitle: 'Огонь. Вода. Пар. Природа.',
     openImage: 'Открыть изображение',
     closeViewer: 'Закрыть просмотр',
@@ -966,7 +967,7 @@ broomHeading3: 'Ось наша пропозиція:',
     grill: 'МАНГАЛ',
     coldPlunge: 'КУПІЛЬ',
     jacuzzi: 'ДЖАКУЗІ',
-    bathAccessories: 'Банні аксесуари',
+    bathEssentials: 'Банні аксесуари',
     towelSheet: 'Рушник і простирадло',
     towelSheetDescription:
       'Свіжий банний рушник і лляне простирадло для вашого банного ритуалу.',
@@ -1070,7 +1071,7 @@ broomHeading3: 'Ось наша пропозиція:',
     },
 
     // Gallery
-    atmosphere: 'Атмосфера',
+    galleryatmosphere: 'Атмосфера',
     galleryTitle: 'Вогонь. Вода. Пара. Природа.',
     openImage: 'Відкрити зображення',
     closeViewer: 'Закрити перегляд',

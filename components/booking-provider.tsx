@@ -19,6 +19,7 @@ export type CartItem = {
   price: number
   quantity: number
   type?: 'service' | 'treatment' | 'broom' | 'sauna'
+  canChangeQuantity?: boolean
   maxQuantity?: number
   minQuantity?: number
 }
@@ -28,6 +29,7 @@ type AddToCartItem = {
   name: string
   price: number
   type?: 'service' | 'treatment' | 'broom' | 'sauna'
+  canChangeQuantity?: boolean
   maxQuantity?: number
   minQuantity?: number
 }
@@ -39,6 +41,7 @@ type BookingContextValue = {
   cartTotal: number
   cartCount: number
   addToCart: (item: AddToCartItem) => void
+  updateQuantity: (id: string, quantity: number) => void
   increaseQuantity: (id: string) => void
   decreaseQuantity: (id: string) => void
   removeFromCart: (id: string) => void
@@ -137,10 +140,7 @@ export function BookingProvider({
       }
 
       /*
-       * Дополнительные услуги:
-       * grill
-       * baptismal-font
-       * jacuzzi
+       * Дополнительные услуги
        */
       if (item.type === 'treatment') {
         const treatmentKey =
@@ -164,10 +164,6 @@ export function BookingProvider({
         }
       }
 
-      /*
-       * Если перевод не найден,
-       * оставляем оригинальное название.
-       */
       return item.name
     },
     [language],
@@ -201,10 +197,13 @@ export function BookingProvider({
         )
 
         /*
-         * Если товар уже есть,
-         * увеличиваем количество.
+         * Если товар уже есть
          */
         if (existingItem) {
+          if (existingItem.canChangeQuantity === false) {
+            return currentCart
+          }
+
           const maxQuantity =
             existingItem.maxQuantity
 
@@ -248,6 +247,77 @@ export function BookingProvider({
   )
 
   /*
+   * UPDATE QUANTITY
+   *
+   * Используется cart-modal.tsx
+   */
+  const updateQuantity = useCallback(
+    (id: string, quantity: number) => {
+      setCart((currentCart) =>
+        currentCart
+          .map((item) => {
+            if (item.id !== id) {
+              return item
+            }
+
+            if (item.canChangeQuantity === false) {
+              return item
+            }
+
+            const minQuantity =
+              item.minQuantity ?? 1
+
+            const maxQuantity =
+              item.maxQuantity
+
+            let nextQuantity = quantity
+
+            if (nextQuantity < minQuantity) {
+              nextQuantity = minQuantity
+            }
+
+            if (
+              maxQuantity !== undefined &&
+              nextQuantity > maxQuantity
+            ) {
+              nextQuantity = maxQuantity
+            }
+
+            /*
+             * Баню не удаляем через количество 0
+             */
+            if (
+              item.type === 'sauna' &&
+              nextQuantity < 1
+            ) {
+              nextQuantity = 1
+            }
+
+            return {
+              ...item,
+              quantity: nextQuantity,
+            }
+          })
+          .filter((item) => {
+            /*
+             * Если обычный товар получил quantity 0,
+             * удаляем его.
+             */
+            if (
+              item.quantity <= 0 &&
+              item.type !== 'sauna'
+            ) {
+              return false
+            }
+
+            return true
+          }),
+      )
+    },
+    [],
+  )
+
+  /*
    * INCREASE
    */
   const increaseQuantity = useCallback(
@@ -255,6 +325,10 @@ export function BookingProvider({
       setCart((currentCart) =>
         currentCart.map((item) => {
           if (item.id !== id) {
+            return item
+          }
+
+          if (item.canChangeQuantity === false) {
             return item
           }
 
@@ -286,6 +360,10 @@ export function BookingProvider({
         currentCart
           .map((item) => {
             if (item.id !== id) {
+              return item
+            }
+
+            if (item.canChangeQuantity === false) {
               return item
             }
 
@@ -370,6 +448,7 @@ export function BookingProvider({
       cartTotal,
       cartCount,
       addToCart,
+      updateQuantity,
       increaseQuantity,
       decreaseQuantity,
       removeFromCart,
@@ -385,6 +464,7 @@ export function BookingProvider({
       cartTotal,
       cartCount,
       addToCart,
+      updateQuantity,
       increaseQuantity,
       decreaseQuantity,
       removeFromCart,

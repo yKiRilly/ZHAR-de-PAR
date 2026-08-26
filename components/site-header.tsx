@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-
 import {
   Menu,
   X,
@@ -10,20 +9,17 @@ import {
 } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
-
 import { useBooking } from '@/components/booking-provider'
-
 import { useLanguage } from '@/components/language-provider'
-
 import type { Language } from '@/lib/translations'
 
 const navLinks = [
-  { label: 'philosophy', href: '#philosophy' },
-  { label: 'rituals', href: '#rituals' },
-  { label: 'brooms', href: '#brooms' },
-  { label: 'gallery', href: '#gallery' },
-  { label: 'journal', href: '#faq' },
-]
+  { key: 'philosophy', href: '#philosophy' },
+  { key: 'rituals', href: '#rituals' },
+  { key: 'brooms', href: '#brooms' },
+  { key: 'gallery', href: '#gallery' },
+  { key: 'journal', href: '#faq' },
+] as const
 
 const languages: { code: Language; label: string }[] = [
   { code: 'en', label: 'English' },
@@ -34,7 +30,6 @@ const languages: { code: Language; label: string }[] = [
 
 export function SiteHeader() {
   const { open, cart } = useBooking()
-
   const { language, setLanguage, t } = useLanguage()
 
   const [scrolled, setScrolled] = useState(false)
@@ -42,7 +37,9 @@ export function SiteHeader() {
   const [languageOpen, setLanguageOpen] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
+    const onScroll = () => {
+      setScrolled(window.scrollY > 40)
+    }
 
     onScroll()
 
@@ -63,6 +60,33 @@ export function SiteHeader() {
   const closeMobileMenu = () => {
     setMenuOpen(false)
     setLanguageOpen(false)
+  }
+
+  /*
+   * Перевод пунктов меню.
+   *
+   * Используем явное соответствие, чтобы TypeScript
+   * больше не выдавал ошибку на t[link.label].
+   */
+  const getNavLabel = (
+    key: (typeof navLinks)[number]['key'],
+  ) => {
+    switch (key) {
+      case 'philosophy':
+        return t.philosophy
+
+      case 'rituals':
+        return t.rituals
+
+      case 'brooms':
+        return t.brooms
+
+      case 'gallery':
+        return t.gallery
+
+      case 'journal':
+        return t.journal
+    }
   }
 
   return (
@@ -95,14 +119,14 @@ export function SiteHeader() {
           onClick={closeMobileMenu}
         >
           <img
-            src="/photos/logos/logoof .png"
-            alt="Zhar de Par"
+            src="/photos/logos/logoof.png"
+            alt="ZHAR de PAR"
             className="
               h-auto
-              w-[240px]
+              w-[200px]
               object-contain
-              sm:w-[260px]
-              lg:w-[280px]
+              sm:w-[230px]
+              lg:w-[250px]
             "
           />
         </a>
@@ -125,6 +149,7 @@ export function SiteHeader() {
               key={link.href}
               href={link.href}
               className="
+                whitespace-nowrap
                 text-[17px]
                 font-semibold
                 text-foreground/85
@@ -132,13 +157,14 @@ export function SiteHeader() {
                 hover:text-foreground
               "
             >
-              {t[link.label as keyof typeof t]}
+              {getNavLabel(link.key)}
             </a>
           ))}
         </nav>
 
         {/* Right side */}
         <div className="flex shrink-0 items-center gap-3">
+
           {/* Language selector */}
           <div className="relative hidden sm:block">
             <button
@@ -221,7 +247,7 @@ export function SiteHeader() {
             )}
           </div>
 
-          {/* Cart icon */}
+          {/* Cart */}
           <button
             type="button"
             onClick={() => open()}
@@ -335,7 +361,7 @@ export function SiteHeader() {
                 hover:text-foreground
               "
             >
-              {t[link.label as keyof typeof t]}
+              {getNavLabel(link.key)}
             </a>
           ))}
 
@@ -359,9 +385,10 @@ export function SiteHeader() {
                 <button
                   key={item.code}
                   type="button"
-                  onClick={() =>
+                  onClick={() => {
                     setLanguage(item.code)
-                  }
+                    setMenuOpen(false)
+                  }}
                   className={cn(
                     'rounded-full border px-4 py-2.5 text-sm uppercase tracking-widest transition-colors',
                     item.code === language

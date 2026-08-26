@@ -1,3 +1,4 @@
+
 'use client'
 
 import { ShoppingCart, X, Minus, Plus, Trash2 } from 'lucide-react'
@@ -18,7 +19,8 @@ export function CartModal({
     cartCount,
     cartTotal,
     removeFromCart,
-    updateQuantity,
+    increaseQuantity,
+    decreaseQuantity,
     clearCart,
     open: openBooking,
   } = useBooking()
@@ -40,7 +42,6 @@ export function CartModal({
       aria-label="Shopping cart"
     >
       {/* BACKGROUND */}
-
       <button
         type="button"
         aria-label="Close cart"
@@ -49,11 +50,9 @@ export function CartModal({
       />
 
       {/* CART */}
-
       <div className="relative z-10 w-full max-w-xl rounded-t-2xl border border-[#b28d20]/50 bg-[#080808] shadow-2xl sm:rounded-2xl">
 
         {/* HEADER */}
-
         <div className="flex items-center justify-between border-b border-white/10 px-6 py-5">
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.3em] text-[#b28d20]">
@@ -76,7 +75,6 @@ export function CartModal({
         </div>
 
         {/* CONTENT */}
-
         {cart.length === 0 ? (
           <div className="flex flex-col items-center px-6 py-16 text-center">
 
@@ -89,7 +87,7 @@ export function CartModal({
             </h4>
 
             <p className="mt-2 max-w-sm text-sm leading-relaxed text-white/40">
-              Choose a sauna experience, treatment or bath broom and it will appear here.
+              Choose a sauna experience or add an extra service and it will appear here.
             </p>
 
             <button
@@ -103,9 +101,7 @@ export function CartModal({
         ) : (
           <>
             {/* ITEMS */}
-
             <div className="max-h-[55vh] overflow-y-auto px-6 py-5">
-
               <div className="space-y-3">
 
                 {cart.map((item) => (
@@ -114,10 +110,10 @@ export function CartModal({
                     className="rounded-xl border border-white/10 bg-black/50 p-4"
                   >
 
+                    {/* NAME + DELETE */}
                     <div className="flex items-start justify-between gap-4">
 
                       <div className="min-w-0">
-
                         <h4 className="text-sm font-medium uppercase tracking-wider text-white">
                           {item.name}
                         </h4>
@@ -125,26 +121,19 @@ export function CartModal({
                         <p className="mt-1 text-sm text-[#b28d20]">
                           €{item.price}
                         </p>
-
                       </div>
-
-                      {/* DELETE */}
 
                       <button
                         type="button"
-                        onClick={() =>
-                          removeFromCart(item.id)
-                        }
+                        onClick={() => removeFromCart(item.id)}
                         className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white/30 transition-colors hover:bg-red-500/10 hover:text-red-400"
                         aria-label={`Remove ${item.name}`}
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
-
                     </div>
 
                     {/* QUANTITY */}
-
                     <div className="mt-4 flex items-center justify-between">
 
                       <span className="text-xs uppercase tracking-widest text-white/30">
@@ -153,15 +142,18 @@ export function CartModal({
 
                       <div className="flex items-center gap-3">
 
+                        {/* MINUS */}
                         <button
                           type="button"
                           onClick={() =>
-                            updateQuantity(
-                              item.id,
-                              item.quantity - 1,
-                            )
+                            decreaseQuantity(item.id)
                           }
-                          className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 text-white/50 transition-all hover:border-[#b28d20] hover:text-[#b28d20]"
+                          disabled={
+                            item.type === 'sauna' &&
+                            item.quantity <= (item.minQuantity ?? 1)
+                          }
+                          className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 text-white/50 transition-all hover:border-[#b28d20] hover:text-[#b28d20] disabled:cursor-not-allowed disabled:opacity-30"
+                          aria-label={`Decrease ${item.name}`}
                         >
                           <Minus className="h-3.5 w-3.5" />
                         </button>
@@ -170,42 +162,39 @@ export function CartModal({
                           {item.quantity}
                         </span>
 
+                        {/* PLUS */}
                         <button
                           type="button"
                           onClick={() =>
-                            updateQuantity(
-                              item.id,
-                              item.quantity + 1,
-                            )
+                            increaseQuantity(item.id)
                           }
-                          className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 text-white/50 transition-all hover:border-[#b28d20] hover:text-[#b28d20]"
+                          disabled={
+                            item.maxQuantity !== undefined &&
+                            item.quantity >= item.maxQuantity
+                          }
+                          className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 text-white/50 transition-all hover:border-[#b28d20] hover:text-[#b28d20] disabled:cursor-not-allowed disabled:opacity-30"
+                          aria-label={`Increase ${item.name}`}
                         >
                           <Plus className="h-3.5 w-3.5" />
                         </button>
 
                       </div>
-
                     </div>
 
                     {/* ITEM TOTAL */}
-
                     <div className="mt-3 border-t border-white/10 pt-3 text-right">
-
                       <span className="text-sm text-white/50">
                         €{item.price * item.quantity}
                       </span>
-
                     </div>
 
                   </div>
                 ))}
 
               </div>
-
             </div>
 
             {/* FOOTER */}
-
             <div className="border-t border-white/10 px-6 py-5">
 
               <div className="flex items-center justify-between">
@@ -213,9 +202,7 @@ export function CartModal({
                 <div>
                   <p className="text-xs uppercase tracking-widest text-white/30">
                     {cartCount}{' '}
-                    {cartCount === 1
-                      ? 'item'
-                      : 'items'}
+                    {cartCount === 1 ? 'item' : 'items'}
                   </p>
 
                   <p className="mt-1 text-sm text-white/50">
@@ -230,7 +217,6 @@ export function CartModal({
               </div>
 
               {/* BOOK */}
-
               <button
                 type="button"
                 onClick={handleBooking}
@@ -240,7 +226,6 @@ export function CartModal({
               </button>
 
               {/* CLEAR */}
-
               <button
                 type="button"
                 onClick={clearCart}

@@ -13,10 +13,12 @@ import {
   type Language,
 } from '@/lib/translations'
 
+type Translation = typeof translations.en
+
 type LanguageContextType = {
   language: Language
   setLanguage: (language: Language) => void
-  t: typeof translations.en
+  t: Translation
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(
@@ -31,7 +33,9 @@ export function LanguageProvider({
   const [language, setLanguageState] = useState<Language>('en')
 
   useEffect(() => {
-    const savedLanguage = localStorage.getItem('dub-language') as Language | null
+    const savedLanguage = localStorage.getItem('dub-language') as
+      | Language
+      | null
 
     if (
       savedLanguage === 'en' ||
@@ -48,12 +52,17 @@ export function LanguageProvider({
     localStorage.setItem('dub-language', newLanguage)
   }
 
+  // Берём перевод текущего языка.
+  // Приводим его к структуре английского языка,
+  // чтобы TypeScript не ломал production build.
+  const t = translations[language] as Translation
+
   return (
     <LanguageContext.Provider
       value={{
         language,
         setLanguage,
-        t: translations[language],
+        t,
       }}
     >
       {children}

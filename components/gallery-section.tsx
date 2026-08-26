@@ -100,7 +100,7 @@ export function GallerySection() {
         <div className="max-w-2xl">
           <Reveal>
             <p className="text-xs font-medium uppercase tracking-[0.3em] text-primary">
-              {t.galleryAtmosphere}
+              {t.galleryatmosphere}
             </p>
           </Reveal>
 

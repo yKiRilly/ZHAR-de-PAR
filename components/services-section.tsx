@@ -668,7 +668,8 @@ export function ServicesSection() {
           "
         >
           {services.map((service, i) => {
-            const translated = t.services[service.id]
+const translated =
+  t.services[service.id as keyof typeof t.services]
 
             const isMultiple =
               service.id === 'group-steam-ritual' ||
