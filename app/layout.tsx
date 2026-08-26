@@ -1,7 +1,9 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Cormorant_Garamond, Jost } from 'next/font/google'
+
 import { LanguageProvider } from '@/components/language-provider'
+
 import './globals.css'
 
 const cormorant = Cormorant_Garamond({
@@ -18,76 +20,105 @@ const jost = Jost({
   display: 'swap',
 })
 
-const siteUrl = 'https://emberandbirch.example'
+const siteUrl = 'https://www.zhardepar.com'
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
 
   title: {
-    default: 'DUBъ — Private Slavic Bathhouse',
-    template: '%s | DUBъ',
+    default: 'ZHAR de PAR — Slavic Banya in Spain',
+    template: '%s | ZHAR de PAR',
   },
 
   description:
-    'Ember & Birch is a private luxury bathhouse and thermal wellness retreat offering traditional steam rituals, aromatic bath brooms, plunge pools, and a restaurant-style menu. Reserve your private sauna experience — minimum three hours.',
+    'ZHAR de PAR is a private Slavic banya in Spain. Traditional steam rituals, bath brooms, sauna, jacuzzi, plunge pool and authentic banya experiences in the Spanish nature.',
 
   keywords: [
-    'luxury bathhouse',
-    'private sauna experience',
-    'thermal spa retreat',
+    'ZHAR de PAR',
+    'Slavic banya Spain',
+    'Russian banya Spain',
+    'private banya Spain',
+    'banya in Spain',
+    'sauna Spain',
+    'private sauna Spain',
     'steam ritual',
-    'banya',
-    'wellness resort',
-    'aromatic bath brooms',
-    'private spa reservation',
-    'sauna and plunge pool',
-    'premium wellness sanctuary',
+    'banya ritual',
+    'bathhouse Spain',
+    'sauna and jacuzzi',
+    'sauna with plunge pool',
+    'bath brooms',
+    'venik',
+    'Slavic sauna',
   ],
 
-  authors: [{ name: 'DUBъ' }],
-  creator: 'DUBъ',
+  authors: [
+    {
+      name: 'ZHAR de PAR',
+      url: siteUrl,
+    },
+  ],
+
+  creator: 'ZHAR de PAR',
+  publisher: 'ZHAR de PAR',
+
+  alternates: {
+    canonical: siteUrl,
+  },
 
   openGraph: {
     type: 'website',
-    locale: 'en',
+    locale: 'en_US',
     url: siteUrl,
-    siteName: 'DUBъ',
-    title: 'DUBъ — Private Slavic Bathhouse',
+    siteName: 'ZHAR de PAR',
+
+    title: 'ZHAR de PAR — Slavic Banya in Spain',
 
     description:
-      'A private luxury bathhouse and thermal wellness retreat. Traditional steam rituals, aromatic bath brooms, and cinematic relaxation. Reserve for a minimum of three hours.',
+      'A private Slavic banya in Spain. Heat, steam, traditional rituals and the freedom of Spanish nature.',
 
     images: [
       {
-        url: '/images/hero.png',
+        url: '/photos/view/viewgeneral.PNG',
         width: 1200,
         height: 630,
-        alt: 'DUBъ private Slavic bathhouse',
+        alt: 'ZHAR de PAR — Slavic banya in Spain',
       },
     ],
   },
 
   twitter: {
     card: 'summary_large_image',
-    title: 'DUBъ — Private Slavic Bathhouse',
+
+    title: 'ZHAR de PAR — Slavic Banya in Spain',
 
     description:
-      'A private luxury bathhouse and thermal wellness retreat. Reserve your steam ritual for a minimum of three hours.',
+      'A private Slavic banya in Spain. Traditional steam rituals, bath brooms, sauna, jacuzzi and plunge pool.',
 
-    images: ['/images/hero.png'],
+    images: ['/photos/view/viewgeneral.PNG'],
   },
 
   robots: {
     index: true,
     follow: true,
+
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 
-  generator: 'v0.app',
+  icons: {
+    icon: '/photos/logos/logoof.png',
+    apple: '/photos/logos/logoof.png',
+  },
 }
 
 export const viewport: Viewport = {
   colorScheme: 'dark',
-  themeColor: '#1a1512',
+  themeColor: '#000000',
 }
 
 export default function RootLayout({
