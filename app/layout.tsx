@@ -1,3 +1,4 @@
+
 import { Analytics } from '@vercel/analytics/next'
 
 import type { Metadata, Viewport } from 'next'
@@ -294,73 +295,123 @@ export const metadata: Metadata = {
 
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'LocalBusiness',
 
-  name: 'ZHAR de PAR',
-
-  description:
-    'Русская баня в Испании на природе. Частная баня ZHAR de PAR рядом с Ллорет-де-Мар, Бланесом и Жироной. Баня, сауна, пар, банные веники, джакузи, купель и настоящий банный ритуал.',
-
-  url: siteUrl,
-
-  logo: `${siteUrl}/photos/logos/logoof.png`,
-
-  image: `${siteUrl}/photos/view/viewgeneral.PNG`,
-
-  priceRange: '€€',
-
-  currenciesAccepted: 'EUR',
-
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: 'Lloret de Mar',
-    addressRegion: 'Girona',
-    addressCountry: 'ES',
-  },
-
-  areaServed: [
+  '@graph': [
     {
-      '@type': 'City',
-      name: 'Lloret de Mar',
-    },
-    {
-      '@type': 'City',
-      name: 'Blanes',
-    },
-    {
-      '@type': 'City',
-      name: 'Girona',
-    },
-    {
-      '@type': 'City',
-      name: 'Barcelona',
-    },
-    {
-      '@type': 'AdministrativeArea',
-      name: 'Catalonia',
-    },
-    {
-      '@type': 'Country',
-      name: 'Spain',
-    },
-  ],
+      '@type': 'LocalBusiness',
+      '@id': `${siteUrl}/#business`,
 
-  knowsAbout: [
-    'Русская баня',
-    'Русская баня в Испании',
-    'Баня на природе',
-    'Сауна',
-    'Парная',
-    'Банный ритуал',
-    'Банные веники',
-    'Березовый веник',
-    'Дубовый веник',
-    'Эвкалиптовый веник',
-    'Парение веником',
-    'Джакузи',
-    'Купель',
-    'Отдых на природе',
-    'Банный отдых',
+      name: 'ZHAR de PAR',
+
+      description:
+        'Русская баня в Испании на природе. Частная баня ZHAR de PAR рядом с Ллорет-де-Мар, Бланесом и Жироной. Баня, сауна, пар, банные веники, джакузи, купель и настоящий банный ритуал.',
+
+      url: siteUrl,
+
+      logo: `${siteUrl}/photos/logos/logoof.png`,
+
+      image: `${siteUrl}/photos/view/viewgeneral.PNG`,
+
+      priceRange: '€€',
+
+      currenciesAccepted: 'EUR',
+
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Lloret de Mar',
+        addressRegion: 'Girona',
+        addressCountry: 'ES',
+      },
+
+      areaServed: [
+        {
+          '@type': 'City',
+          name: 'Lloret de Mar',
+        },
+        {
+          '@type': 'City',
+          name: 'Blanes',
+        },
+        {
+          '@type': 'City',
+          name: 'Girona',
+        },
+        {
+          '@type': 'City',
+          name: 'Barcelona',
+        },
+        {
+          '@type': 'AdministrativeArea',
+          name: 'Catalonia',
+        },
+        {
+          '@type': 'Country',
+          name: 'Spain',
+        },
+      ],
+
+      knowsAbout: [
+        'Русская баня',
+        'Русская баня в Испании',
+        'Баня на природе',
+        'Сауна',
+        'Парная',
+        'Банный ритуал',
+        'Банные веники',
+        'Березовый веник',
+        'Дубовый веник',
+        'Эвкалиптовый веник',
+        'Парение веником',
+        'Джакузи',
+        'Купель',
+        'Отдых на природе',
+        'Банный отдых',
+      ],
+    },
+
+    {
+      '@type': 'VideoObject',
+      '@id': `${siteUrl}/#video`,
+
+      name: 'ZHAR de PAR — русская баня в Испании',
+
+      description:
+        'Видео о ZHAR de PAR — частной русской бане на природе в Испании рядом с Ллорет-де-Мар, Бланесом и Жироной. Баня, пар, банные ритуалы и отдых на природе.',
+
+      thumbnailUrl: `${siteUrl}/photos/view/viewgeneral.PNG`,
+
+      uploadDate: '2026-08-26',
+
+      contentUrl: `${siteUrl}/video/videobanya.mp4`,
+
+      embedUrl: siteUrl,
+
+      inLanguage: 'ru-RU',
+
+      isFamilyFriendly: true,
+
+      publisher: {
+        '@type': 'Organization',
+
+        name: 'ZHAR de PAR',
+
+        url: siteUrl,
+
+        logo: {
+          '@type': 'ImageObject',
+          url: `${siteUrl}/photos/logos/logoof.png`,
+        },
+      },
+
+      about: {
+        '@id': `${siteUrl}/#business`,
+      },
+
+      potentialAction: {
+        '@type': 'WatchAction',
+        target: `${siteUrl}/#video`,
+      },
+    },
   ],
 }
 
