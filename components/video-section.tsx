@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
@@ -10,6 +9,7 @@ export function VideoSection() {
   // ==========================================
   // SCROLL ZOOM EFFECT
   // ==========================================
+
   useEffect(() => {
     const handleScroll = () => {
       const section = document.getElementById('video-section')
@@ -44,6 +44,7 @@ export function VideoSection() {
   // ==========================================
   // AUTOPLAY WHEN VIDEO ENTERS SCREEN
   // ==========================================
+
   useEffect(() => {
     const video = videoRef.current
     const section = document.getElementById('video-section')
@@ -53,14 +54,12 @@ export function VideoSection() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          // Начинаем видео сначала
           video.currentTime = 0
 
           video.play().catch(() => {
-            // Браузер может заблокировать autoplay
+            // Autoplay may be blocked by the browser
           })
         } else {
-          // Когда ушли от видео — останавливаем
           video.pause()
           video.currentTime = 0
         }
@@ -80,6 +79,7 @@ export function VideoSection() {
   // ==========================================
   // ZOOM
   // ==========================================
+
   const scale = 0.82 + progress * 0.18
 
   return (
@@ -116,25 +116,13 @@ export function VideoSection() {
             lg:h-[650px]
           "
           src="/video/videobanya.mp4"
-
-          // Превью до запуска видео
           poster="/photos/view/viewgeneral.PNG"
-
-          // Видео без звука для autoplay
           muted
           playsInline
-
-          // Управление пользователю не показываем
           controls={false}
-
-          // Загружаем метаданные, а не весь файл сразу
           preload="metadata"
-
-          // Дополнительные параметры для браузеров
           autoPlay={false}
           loop={false}
-
-          // Zoom animation
           style={{
             transform: `scale(${scale})`,
             transformOrigin: 'center center',
