@@ -1,3 +1,4 @@
+
 import { BookingProvider } from '@/components/booking-provider'
 import { SiteHeader } from '@/components/site-header'
 import { Hero } from '@/components/hero'
@@ -37,6 +38,43 @@ const structuredData = {
       name: 'ZHAR de PAR',
       description:
         'Private Slavic banya in Spain with traditional steam rituals, bath brooms, sauna and private relaxation.',
+      publisher: {
+        '@id': `${siteUrl}/#business`,
+      },
+    },
+
+    {
+      '@type': 'WebPage',
+      '@id': `${siteUrl}/#webpage`,
+      url: siteUrl,
+      name: 'ZHAR de PAR — Русская баня в Испании',
+      isPartOf: {
+        '@id': `${siteUrl}/#website`,
+      },
+      about: {
+        '@id': `${siteUrl}/#business`,
+      },
+      primaryImageOfPage: {
+        '@type': 'ImageObject',
+        url: `${siteUrl}/photos/view/viewgeneral.PNG`,
+      },
+    },
+
+    {
+      '@type': 'VideoObject',
+      '@id': `${siteUrl}/#banya-video`,
+      name: 'ZHAR de PAR — Русская баня в Испании',
+      description:
+        'Видео ZHAR de PAR — русская баня на природе в Испании. Пар, банные ритуалы, банные веники, сауна, джакузи и купель на Коста-Браве.',
+      thumbnailUrl: [
+        `${siteUrl}/photos/view/viewgeneral.PNG`,
+      ],
+      contentUrl: `${siteUrl}/video/videobanya.mp4`,
+      embedUrl: `${siteUrl}/video`,
+      uploadDate: '2026-08-26',
+      mainEntityOfPage: {
+        '@id': `${siteUrl}/#webpage`,
+      },
       publisher: {
         '@id': `${siteUrl}/#business`,
       },
