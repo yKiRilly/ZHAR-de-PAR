@@ -637,23 +637,25 @@ export function ServicesSection() {
         {/* Main heading */}
 <Reveal>
   <h2
-    className="
-      mt-16
-      max-w-[1100px]
-      text-balance
-      font-serif
-      text-3xl
-      font-light
-      leading-[1.1]
-      sm:mt-20
-      sm:text-5xl
-      sm:leading-[1.1]
-    "
-  >
-    <p>{t.broomHeading1}</p>
-              <p>{t.broomHeading2}</p>
-              <p>{t.broomHeading3}</p>
-  </h2>
+  className="
+    mt-16
+    max-w-[1100px]
+    text-balance
+    font-serif
+    text-3xl
+    font-light
+    leading-[1.1]
+    sm:mt-20
+    sm:text-5xl
+    sm:leading-[1.1]
+  "
+>
+  {t.broomHeading1}
+  <br />
+  {t.broomHeading2}
+  <br />
+  {t.broomHeading3}
+</h2>
 </Reveal>
 
         {/* Steam rituals */}
