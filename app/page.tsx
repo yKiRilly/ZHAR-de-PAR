@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 
 import { BookingProvider } from '@/components/booking-provider'
 import { SiteHeader } from '@/components/site-header'
@@ -24,11 +25,43 @@ const structuredData = {
       name: 'ZHAR de PAR',
       url: siteUrl,
       description:
-        'ZHAR de PAR is a private Slavic banya in Spain offering traditional steam rituals, bath brooms, sauna, jacuzzi, plunge pool and private relaxation in nature.',
+        'Частная русская баня на природе в Испании. Баня, сауна, пар, банные ритуалы, веники, джакузи и купель рядом с Ллорет-де-Мар и Бланесом.',
       priceRange: '€€€',
       image: `${siteUrl}/photos/view/viewgeneral.PNG`,
       logo: `${siteUrl}/photos/logos/logoof.png`,
       openingHours: 'Mo-Su 10:00-24:00',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Lloret de Mar',
+        addressRegion: 'Girona',
+        addressCountry: 'ES',
+      },
+      areaServed: [
+        {
+          '@type': 'City',
+          name: 'Lloret de Mar',
+        },
+        {
+          '@type': 'City',
+          name: 'Blanes',
+        },
+        {
+          '@type': 'City',
+          name: 'Girona',
+        },
+        {
+          '@type': 'City',
+          name: 'Barcelona',
+        },
+        {
+          '@type': 'AdministrativeArea',
+          name: 'Catalonia',
+        },
+        {
+          '@type': 'Country',
+          name: 'Spain',
+        },
+      ],
     },
 
     {
@@ -37,7 +70,8 @@ const structuredData = {
       url: siteUrl,
       name: 'ZHAR de PAR',
       description:
-        'Private Slavic banya in Spain with traditional steam rituals, bath brooms, sauna and private relaxation.',
+        'Русская баня на природе в Испании с традиционными банными ритуалами, вениками, сауной, джакузи и купелью.',
+      inLanguage: 'ru-RU',
       publisher: {
         '@id': `${siteUrl}/#business`,
       },
@@ -48,6 +82,9 @@ const structuredData = {
       '@id': `${siteUrl}/#webpage`,
       url: siteUrl,
       name: 'ZHAR de PAR — Русская баня в Испании',
+      description:
+        'Частная русская баня на природе в Испании. Пар, банные ритуалы, веники, сауна, джакузи и купель.',
+      inLanguage: 'ru-RU',
       isPartOf: {
         '@id': `${siteUrl}/#website`,
       },
@@ -66,12 +103,11 @@ const structuredData = {
       name: 'ZHAR de PAR — Русская баня в Испании',
       description:
         'Видео ZHAR de PAR — русская баня на природе в Испании. Пар, банные ритуалы, банные веники, сауна, джакузи и купель на Коста-Браве.',
-      thumbnailUrl: [
-        `${siteUrl}/photos/view/viewgeneral.PNG`,
-      ],
+      thumbnailUrl: [`${siteUrl}/photos/view/viewgeneral.PNG`],
       contentUrl: `${siteUrl}/video/videobanya.mp4`,
       embedUrl: `${siteUrl}/video`,
       uploadDate: '2026-08-26',
+      inLanguage: 'ru-RU',
       mainEntityOfPage: {
         '@id': `${siteUrl}/#webpage`,
       },
@@ -82,6 +118,7 @@ const structuredData = {
 
     {
       '@type': 'FAQPage',
+      '@id': `${siteUrl}/#faq`,
       mainEntity: faqs.map((faq) => ({
         '@type': 'Question',
         name: faq.question,
@@ -92,6 +129,54 @@ const structuredData = {
       })),
     },
   ],
+}
+
+export const metadata: Metadata = {
+  title: 'ZHAR de PAR — Русская баня в Испании',
+  description:
+    'Частная русская баня на природе в Испании. Пар, банные ритуалы, веники, сауна, джакузи и купель рядом с Ллорет-де-Мар, Бланесом и Жироной.',
+
+  alternates: {
+    canonical: siteUrl,
+  },
+
+  openGraph: {
+    type: 'website',
+    locale: 'ru_RU',
+    url: siteUrl,
+    siteName: 'ZHAR de PAR',
+    title: 'ZHAR de PAR — Русская баня в Испании',
+    description:
+      'Частная русская баня на природе в Испании. Пар, банные ритуалы, веники, сауна, джакузи и купель.',
+    images: [
+      {
+        url: '/photos/view/viewgeneral.PNG',
+        width: 1200,
+        height: 630,
+        alt: 'ZHAR de PAR — Русская баня в Испании',
+      },
+    ],
+  },
+
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ZHAR de PAR — Русская баня в Испании',
+    description:
+      'Русская баня на природе в Испании. Пар, банные ритуалы, веники, сауна, джакузи и купель.',
+    images: ['/photos/view/viewgeneral.PNG'],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 }
 
 export default function Page() {
