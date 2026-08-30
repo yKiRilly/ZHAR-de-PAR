@@ -1,3 +1,4 @@
+
 'use client'
 
 import {
@@ -13,7 +14,7 @@ import {
   type Language,
 } from '@/lib/translations'
 
-type Translation = typeof translations.en
+type Translation = (typeof translations)[Language]
 
 type LanguageContextType = {
   language: Language
@@ -30,32 +31,24 @@ export function LanguageProvider({
 }: {
   children: ReactNode
 }) {
-  const [language, setLanguageState] = useState<Language>('en')
+  const [language, setLanguageState] = useState<Language>('ru')
 
   useEffect(() => {
-    const savedLanguage = localStorage.getItem('dub-language') as
-      | Language
-      | null
+    const savedLanguage = localStorage.getItem('zhar-language')
 
-    if (
-      savedLanguage === 'en' ||
-      savedLanguage === 'es' ||
-      savedLanguage === 'ru' ||
-      savedLanguage === 'uk'
-    ) {
+    if (savedLanguage === 'ru' || savedLanguage === 'uk') {
       setLanguageState(savedLanguage)
+    } else {
+      localStorage.setItem('zhar-language', 'ru')
     }
   }, [])
 
   const setLanguage = (newLanguage: Language) => {
     setLanguageState(newLanguage)
-    localStorage.setItem('dub-language', newLanguage)
+    localStorage.setItem('zhar-language', newLanguage)
   }
 
-  // Берём перевод текущего языка.
-  // Приводим его к структуре английского языка,
-  // чтобы TypeScript не ломал production build.
-  const t = translations[language] as Translation
+  const t = translations[language]
 
   return (
     <LanguageContext.Provider

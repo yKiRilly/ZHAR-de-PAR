@@ -1,3 +1,4 @@
+
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -21,9 +22,8 @@ const navLinks = [
   { key: 'journal', href: '#faq' },
 ] as const
 
+// Только русский и украинский
 const languages: { code: Language; label: string }[] = [
-  { code: 'en', label: 'English' },
-  { code: 'es', label: 'Español' },
   { code: 'ru', label: 'Русский' },
   { code: 'uk', label: 'Українська' },
 ]
@@ -62,12 +62,6 @@ export function SiteHeader() {
     setLanguageOpen(false)
   }
 
-  /*
-   * Перевод пунктов меню.
-   *
-   * Используем явное соответствие, чтобы TypeScript
-   * больше не выдавал ошибку на t[link.label].
-   */
   const getNavLabel = (
     key: (typeof navLinks)[number]['key'],
   ) => {
@@ -119,7 +113,7 @@ export function SiteHeader() {
           onClick={closeMobileMenu}
         >
           <img
-            src="/photos/logos/logoof .png"
+            src="/photos/logos/logoof.png"
             alt="ZHAR de PAR"
             className="
               h-auto

@@ -39,7 +39,7 @@ const videoStructuredData = {
   '@type': 'VideoObject',
   name: 'ZHAR de PAR — Русская баня в Испании',
   description:
-    'Видео ZHAR de PAR — русская баня на природе в Испании. Пар, сауна, банные ритуалы, банные веники, джакузи и купель.',
+    'Видео ZHAR de PAR — русская баня на природе в Испании. Пар, банные ритуалы, банные веники, джакузи и купель.',
   thumbnailUrl: [thumbnailUrl],
   contentUrl: videoUrl,
   embedUrl: `${siteUrl}/video`,
