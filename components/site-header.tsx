@@ -1,7 +1,8 @@
-
 'use client'
 
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
+
 import {
   Menu,
   X,
@@ -112,9 +113,12 @@ export function SiteHeader() {
           aria-label="ZHAR de PAR home"
           onClick={closeMobileMenu}
         >
-          <img
-            src="/photos/logos/logoof .png"
+          <Image
+            src="/photos/logos/logoof.png"
             alt="ZHAR de PAR"
+            width={250}
+            height={80}
+            priority
             className="
               h-auto
               w-[200px]
