@@ -263,7 +263,7 @@ export function SiteFooter() {
             <ul className="mt-5 space-y-4 text-sm text-muted-foreground">
               <li>
                 <a
-                  href="tel:+34614279511"
+                  href="tel:+34601801800"
                   className="
                     flex
                     items-center
@@ -277,7 +277,7 @@ export function SiteFooter() {
                 >
                   <Phone className="h-4 w-4 shrink-0 text-primary" />
 
-                  <span>+34 614 279 511</span>
+                  <span>+34 601801800</span>
                 </a>
               </li>
 
@@ -380,7 +380,7 @@ export function SiteFooter() {
 
           {/* WhatsApp */}
           <a
-            href="#"
+              href="https://wa.me/34601801800?text=Здравствуйте!%20Хочу%20забронировать%20баню."
             target="_blank"
             rel="noopener noreferrer"
             aria-label="WhatsApp"
