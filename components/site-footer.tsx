@@ -198,6 +198,7 @@ export function SiteFooter() {
             </h3>
 
             <ul className="mt-5 space-y-4 text-sm text-muted-foreground">
+              {/* Google Maps */}
               <li
                 className="
                   flex
@@ -208,9 +209,18 @@ export function SiteFooter() {
                 "
               >
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                <span>MQPM+73, 17300 Blanes, Girona</span>
+
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=MQPM%2B73%2C%2017300%20Blanes%2C%20Girona"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-foreground"
+                >
+                  MQPM+73, 17300 Blanes, Girona
+                </a>
               </li>
 
+              {/* Hours */}
               <li
                 className="
                   flex
