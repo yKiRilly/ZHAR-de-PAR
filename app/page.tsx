@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next'
 
 import { BookingProvider } from '@/components/booking-provider'
@@ -23,35 +24,45 @@ const structuredData = {
       '@type': 'LocalBusiness',
       '@id': `${siteUrl}/#business`,
       name: 'ZHAR de PAR',
+      alternateName: 'ЖАР де ПАР',
       url: siteUrl,
+
       description:
-        'Частная русская баня на природе в Испании. Баня, сауна, пар, банные ритуалы, веники, джакузи и купель рядом с Ллорет-де-Мар и Бланесом.',
+        'Частная русская баня на природе в Испании. Русская баня, сауна, парение веником, банные ритуалы, банные веники, джакузи и купель рядом с Бланесом, Ллорет-де-Мар и Жироной.',
+
+      telephone: '+34601801800',
+      email: 'zhardepar1@gmail.com',
+
       priceRange: '€€€',
+      currenciesAccepted: 'EUR',
+
       image: `${siteUrl}/photos/view/viewgeneral.PNG`,
       logo: `${siteUrl}/photos/logos/logoof.png`,
-      openingHours: 'Mo-Su 10:00-24:00',
+
       address: {
         '@type': 'PostalAddress',
-        addressLocality: 'Lloret de Mar',
+        addressLocality: 'Blanes',
         addressRegion: 'Girona',
+        postalCode: '17300',
         addressCountry: 'ES',
       },
+
       areaServed: [
-        {
-          '@type': 'City',
-          name: 'Lloret de Mar',
-        },
         {
           '@type': 'City',
           name: 'Blanes',
         },
         {
           '@type': 'City',
-          name: 'Girona',
+          name: 'Lloret de Mar',
         },
         {
           '@type': 'City',
-          name: 'Barcelona',
+          name: 'Girona',
+        },
+        {
+          '@type': 'AdministrativeArea',
+          name: 'Costa Brava',
         },
         {
           '@type': 'AdministrativeArea',
@@ -62,6 +73,29 @@ const structuredData = {
           name: 'Spain',
         },
       ],
+
+      sameAs: [
+        'https://www.instagram.com/banka_blanes/',
+      ],
+
+      knowsAbout: [
+        'Русская баня',
+        'Русская баня в Испании',
+        'Баня в Испании',
+        'Баня на природе',
+        'Сауна',
+        'Парная',
+        'Парение веником',
+        'Банные ритуалы',
+        'Банные веники',
+        'Березовый веник',
+        'Дубовый веник',
+        'Канадский дубовый веник',
+        'Джакузи',
+        'Купель',
+        'Отдых на природе',
+        'Банный отдых',
+      ],
     },
 
     {
@@ -69,9 +103,12 @@ const structuredData = {
       '@id': `${siteUrl}/#website`,
       url: siteUrl,
       name: 'ZHAR de PAR',
+
       description:
-        'Русская баня на природе в Испании с традиционными банными ритуалами, вениками, сауной, джакузи и купелью.',
-      inLanguage: 'ru-RU',
+        'ZHAR de PAR — русская баня в Испании на природе рядом с Бланесом и Ллорет-де-Мар. Баня, сауна, парение веником, банные ритуалы, купель и джакузи.',
+
+      inLanguage: ['ru-RU', 'uk-UA'],
+
       publisher: {
         '@id': `${siteUrl}/#business`,
       },
@@ -81,16 +118,22 @@ const structuredData = {
       '@type': 'WebPage',
       '@id': `${siteUrl}/#webpage`,
       url: siteUrl,
+
       name: 'ZHAR de PAR — Русская баня в Испании',
+
       description:
-        'Частная русская баня на природе в Испании. Пар, банные ритуалы, веники, сауна, джакузи и купель.',
-      inLanguage: 'ru-RU',
+        'Частная русская баня на природе в Бланесе, Испания. Парение веником, банные ритуалы, сауна, купель, джакузи и отдых рядом с Ллорет-де-Мар.',
+
+      inLanguage: ['ru-RU', 'uk-UA'],
+
       isPartOf: {
         '@id': `${siteUrl}/#website`,
       },
+
       about: {
         '@id': `${siteUrl}/#business`,
       },
+
       primaryImageOfPage: {
         '@type': 'ImageObject',
         url: `${siteUrl}/photos/view/viewgeneral.PNG`,
@@ -100,17 +143,24 @@ const structuredData = {
     {
       '@type': 'VideoObject',
       '@id': `${siteUrl}/#banya-video`,
+
       name: 'ZHAR de PAR — Русская баня в Испании',
+
       description:
-        'Видео ZHAR de PAR — русская баня на природе в Испании. Пар, банные ритуалы, банные веники, сауна, джакузи и купель на Коста-Браве.',
+        'Видео ZHAR de PAR — русская баня на природе в Испании. Парение, банные ритуалы, банные веники, сауна, джакузи и купель на Коста-Браве.',
+
       thumbnailUrl: [`${siteUrl}/photos/view/viewgeneral.PNG`],
+
       contentUrl: `${siteUrl}/video/videobanya.mp4`,
-      embedUrl: `${siteUrl}/video`,
+
       uploadDate: '2026-08-26',
+
       inLanguage: 'ru-RU',
+
       mainEntityOfPage: {
         '@id': `${siteUrl}/#webpage`,
       },
+
       publisher: {
         '@id': `${siteUrl}/#business`,
       },
@@ -119,9 +169,12 @@ const structuredData = {
     {
       '@type': 'FAQPage',
       '@id': `${siteUrl}/#faq`,
+
       mainEntity: faqs.map((faq) => ({
         '@type': 'Question',
+
         name: faq.question,
+
         acceptedAnswer: {
           '@type': 'Answer',
           text: faq.answer,
@@ -133,8 +186,9 @@ const structuredData = {
 
 export const metadata: Metadata = {
   title: 'ZHAR de PAR — Русская баня в Испании',
+
   description:
-    'Частная русская баня на природе в Испании. Пар, банные ритуалы, веники, сауна, джакузи и купель рядом с Ллорет-де-Мар, Бланесом и Жироной.',
+    'Частная русская баня на природе в Бланесе, Испания. Парение веником, банные ритуалы, сауна, банные веники, купель и джакузи рядом с Ллорет-де-Мар и Жироной.',
 
   alternates: {
     canonical: siteUrl,
@@ -145,30 +199,37 @@ export const metadata: Metadata = {
     locale: 'ru_RU',
     url: siteUrl,
     siteName: 'ZHAR de PAR',
+
     title: 'ZHAR de PAR — Русская баня в Испании',
+
     description:
-      'Частная русская баня на природе в Испании. Пар, банные ритуалы, веники, сауна, джакузи и купель.',
+      'Частная русская баня на природе в Бланесе. Парение веником, банные ритуалы, сауна, купель, джакузи и отдых на Коста-Браве.',
+
     images: [
       {
         url: '/photos/view/viewgeneral.PNG',
         width: 1200,
         height: 630,
-        alt: 'ZHAR de PAR — Русская баня в Испании',
+        alt: 'ZHAR de PAR — русская баня в Испании',
       },
     ],
   },
 
   twitter: {
     card: 'summary_large_image',
+
     title: 'ZHAR de PAR — Русская баня в Испании',
+
     description:
-      'Русская баня на природе в Испании. Пар, банные ритуалы, веники, сауна, джакузи и купель.',
+      'Русская баня на природе в Испании. Парение веником, банные ритуалы, сауна, купель и джакузи.',
+
     images: ['/photos/view/viewgeneral.PNG'],
   },
 
   robots: {
     index: true,
     follow: true,
+
     googleBot: {
       index: true,
       follow: true,
@@ -240,6 +301,7 @@ export default function Page() {
       </main>
 
       <SiteFooter />
+
       <BookNowFab />
     </BookingProvider>
   )
