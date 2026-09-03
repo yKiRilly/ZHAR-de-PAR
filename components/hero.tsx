@@ -146,7 +146,20 @@ export function Hero() {
         >
           {t.heroTitle}
         </h1>
-
+<p
+  className="
+    mt-4
+    text-sm
+    font-medium
+    uppercase
+    tracking-[0.15em]
+    text-[#b28d20]
+    sm:mt-5
+    sm:text-base
+  "
+>
+  Русская баня в Испании · Бланес · Коста-Брава
+</p>
         {/* Description */}
         <p
           className="
