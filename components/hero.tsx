@@ -126,19 +126,19 @@ export function Hero() {
 
         {/* SEO location text */}
         <p
-          className="
-            mt-4
-            text-sm
-            font-medium
-            uppercase
-            tracking-[0.15em]
-            text-[#b28d20]
-            sm:mt-5
-            sm:text-base
-          "
-        >
-          Баня в Испании · Бланес · Коста-Брава
-        </p>
+  className="
+    mt-4
+    text-sm
+    font-medium
+    uppercase
+    tracking-[0.15em]
+    text-[#b28d20]
+    sm:mt-5
+    sm:text-base
+  "
+>
+  {t.heroLocation}
+</p>
 
         {/* Description */}
         <p
