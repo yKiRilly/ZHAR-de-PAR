@@ -1,3 +1,4 @@
+
 'use client'
 
 import Image from 'next/image'
@@ -35,11 +36,9 @@ export function SiteFooter() {
             justify-center
             px-5
             py-14
-
             sm:min-h-[400px]
             sm:px-8
             sm:py-16
-
             lg:min-h-[360px]
             lg:justify-end
             lg:px-10
@@ -50,7 +49,6 @@ export function SiteFooter() {
               w-full
               max-w-2xl
               text-center
-
               lg:mr-0
               lg:translate-x-8
               lg:text-left
@@ -63,9 +61,7 @@ export function SiteFooter() {
                 font-bold
                 leading-tight
                 tracking-tight
-
                 sm:text-5xl
-
                 lg:text-6xl
               "
             >
@@ -80,10 +76,8 @@ export function SiteFooter() {
                 uppercase
                 tracking-[0.18em]
                 text-primary
-
                 sm:text-base
                 sm:tracking-[0.2em]
-
                 lg:text-lg
               "
             >
@@ -99,10 +93,8 @@ export function SiteFooter() {
                 font-semibold
                 leading-relaxed
                 text-muted-foreground
-
                 sm:mt-7
                 sm:text-base
-
                 lg:mx-0
                 lg:max-w-2xl
                 lg:text-lg
@@ -127,7 +119,6 @@ export function SiteFooter() {
                 text-primary-foreground
                 transition-colors
                 hover:bg-primary/90
-
                 sm:mt-9
                 sm:px-10
                 sm:py-4
@@ -147,10 +138,8 @@ export function SiteFooter() {
           max-w-7xl
           px-5
           py-8
-
           sm:px-8
           sm:py-10
-
           lg:px-10
           lg:py-8
         "
@@ -160,11 +149,9 @@ export function SiteFooter() {
           className="
             grid
             gap-10
-
             sm:grid-cols-2
             sm:gap-x-10
             sm:gap-y-12
-
             lg:grid-cols-[1.2fr_1fr_1fr]
             lg:items-start
             lg:gap-8
@@ -176,9 +163,7 @@ export function SiteFooter() {
               flex
               items-center
               justify-center
-
               sm:col-span-2
-
               lg:col-span-1
               lg:-mt-16
               lg:items-start
@@ -195,9 +180,7 @@ export function SiteFooter() {
                 h-auto
                 w-[240px]
                 object-contain
-
                 sm:w-[260px]
-
                 lg:w-[280px]
               "
             />
@@ -207,7 +190,6 @@ export function SiteFooter() {
           <div
             className="
               text-center
-
               sm:text-left
             "
           >
@@ -222,12 +204,10 @@ export function SiteFooter() {
                   items-start
                   justify-center
                   gap-3
-
                   sm:justify-start
                 "
               >
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-
                 <span>MQPM+73, 17300 Blanes, Girona</span>
               </li>
 
@@ -237,12 +217,10 @@ export function SiteFooter() {
                   items-start
                   justify-center
                   gap-3
-
                   sm:justify-start
                 "
               >
                 <Clock className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-
                 <span>{t.footerHours}</span>
               </li>
             </ul>
@@ -252,7 +230,6 @@ export function SiteFooter() {
           <div
             className="
               text-center
-
               sm:text-left
             "
           >
@@ -261,6 +238,7 @@ export function SiteFooter() {
             </h3>
 
             <ul className="mt-5 space-y-4 text-sm text-muted-foreground">
+              {/* Phone */}
               <li>
                 <a
                   href="tel:+34601801800"
@@ -271,19 +249,18 @@ export function SiteFooter() {
                     gap-3
                     transition-colors
                     hover:text-foreground
-
                     sm:justify-start
                   "
                 >
                   <Phone className="h-4 w-4 shrink-0 text-primary" />
-
-                  <span>+34 601801800</span>
+                  <span>+34 601 80 18 00</span>
                 </a>
               </li>
 
+              {/* Email */}
               <li>
                 <a
-                  href="mailto:kirill2525225@gmail.com"
+                  href="mailto:zhardepar1@gmail.com"
                   className="
                     flex
                     items-center
@@ -292,14 +269,12 @@ export function SiteFooter() {
                     break-all
                     transition-colors
                     hover:text-foreground
-
                     sm:justify-start
                     sm:break-normal
                   "
                 >
                   <Mail className="h-4 w-4 shrink-0 text-primary" />
-
-                  <span>kirill2525225@gmail.com</span>
+                  <span>zhardepar1@gmail.com</span>
                 </a>
               </li>
             </ul>
@@ -315,9 +290,7 @@ export function SiteFooter() {
             items-center
             justify-center
             gap-4
-
             sm:mt-8
-
             lg:-mt-10
           "
         >
@@ -380,7 +353,7 @@ export function SiteFooter() {
 
           {/* WhatsApp */}
           <a
-              href="https://wa.me/34601801800?text=Здравствуйте!%20Хочу%20забронировать%20баню."
+            href="https://wa.me/34601801800?text=Здравствуйте!%20Хочу%20забронировать%20баню"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="WhatsApp"
@@ -426,10 +399,8 @@ export function SiteFooter() {
             text-center
             text-xs
             text-muted-foreground
-
             sm:flex-row
             sm:text-left
-
             lg:mt-8
           "
         >
