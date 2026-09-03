@@ -1,4 +1,3 @@
-
 'use client'
 
 import { ArrowDown } from 'lucide-react'
@@ -107,28 +106,6 @@ export function Hero() {
           lg:pt-0
         "
       >
-        {/* Label */}
-        <p
-          className="
-            mb-4
-            animate-in
-            fade-in
-            slide-in-from-bottom-4
-            text-sm
-            font-black
-            uppercase
-            tracking-[0.18em]
-            text-primary
-            duration-700
-            [text-shadow:0_0_1px_currentColor,0_0_1px_currentColor,0_0_1px_currentColor]
-            sm:mb-6
-            sm:text-lg
-            sm:tracking-[0.25em]
-          "
-        >
-          {t.heroLabel}
-        </p>
-
         {/* Main title */}
         <h1
           className="
@@ -146,20 +123,23 @@ export function Hero() {
         >
           {t.heroTitle}
         </h1>
-<p
-  className="
-    mt-4
-    text-sm
-    font-medium
-    uppercase
-    tracking-[0.15em]
-    text-[#b28d20]
-    sm:mt-5
-    sm:text-base
-  "
->
-  Русская баня в Испании · Бланес · Коста-Брава
-</p>
+
+        {/* SEO location text */}
+        <p
+          className="
+            mt-4
+            text-sm
+            font-medium
+            uppercase
+            tracking-[0.15em]
+            text-[#b28d20]
+            sm:mt-5
+            sm:text-base
+          "
+        >
+          Баня в Испании · Бланес · Коста-Брава
+        </p>
+
         {/* Description */}
         <p
           className="
