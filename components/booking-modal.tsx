@@ -92,7 +92,11 @@ function getCalendarDays(monthDate: Date) {
     })
   }
 
-  for (let day = 1; day <= daysInMonth; day++) {
+  for (
+    let day = 1;
+    day <= daysInMonth;
+    day++
+  ) {
     days.push({
       day,
       currentMonth: true,
@@ -119,6 +123,61 @@ function getCalendarDays(monthDate: Date) {
   return days
 }
 
+/**
+ * Возвращает дату и время окончания брони.
+ *
+ * Например:
+ * 2026-09-05 18:00 + 3 часа
+ * = 2026-09-05 21:00:00
+ */
+function getBookingEnd(
+  date: string,
+  time: string,
+  durationMinutes: number,
+) {
+  const [year, month, day] =
+    date.split('-').map(Number)
+
+  const [hours, minutes] =
+    time.split(':').map(Number)
+
+  const start = new Date(
+    year,
+    month - 1,
+    day,
+    hours,
+    minutes,
+    0,
+    0,
+  )
+
+  const end = new Date(
+    start.getTime() +
+      durationMinutes * 60 * 1000,
+  )
+
+  const endYear =
+    end.getFullYear()
+
+  const endMonth = String(
+    end.getMonth() + 1,
+  ).padStart(2, '0')
+
+  const endDay = String(
+    end.getDate(),
+  ).padStart(2, '0')
+
+  const endHours = String(
+    end.getHours(),
+  ).padStart(2, '0')
+
+  const endMinutes = String(
+    end.getMinutes(),
+  ).padStart(2, '0')
+
+  return `${endYear}-${endMonth}-${endDay} ${endHours}:${endMinutes}:00`
+}
+
 export function BookingModal({
   open,
   onClose,
@@ -134,53 +193,105 @@ export function BookingModal({
   const { t } = useLanguage()
 
   const [guests, setGuests] = useState(2)
-  const [selectedDate, setSelectedDate] = useState('')
-  const [selectedTime, setSelectedTime] = useState('')
 
-  const [dateOpen, setDateOpen] = useState(false)
-  const [timeOpen, setTimeOpen] = useState(false)
-  const [guestsOpen, setGuestsOpen] = useState(false)
+  const [selectedDate, setSelectedDate] =
+    useState('')
 
-  const [calendarMonth, setCalendarMonth] = useState(
-    new Date(),
+  const [selectedTime, setSelectedTime] =
+    useState('')
+
+  const [dateOpen, setDateOpen] =
+    useState(false)
+
+  const [timeOpen, setTimeOpen] =
+    useState(false)
+
+  const [guestsOpen, setGuestsOpen] =
+    useState(false)
+
+  const [calendarMonth, setCalendarMonth] =
+    useState(new Date())
+
+  const [isSubmitting, setIsSubmitting] =
+    useState(false)
+
+  const extraGuests = Math.max(
+    0,
+    guests - 8,
   )
 
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const guestSurcharge =
+    extraGuests * 50
 
-  const extraGuests = Math.max(0, guests - 8)
-  const guestSurcharge = extraGuests * 50
-  const finalTotal = cartTotal + guestSurcharge
+  const finalTotal =
+    cartTotal + guestSurcharge
 
   const today = getTodayString()
-  const calendarDays = getCalendarDays(calendarMonth)
 
-  // Без "г." после года
+  const calendarDays =
+    getCalendarDays(calendarMonth)
+
   const monthName =
-    calendarMonth.toLocaleDateString('ru-RU', {
-      month: 'long',
-    }) +
+    calendarMonth.toLocaleDateString(
+      'ru-RU',
+      {
+        month: 'long',
+      },
+    ) +
     ` ${calendarMonth.getFullYear()}`
 
   const timeOptions: string[] = []
 
-  for (let hour = 8; hour <= 23; hour++) {
+  for (
+    let hour = 8;
+    hour <= 23;
+    hour++
+  ) {
     for (const minute of [0, 30]) {
-      if (hour === 23 && minute === 30) continue
+      if (
+        hour === 23 &&
+        minute === 30
+      ) {
+        continue
+      }
 
       timeOptions.push(
-        `${String(hour).padStart(2, '0')}:${String(
-          minute,
-        ).padStart(2, '0')}`,
+        `${String(hour).padStart(
+          2,
+          '0',
+        )}:${String(minute).padStart(
+          2,
+          '0',
+        )}`,
       )
     }
   }
+
+  /**
+   * Ищем аренду сауны в корзине.
+   *
+   * quantity = количество часов.
+   *
+   * Минимум 3 часа.
+   */
+  const saunaItem = cart.find(
+    (item) => item.type === 'sauna',
+  )
+
+  const saunaHours = Math.max(
+    3,
+    saunaItem?.quantity ?? 3,
+  )
+
+  const durationMinutes =
+    saunaHours * 60
 
   if (!open) {
     return null
   }
 
   // ==========================================
-  // СОХРАНЕНИЕ БРОНИРОВАНИЯ В SUPABASE
+  // SAVE BOOKING TO SUPABASE
   // ==========================================
 
   const handleReserve = async (
@@ -216,65 +327,234 @@ export function BookingModal({
       formData.get('phone') || '',
     ).trim()
 
+    const message = String(
+      formData.get('message') || '',
+    ).trim()
+
     // Проверяем имя
     if (!name) {
-      alert('Пожалуйста, укажите имя.')
+      alert(
+        'Пожалуйста, укажите имя.',
+      )
       return
     }
 
     // Проверяем телефон
     if (!phone) {
-      alert('Пожалуйста, укажите телефон.')
+      alert(
+        'Пожалуйста, укажите телефон.',
+      )
       return
     }
+
+    /*
+     * Время начала.
+     *
+     * Например:
+     * 2026-09-05 18:00:00
+     */
+    const bookingStart =
+      `${selectedDate} ${selectedTime}:00`
+
+    /*
+     * Время окончания.
+     *
+     * Например:
+     * 18:00 + 3 часа = 21:00
+     */
+    const bookingEnd = getBookingEnd(
+      selectedDate,
+      selectedTime,
+      durationMinutes,
+    )
+
+    /*
+     * Данные, которые отправляем
+     * в Supabase.
+     */
+    const bookingData = {
+      name,
+      phone,
+      booking_date: selectedDate,
+      booking_time: selectedTime,
+      booking_start: bookingStart,
+      booking_end: bookingEnd,
+      duration_minutes:
+        durationMinutes,
+      guests,
+      message,
+      cart,
+      total: finalTotal,
+    }
+
+    console.log(
+      '==============================',
+    )
+
+    console.log(
+      'SENDING BOOKING:',
+      bookingData,
+    )
+
+    console.log(
+      'BOOKING START:',
+      bookingStart,
+    )
+
+    console.log(
+      'BOOKING END:',
+      bookingEnd,
+    )
+
+    console.log(
+      'DURATION MINUTES:',
+      durationMinutes,
+    )
+
+    console.log(
+      '==============================',
+    )
 
     setIsSubmitting(true)
 
     try {
-      const { error } = await supabase
+      const {
+        data,
+        error,
+        status,
+        statusText,
+      } = await supabase
         .from('bookings')
-        .insert({
-          name,
-          phone,
-          cart,
-          total: finalTotal,
-          booking_date: selectedDate,
-          booking_time: selectedTime,
-        })
+        .insert(bookingData)
+        .select()
+
+      console.log(
+        'SUPABASE STATUS:',
+        status,
+      )
+
+      console.log(
+        'SUPABASE STATUS TEXT:',
+        statusText,
+      )
+
+      console.log(
+        'SUPABASE DATA:',
+        data,
+      )
+
+      console.log(
+        'SUPABASE ERROR RAW:',
+        error,
+      )
+
+      // ==========================================
+      // SUPABASE ERROR
+      // ==========================================
 
       if (error) {
         console.error(
-          'SUPABASE BOOKING ERROR:',
-          error,
+          'SUPABASE ERROR MESSAGE:',
+          error.message,
         )
 
+        console.error(
+          'SUPABASE ERROR CODE:',
+          error.code,
+        )
+
+        console.error(
+          'SUPABASE ERROR DETAILS:',
+          error.details,
+        )
+
+        console.error(
+          'SUPABASE ERROR HINT:',
+          error.hint,
+        )
+
+        /*
+         * 23P01 =
+         * EXCLUSION CONSTRAINT VIOLATION.
+         *
+         * Это означает,
+         * что время пересекается
+         * с другой бронью.
+         */
+        if (
+          error.code ===
+          '23P01'
+        ) {
+          alert(
+            'Это время уже занято.\n\nПожалуйста, выберите другое время.',
+          )
+
+          return
+        }
+
+        const message =
+          error.message ||
+          'Неизвестная ошибка Supabase'
+
+        const details =
+          error.details ||
+          'Нет дополнительных данных.'
+
+        const hint =
+          error.hint ||
+          'Нет подсказки.'
+
+        const code =
+          error.code ||
+          'NO_CODE'
+
         alert(
-          'Не удалось отправить заявку. Пожалуйста, попробуйте ещё раз.',
+          `Ошибка бронирования\n\n` +
+          `Сообщение: ${message}\n\n` +
+          `Код: ${code}\n\n` +
+          `Details: ${details}\n\n` +
+          `Hint: ${hint}`,
         )
 
         return
       }
 
+      // ==========================================
+      // SUCCESS
+      // ==========================================
+
       console.log(
-        'BOOKING SAVED TO SUPABASE',
+        'BOOKING SAVED SUCCESSFULLY',
       )
 
-      alert(t.booking.thankYou)
+      alert(
+        t.booking.thankYou,
+      )
 
       onClose()
     } catch (error) {
       console.error(
-        'BOOKING ERROR:',
+        'BOOKING CATCH ERROR:',
         error,
       )
 
-      alert(
-        'Произошла ошибка. Пожалуйста, попробуйте ещё раз.',
-      )
+      if (error instanceof Error) {
+        alert(
+          `Ошибка бронирования\n\n${error.message}`,
+        )
+      } else {
+        alert(
+          `Ошибка бронирования\n\n${String(error)}`,
+        )
+      }
     } finally {
       setIsSubmitting(false)
     }
   }
+
+  // ==========================================
+  // DATE
+  // ==========================================
 
   const selectDate = (date: Date) => {
     const value = dateToString(date)
@@ -333,7 +613,9 @@ export function BookingModal({
             type="button"
             onClick={onClose}
             className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/30 text-muted-foreground transition-all hover:border-primary hover:bg-primary hover:text-primary-foreground"
-            aria-label={t.booking.close}
+            aria-label={
+              t.booking.close
+            }
           >
             <X className="h-4 w-4" />
           </button>
@@ -342,7 +624,6 @@ export function BookingModal({
         {/* SCROLLABLE CONTENT */}
 
         <div className="flex-1 overflow-y-auto">
-
           {/* CART */}
 
           <div className="px-6 py-5 sm:px-8">
@@ -355,7 +636,10 @@ export function BookingModal({
                 </p>
 
                 <p className="mt-2 text-sm text-muted-foreground">
-                  {t.booking.emptyDescription}
+                  {
+                    t.booking
+                      .emptyDescription
+                  }
                 </p>
               </div>
             ) : (
@@ -383,7 +667,6 @@ export function BookingModal({
                       className="rounded-xl border border-primary/15 bg-[#15100e] px-4 py-4"
                     >
                       <div className="flex items-center gap-3 sm:gap-4">
-
                         {/* NAME */}
 
                         <div className="min-w-0 flex-1">
@@ -398,13 +681,19 @@ export function BookingModal({
 
                           {isBroom && (
                             <p className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground">
-                              {t.booking.maximum}
+                              {
+                                t.booking
+                                  .maximum
+                              }
                             </p>
                           )}
 
                           {isSauna && (
                             <p className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground">
-                              {t.booking.minimum}
+                              {
+                                t.booking
+                                  .minimum
+                              }
                             </p>
                           )}
                         </div>
@@ -419,14 +708,18 @@ export function BookingModal({
                                 item.id,
                               )
                             }
-                            disabled={atMinimum}
+                            disabled={
+                              atMinimum
+                            }
                             className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/25 transition-all hover:border-primary hover:bg-primary hover:text-primary-foreground disabled:cursor-not-allowed disabled:opacity-30"
                           >
                             <Minus className="h-4 w-4" />
                           </button>
 
                           <span className="w-7 text-center font-serif text-lg">
-                            {item.quantity}
+                            {
+                              item.quantity
+                            }
                           </span>
 
                           <button
@@ -436,7 +729,9 @@ export function BookingModal({
                                 item.id,
                               )
                             }
-                            disabled={atMaximum}
+                            disabled={
+                              atMaximum
+                            }
                             className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/25 transition-all hover:border-primary hover:bg-primary hover:text-primary-foreground disabled:cursor-not-allowed disabled:opacity-30"
                           >
                             <Plus className="h-4 w-4" />
@@ -501,11 +796,15 @@ export function BookingModal({
               {guestSurcharge > 0 && (
                 <div className="mt-2 flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">
-                    Extra guests ({extraGuests} × €50)
+                    Extra guests (
+                    {extraGuests} × €50)
                   </span>
 
                   <span className="font-medium text-primary">
-                    +€{guestSurcharge.toFixed(2)}
+                    +€
+                    {guestSurcharge.toFixed(
+                      2,
+                    )}
                   </span>
                 </div>
               )}
@@ -532,12 +831,14 @@ export function BookingModal({
                 </h3>
 
                 <p className="mt-2 text-sm text-muted-foreground">
-                  {t.booking.detailsDescription}
+                  {
+                    t.booking
+                      .detailsDescription
+                  }
                 </p>
               </div>
 
               <div className="space-y-5">
-
                 {/* FULL NAME */}
 
                 <div>
@@ -590,7 +891,6 @@ export function BookingModal({
                 {/* DATE + TIME */}
 
                 <div className="grid gap-4 sm:grid-cols-2">
-
                   {/* DATE */}
 
                   <div className="relative">
@@ -608,6 +908,7 @@ export function BookingModal({
                         setDateOpen(
                           !dateOpen,
                         )
+
                         setTimeOpen(false)
                         setGuestsOpen(false)
                       }}
@@ -648,9 +949,6 @@ export function BookingModal({
 
                     {dateOpen && (
                       <div className="absolute left-0 right-0 top-[82px] z-50 overflow-hidden rounded-2xl border border-primary/30 bg-[#17110e] p-4 shadow-2xl">
-
-                        {/* CALENDAR HEADER */}
-
                         <div className="mb-4 flex items-center justify-between">
                           <button
                             type="button"
@@ -780,6 +1078,7 @@ export function BookingModal({
                         setTimeOpen(
                           !timeOpen,
                         )
+
                         setDateOpen(false)
                         setGuestsOpen(false)
                       }}
@@ -831,6 +1130,7 @@ export function BookingModal({
                                   setSelectedTime(
                                     time,
                                   )
+
                                   setTimeOpen(
                                     false,
                                   )
@@ -872,6 +1172,7 @@ export function BookingModal({
                       setGuestsOpen(
                         !guestsOpen,
                       )
+
                       setDateOpen(false)
                       setTimeOpen(false)
                     }}
@@ -922,6 +1223,7 @@ export function BookingModal({
                                 setGuests(
                                   number,
                                 )
+
                                 setGuestsOpen(
                                   false,
                                 )
@@ -938,7 +1240,8 @@ export function BookingModal({
                             >
                               <span>
                                 {number}{' '}
-                                {number === 1
+                                {number ===
+                                1
                                   ? t.booking
                                       .guest
                                   : t.booking
