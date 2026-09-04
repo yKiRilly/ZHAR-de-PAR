@@ -1,7 +1,6 @@
-
 'use client'
 
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 
 import {
   CalendarDays,
@@ -26,6 +25,11 @@ type BookingModalProps = {
   onClose: () => void
   cart: CartItem[]
   cartTotal: number
+}
+
+type BookedInterval = {
+  booking_start: string
+  booking_end: string
 }
 
 function formatDate(date: string) {
@@ -81,11 +85,7 @@ function getCalendarDays(monthDate: Date) {
     date: Date
   }[] = []
 
-  for (
-    let i = startDay - 1;
-    i >= 0;
-    i--
-  ) {
+  for (let i = startDay - 1; i >= 0; i--) {
     days.push({
       day: previousMonthDays - i,
       currentMonth: false,
@@ -128,13 +128,6 @@ function getCalendarDays(monthDate: Date) {
   return days
 }
 
-/**
- * Рассчитывает дату и время окончания бронирования.
- *
- * Например:
- * 2026-09-05 18:00 + 180 минут
- * = 2026-09-05 21:00:00
- */
 function getBookingEnd(
   date: string,
   time: string,
@@ -184,6 +177,47 @@ function getBookingEnd(
   return `${endYear}-${endMonth}-${endDay} ${endHours}:${endMinutes}:00`
 }
 
+function getDateTimeTimestamp(
+  date: string,
+  time: string,
+) {
+  const [year, month, day] = date
+    .split('-')
+    .map(Number)
+
+  const [hours, minutes] = time
+    .split(':')
+    .map(Number)
+
+  return new Date(
+    year,
+    month - 1,
+    day,
+    hours,
+    minutes,
+    0,
+    0,
+  ).getTime()
+}
+
+function getIntervalTimestamp(
+  value: string,
+) {
+  const normalized = value.replace('T', ' ')
+
+  const [datePart, timePart] =
+    normalized.split(' ')
+
+  if (!datePart || !timePart) {
+    return NaN
+  }
+
+  return getDateTimeTimestamp(
+    datePart,
+    timePart.slice(0, 5),
+  )
+}
+
 export function BookingModal({
   open,
   onClose,
@@ -224,6 +258,15 @@ export function BookingModal({
   const [privacyAccepted, setPrivacyAccepted] =
     useState(false)
 
+  const [bookedIntervals, setBookedIntervals] =
+    useState<BookedInterval[]>([])
+
+  const [loadingBookedTimes, setLoadingBookedTimes] =
+    useState(false)
+
+  const [bookingTimesError, setBookingTimesError] =
+    useState('')
+
   const extraGuests = Math.max(
     0,
     guests - 8,
@@ -249,6 +292,15 @@ export function BookingModal({
     ) +
     ` ${calendarMonth.getFullYear()}`
 
+  /**
+   * Генерируем доступные интервалы:
+   *
+   * 08:00
+   * 08:30
+   * 09:00
+   * ...
+   * 23:00
+   */
   const timeOptions: string[] = []
 
   for (
@@ -295,14 +347,179 @@ export function BookingModal({
   const durationMinutes =
     saunaHours * 60
 
-  if (!open) {
-    return null
+  /**
+   * Загружаем занятые интервалы
+   * для выбранной даты.
+   *
+   * Важно:
+   * Supabase возвращает только
+   * booking_start и booking_end.
+   *
+   * Имя, телефон и другие данные
+   * клиента сюда не попадают.
+   */
+  useEffect(() => {
+    if (!open || !selectedDate) {
+      setBookedIntervals([])
+      setBookingTimesError('')
+      return
+    }
+
+    let cancelled = false
+
+    const loadBookedIntervals = async () => {
+      setLoadingBookedTimes(true)
+      setBookingTimesError('')
+
+      try {
+        const {
+          data,
+          error,
+        } = await supabase.rpc(
+          'get_booked_intervals',
+          {
+            selected_date:
+              selectedDate,
+          },
+        )
+
+        if (cancelled) {
+          return
+        }
+
+        if (error) {
+          console.error(
+            'BOOKED INTERVALS ERROR:',
+            error,
+          )
+
+          setBookedIntervals([])
+
+          setBookingTimesError(
+            'Не удалось проверить занятость времени.',
+          )
+
+          return
+        }
+
+        setBookedIntervals(
+          (data || []) as BookedInterval[],
+        )
+      } catch (error) {
+        if (cancelled) {
+          return
+        }
+
+        console.error(
+          'LOAD BOOKED INTERVALS ERROR:',
+          error,
+        )
+
+        setBookedIntervals([])
+
+        setBookingTimesError(
+          'Не удалось проверить занятость времени.',
+        )
+      } finally {
+        if (!cancelled) {
+          setLoadingBookedTimes(false)
+        }
+      }
+    }
+
+    loadBookedIntervals()
+
+    return () => {
+      cancelled = true
+    }
+  }, [open, selectedDate])
+
+  /**
+   * Проверяет, пересекается ли выбранное
+   * время с существующей бронью.
+   *
+   * Например:
+   *
+   * существующая бронь:
+   * 18:00 → 21:00
+   *
+   * наша бронь:
+   * 19:00 → 22:00
+   *
+   * результат:
+   * true
+   */
+  const isTimeBooked = (
+    time: string,
+  ) => {
+    if (!selectedDate) {
+      return false
+    }
+
+    const startTimestamp =
+      getDateTimeTimestamp(
+        selectedDate,
+        time,
+      )
+
+    const endDateTime =
+      getBookingEnd(
+        selectedDate,
+        time,
+        durationMinutes,
+      )
+
+    const endTimestamp =
+      getIntervalTimestamp(
+        endDateTime,
+      )
+
+    if (
+      Number.isNaN(startTimestamp) ||
+      Number.isNaN(endTimestamp)
+    ) {
+      return false
+    }
+
+    return bookedIntervals.some(
+      (interval) => {
+        const bookedStart =
+          getIntervalTimestamp(
+            interval.booking_start,
+          )
+
+        const bookedEnd =
+          getIntervalTimestamp(
+            interval.booking_end,
+          )
+
+        if (
+          Number.isNaN(bookedStart) ||
+          Number.isNaN(bookedEnd)
+        ) {
+          return false
+        }
+
+        /**
+         * Интервалы пересекаются, если:
+         *
+         * наш старт < конец существующей
+         * И
+         * наш конец > старт существующей
+         */
+        return (
+          startTimestamp <
+            bookedEnd &&
+          endTimestamp >
+            bookedStart
+        )
+      },
+    )
   }
 
-  // ==========================================
-  // SAVE BOOKING TO SUPABASE
-  // ==========================================
-
+  /**
+   * SAVE BOOKING
+   */
   const handleReserve = async (
     event: FormEvent<HTMLFormElement>,
   ) => {
@@ -312,19 +529,35 @@ export function BookingModal({
       return
     }
 
-    // DATE
     if (!selectedDate) {
       setDateOpen(true)
       return
     }
 
-    // TIME
     if (!selectedTime) {
       setTimeOpen(true)
       return
     }
 
-    // PRIVACY
+    /**
+     * Дополнительная проверка перед отправкой.
+     *
+     * Даже если пользователь открыл
+     * окно выбора времени раньше,
+     * чем другой клиент создал бронь,
+     * здесь мы ещё раз проверяем.
+     */
+    if (isTimeBooked(selectedTime)) {
+      alert(
+        'Это время уже занято.\n\nПожалуйста, выберите другое время.',
+      )
+
+      setSelectedTime('')
+      setTimeOpen(true)
+
+      return
+    }
+
     if (!privacyAccepted) {
       alert(
         'Por favor, acepte la Política de Privacidad antes de continuar.',
@@ -333,9 +566,10 @@ export function BookingModal({
       return
     }
 
-    const formData = new FormData(
-      event.currentTarget,
-    )
+    const formData =
+      new FormData(
+        event.currentTarget,
+      )
 
     const name = String(
       formData.get('name') || '',
@@ -349,7 +583,6 @@ export function BookingModal({
       formData.get('message') || '',
     ).trim()
 
-    // NAME
     if (!name) {
       alert(
         'Пожалуйста, укажите имя.',
@@ -358,7 +591,6 @@ export function BookingModal({
       return
     }
 
-    // PHONE
     if (!phone) {
       alert(
         'Пожалуйста, укажите телефон.',
@@ -367,15 +599,9 @@ export function BookingModal({
       return
     }
 
-    /**
-     * Время начала.
-     */
     const bookingStart =
       `${selectedDate} ${selectedTime}:00`
 
-    /**
-     * Время окончания.
-     */
     const bookingEnd =
       getBookingEnd(
         selectedDate,
@@ -383,83 +609,34 @@ export function BookingModal({
         durationMinutes,
       )
 
-    /**
-     * Данные для Supabase.
-     */
     const bookingData = {
       name,
       phone,
-
       booking_date:
         selectedDate,
-
       booking_time:
         selectedTime,
-
       booking_start:
         bookingStart,
-
       booking_end:
         bookingEnd,
-
       duration_minutes:
         durationMinutes,
-
       guests,
-
       message,
-
       cart,
-
       total:
         finalTotal,
     }
-
-    console.log(
-      '==============================',
-    )
 
     console.log(
       'SENDING BOOKING:',
       bookingData,
     )
 
-    console.log(
-      'BOOKING START:',
-      bookingStart,
-    )
-
-    console.log(
-      'BOOKING END:',
-      bookingEnd,
-    )
-
-    console.log(
-      'DURATION MINUTES:',
-      durationMinutes,
-    )
-
-    console.log(
-      'PRIVACY ACCEPTED:',
-      privacyAccepted,
-    )
-
-    console.log(
-      '==============================',
-    )
-
     setIsSubmitting(true)
 
     try {
-      /*
-       * ВАЖНО:
-       *
-       * Здесь НЕТ .select()
-       *
-       * Потому что anon должен иметь право
-       * только создавать бронь, но не читать
-       * данные клиентов.
-       */
       const {
         error,
         status,
@@ -479,13 +656,9 @@ export function BookingModal({
       )
 
       console.log(
-        'SUPABASE ERROR RAW:',
+        'SUPABASE ERROR:',
         error,
       )
-
-      // ==========================================
-      // SUPABASE ERROR
-      // ==========================================
 
       if (error) {
         console.error(
@@ -510,7 +683,7 @@ export function BookingModal({
 
         /**
          * PostgreSQL 23P01 =
-         * пересечение времени бронирования.
+         * пересечение времени.
          */
         if (
           error.code ===
@@ -519,6 +692,29 @@ export function BookingModal({
           alert(
             'Это время уже занято.\n\nПожалуйста, выберите другое время.',
           )
+
+          setSelectedTime('')
+
+          /**
+           * Обновляем занятые интервалы,
+           * чтобы интерфейс тоже увидел
+           * новую бронь.
+           */
+          const {
+            data,
+          } = await supabase.rpc(
+            'get_booked_intervals',
+            {
+              selected_date:
+                selectedDate,
+            },
+          )
+
+          setBookedIntervals(
+            (data || []) as BookedInterval[],
+          )
+
+          setTimeOpen(true)
 
           return
         }
@@ -550,10 +746,6 @@ export function BookingModal({
         return
       }
 
-      // ==========================================
-      // SUCCESS
-      // ==========================================
-
       console.log(
         'BOOKING SAVED SUCCESSFULLY',
       )
@@ -564,6 +756,11 @@ export function BookingModal({
 
       setPrivacyAccepted(false)
 
+      setSelectedDate('')
+      setSelectedTime('')
+
+      setBookedIntervals([])
+
       onClose()
     } catch (error) {
       console.error(
@@ -571,7 +768,9 @@ export function BookingModal({
         error,
       )
 
-      if (error instanceof Error) {
+      if (
+        error instanceof Error
+      ) {
         alert(
           `Ошибка бронирования\n\n${error.message}`,
         )
@@ -585,18 +784,29 @@ export function BookingModal({
     }
   }
 
-  // ==========================================
-  // DATE
-  // ==========================================
-
-  const selectDate = (date: Date) => {
-    const value = dateToString(date)
+  /**
+   * DATE
+   */
+  const selectDate = (
+    date: Date,
+  ) => {
+    const value =
+      dateToString(date)
 
     if (value < today) {
       return
     }
 
     setSelectedDate(value)
+
+    /**
+     * При выборе новой даты
+     * старое время сбрасываем.
+     */
+    setSelectedTime('')
+
+    setBookedIntervals([])
+
     setDateOpen(false)
   }
 
@@ -620,6 +830,10 @@ export function BookingModal({
     )
   }
 
+  if (!open) {
+    return null
+  }
+
   return (
     <div
       className="fixed inset-0 z-[100] flex items-end justify-center bg-black/75 p-0 backdrop-blur-sm sm:items-center sm:p-6"
@@ -631,6 +845,7 @@ export function BookingModal({
           event.stopPropagation()
         }
       >
+
         {/* HEADER */}
 
         <div className="flex shrink-0 items-center justify-between border-b border-primary/15 px-6 py-5 sm:px-8">
@@ -657,9 +872,11 @@ export function BookingModal({
         {/* SCROLLABLE CONTENT */}
 
         <div className="flex-1 overflow-y-auto">
+
           {/* CART */}
 
           <div className="px-6 py-5 sm:px-8">
+
             {cart.length === 0 ? (
               <div className="py-12 text-center">
                 <ShoppingBag className="mx-auto h-10 w-10 text-muted-foreground" />
@@ -677,6 +894,7 @@ export function BookingModal({
               </div>
             ) : (
               <div className="space-y-3">
+
                 {cart.map((item) => {
                   const isBroom =
                     item.type === 'broom'
@@ -699,10 +917,13 @@ export function BookingModal({
                       key={item.id}
                       className="rounded-xl border border-primary/15 bg-[#15100e] px-4 py-4"
                     >
+
                       <div className="flex items-center gap-3 sm:gap-4">
+
                         {/* NAME */}
 
                         <div className="min-w-0 flex-1">
+
                           <p className="font-serif text-lg font-light">
                             {item.name}
                           </p>
@@ -729,11 +950,13 @@ export function BookingModal({
                               }
                             </p>
                           )}
+
                         </div>
 
                         {/* QUANTITY */}
 
                         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+
                           <button
                             type="button"
                             onClick={() =>
@@ -750,9 +973,7 @@ export function BookingModal({
                           </button>
 
                           <span className="w-7 text-center font-serif text-lg">
-                            {
-                              item.quantity
-                            }
+                            {item.quantity}
                           </span>
 
                           <button
@@ -769,6 +990,7 @@ export function BookingModal({
                           >
                             <Plus className="h-4 w-4" />
                           </button>
+
                         </div>
 
                         {/* TOTAL */}
@@ -796,6 +1018,7 @@ export function BookingModal({
                             <Trash2 className="h-4 w-4" />
                           </button>
                         )}
+
                       </div>
 
                       <div className="mt-3 border-t border-primary/10 pt-3 text-right font-serif text-lg text-primary sm:hidden">
@@ -805,18 +1028,23 @@ export function BookingModal({
                           item.quantity
                         ).toFixed(2)}
                       </div>
+
                     </div>
                   )
                 })}
+
               </div>
             )}
+
           </div>
 
           {/* TOTAL */}
 
           {cart.length > 0 && (
             <div className="border-t border-primary/15 px-6 py-4 sm:px-8">
+
               <div className="flex items-center justify-between">
+
                 <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
                   {t.booking.total}
                 </span>
@@ -824,10 +1052,12 @@ export function BookingModal({
                 <span className="font-serif text-3xl text-primary">
                   €{finalTotal.toFixed(2)}
                 </span>
+
               </div>
 
               {guestSurcharge > 0 && (
                 <div className="mt-2 flex items-center justify-between text-sm">
+
                   <span className="text-muted-foreground">
                     Extra guests (
                     {extraGuests} × €50)
@@ -839,8 +1069,10 @@ export function BookingModal({
                       2,
                     )}
                   </span>
+
                 </div>
               )}
+
             </div>
           )}
 
@@ -849,12 +1081,16 @@ export function BookingModal({
           {cart.length > 0 && (
             <form
               id="booking-form"
-              onSubmit={handleReserve}
+              onSubmit={
+                handleReserve
+              }
               className="border-t border-primary/15 px-6 py-6 sm:px-8"
             >
+
               {/* FORM HEADING */}
 
               <div className="mb-6">
+
                 <p className="text-xs font-medium uppercase tracking-[0.3em] text-primary">
                   {t.booking.reservation}
                 </p>
@@ -869,12 +1105,15 @@ export function BookingModal({
                       .detailsDescription
                   }
                 </p>
+
               </div>
 
               <div className="space-y-5">
+
                 {/* FULL NAME */}
 
                 <div>
+
                   <label
                     htmlFor="booking-name"
                     className="mb-2 block text-xs font-medium uppercase tracking-widest text-muted-foreground"
@@ -893,11 +1132,13 @@ export function BookingModal({
                     }
                     className="h-[54px] w-full rounded-xl border border-primary/20 bg-[#0e0a08] px-4 text-sm outline-none transition-all placeholder:text-muted-foreground/60 focus:border-primary focus:ring-1 focus:ring-primary/20"
                   />
+
                 </div>
 
                 {/* PHONE */}
 
                 <div>
+
                   <label
                     htmlFor="booking-phone"
                     className="mb-2 block text-xs font-medium uppercase tracking-widest text-muted-foreground"
@@ -906,6 +1147,7 @@ export function BookingModal({
                   </label>
 
                   <div className="flex h-[54px] w-full overflow-hidden rounded-xl border border-primary/20 bg-[#0e0a08] transition-all focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20">
+
                     <div className="flex shrink-0 items-center border-r border-primary/15 px-4 text-sm font-medium text-primary">
                       +
                     </div>
@@ -918,15 +1160,19 @@ export function BookingModal({
                       inputMode="tel"
                       className="min-w-0 flex-1 bg-transparent px-4 text-sm outline-none"
                     />
+
                   </div>
+
                 </div>
 
                 {/* DATE + TIME */}
 
                 <div className="grid gap-4 sm:grid-cols-2">
+
                   {/* DATE */}
 
                   <div className="relative">
+
                     <label
                       htmlFor="booking-date"
                       className="mb-2 block text-xs font-medium uppercase tracking-widest text-muted-foreground"
@@ -941,11 +1187,13 @@ export function BookingModal({
                         setDateOpen(
                           !dateOpen,
                         )
+
                         setTimeOpen(false)
                         setGuestsOpen(false)
                       }}
                       className="flex h-[54px] w-full items-center rounded-xl border border-primary/20 bg-[#0e0a08] px-4 text-left text-sm outline-none transition-all hover:border-primary focus:border-primary"
                     >
+
                       <CalendarDays className="mr-3 h-[18px] w-[18px] shrink-0 text-primary" />
 
                       <span
@@ -969,19 +1217,24 @@ export function BookingModal({
                             : ''
                         }`}
                       />
+
                     </button>
 
                     <input
                       type="hidden"
                       name="date"
-                      value={selectedDate}
+                      value={
+                        selectedDate
+                      }
                     />
 
                     {/* CALENDAR */}
 
                     {dateOpen && (
                       <div className="absolute left-0 right-0 top-[82px] z-50 overflow-hidden rounded-2xl border border-primary/30 bg-[#17110e] p-4 shadow-2xl">
+
                         <div className="mb-4 flex items-center justify-between">
+
                           <button
                             type="button"
                             onClick={
@@ -1005,11 +1258,13 @@ export function BookingModal({
                           >
                             <ChevronRight className="h-4 w-4" />
                           </button>
+
                         </div>
 
                         {/* WEEKDAYS */}
 
                         <div className="mb-2 grid grid-cols-7 text-center text-[10px] font-semibold uppercase tracking-widest text-primary">
+
                           {[
                             'ПН',
                             'ВТ',
@@ -1028,11 +1283,13 @@ export function BookingModal({
                               </span>
                             ),
                           )}
+
                         </div>
 
                         {/* DAYS */}
 
                         <div className="grid grid-cols-7 gap-1">
+
                           {calendarDays.map(
                             ({
                               day,
@@ -1088,14 +1345,18 @@ export function BookingModal({
                               )
                             },
                           )}
+
                         </div>
+
                       </div>
                     )}
+
                   </div>
 
                   {/* TIME */}
 
                   <div className="relative">
+
                     <label
                       htmlFor="booking-time"
                       className="mb-2 block text-xs font-medium uppercase tracking-widest text-muted-foreground"
@@ -1107,14 +1368,22 @@ export function BookingModal({
                       type="button"
                       id="booking-time"
                       onClick={() => {
+
+                        if (!selectedDate) {
+                          setDateOpen(true)
+                          return
+                        }
+
                         setTimeOpen(
                           !timeOpen,
                         )
+
                         setDateOpen(false)
                         setGuestsOpen(false)
                       }}
                       className="flex h-[54px] w-full items-center rounded-xl border border-primary/20 bg-[#0e0a08] px-4 text-left text-sm outline-none transition-all hover:border-primary focus:border-primary"
                     >
+
                       <Clock3 className="mr-3 h-[18px] w-[18px] shrink-0 text-primary" />
 
                       <span
@@ -1135,60 +1404,128 @@ export function BookingModal({
                             : ''
                         }`}
                       />
+
                     </button>
 
                     <input
                       type="hidden"
                       name="time"
-                      value={selectedTime}
+                      value={
+                        selectedTime
+                      }
                     />
 
                     {/* TIME PICKER */}
 
                     {timeOpen && (
                       <div className="absolute left-0 right-0 top-[82px] z-50 rounded-2xl border border-primary/30 bg-[#17110e] p-4 shadow-2xl">
+
                         <div className="mb-3 text-center text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
                           {t.booking.time}
                         </div>
 
-                        <div className="grid max-h-[260px] grid-cols-3 gap-2 overflow-y-auto pr-1">
-                          {timeOptions.map(
-                            (time) => (
-                              <button
-                                key={time}
-                                type="button"
-                                onClick={() => {
-                                  setSelectedTime(
-                                    time,
-                                  )
+                        {loadingBookedTimes && (
+                          <div className="mb-3 rounded-lg border border-primary/10 bg-[#0e0a08] px-3 py-2 text-center text-xs text-muted-foreground">
+                            Проверяем свободное время...
+                          </div>
+                        )}
 
-                                  setTimeOpen(
-                                    false,
-                                  )
-                                }}
-                                className={`
-                                  rounded-lg border px-3 py-2.5 text-sm transition-all
-                                  ${
-                                    selectedTime ===
-                                    time
-                                      ? 'border-primary bg-primary text-black'
-                                      : 'border-primary/15 bg-[#0e0a08] text-foreground hover:border-primary hover:text-primary'
-                                  }
-                                `}
-                              >
-                                {time}
-                              </button>
-                            ),
-                          )}
+                        {bookingTimesError && (
+                          <div className="mb-3 rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-center text-xs text-red-300">
+                            {bookingTimesError}
+                          </div>
+                        )}
+
+                        <div className="mb-3 text-center text-[10px] text-muted-foreground">
+                          Длительность: {saunaHours} ч.
                         </div>
+
+                        <div className="grid max-h-[280px] grid-cols-3 gap-2 overflow-y-auto pr-1">
+
+                          {timeOptions.map(
+                            (time) => {
+                              const booked =
+                                isTimeBooked(
+                                  time,
+                                )
+
+                              const selected =
+                                selectedTime ===
+                                time
+
+                              return (
+                                <button
+                                  key={time}
+                                  type="button"
+                                  disabled={
+                                    booked ||
+                                    loadingBookedTimes
+                                  }
+                                  onClick={() => {
+
+                                    if (
+                                      booked
+                                    ) {
+                                      return
+                                    }
+
+                                    setSelectedTime(
+                                      time,
+                                    )
+
+                                    setTimeOpen(
+                                      false,
+                                    )
+                                  }}
+                                  title={
+                                    booked
+                                      ? 'Это время занято'
+                                      : `Свободно: ${time}`
+                                  }
+                                  className={`
+                                    rounded-lg border px-3 py-2.5 text-sm transition-all
+                                    ${
+                                      booked
+                                        ? 'cursor-not-allowed border-red-500/10 bg-red-500/5 text-muted-foreground/25 line-through'
+                                        : selected
+                                          ? 'border-primary bg-primary text-black'
+                                          : 'border-primary/15 bg-[#0e0a08] text-foreground hover:border-primary hover:text-primary'
+                                    }
+                                  `}
+                                >
+                                  {time}
+                                </button>
+                              )
+                            },
+                          )}
+
+                        </div>
+
+                        <div className="mt-4 flex items-center justify-center gap-4 text-[10px] text-muted-foreground">
+
+                          <div className="flex items-center gap-1.5">
+                            <span className="h-2 w-2 rounded-full border border-primary/40" />
+                            Свободно
+                          </div>
+
+                          <div className="flex items-center gap-1.5">
+                            <span className="h-2 w-2 rounded-full bg-red-500/20" />
+                            Занято
+                          </div>
+
+                        </div>
+
                       </div>
                     )}
+
                   </div>
+
                 </div>
 
                 {/* GUESTS */}
 
                 <div className="relative">
+
                   <label
                     htmlFor="booking-guests"
                     className="mb-2 block text-xs font-medium uppercase tracking-widest text-muted-foreground"
@@ -1200,16 +1537,20 @@ export function BookingModal({
                     type="button"
                     id="booking-guests"
                     onClick={() => {
+
                       setGuestsOpen(
                         !guestsOpen,
                       )
+
                       setDateOpen(false)
                       setTimeOpen(false)
                     }}
                     className="flex h-[54px] w-full items-center rounded-xl border border-primary/20 bg-[#0e0a08] px-4 text-left text-sm outline-none transition-all hover:border-primary focus:border-primary"
                   >
+
                     <span className="text-foreground">
                       {guests}{' '}
+
                       {guests === 1
                         ? t.booking.guest
                         : t.booking
@@ -1223,6 +1564,7 @@ export function BookingModal({
                           : ''
                       }`}
                     />
+
                   </button>
 
                   <input
@@ -1235,11 +1577,13 @@ export function BookingModal({
 
                   {guestsOpen && (
                     <div className="absolute left-0 right-0 top-[82px] z-50 rounded-2xl border border-primary/30 bg-[#17110e] p-3 shadow-2xl">
+
                       <div className="mb-2 px-2 py-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
                         {t.booking.guests}
                       </div>
 
                       <div className="grid max-h-[250px] grid-cols-2 gap-1 overflow-y-auto">
+
                         {Array.from(
                           { length: 17 },
                           (_, index) =>
@@ -1247,9 +1591,12 @@ export function BookingModal({
                         ).map(
                           (number) => (
                             <button
-                              key={number}
+                              key={
+                                number
+                              }
                               type="button"
                               onClick={() => {
+
                                 setGuests(
                                   number,
                                 )
@@ -1268,8 +1615,10 @@ export function BookingModal({
                                 }
                               `}
                             >
+
                               <span>
                                 {number}{' '}
+
                                 {number ===
                                 1
                                   ? t.booking
@@ -1284,10 +1633,13 @@ export function BookingModal({
                                   ✓
                                 </span>
                               )}
+
                             </button>
                           ),
                         )}
+
                       </div>
+
                     </div>
                   )}
 
@@ -1297,18 +1649,21 @@ export function BookingModal({
                     <p className="mt-2 text-xs text-muted-foreground">
                       {extraGuests}{' '}
                       extra guest
-                      {extraGuests > 1
+                      {extraGuests >
+                      1
                         ? 's'
                         : ''}{' '}
                       × €50 = €
                       {guestSurcharge}
                     </p>
                   )}
+
                 </div>
 
                 {/* ADDITIONAL INFORMATION */}
 
                 <div className="mt-6">
+
                   <label
                     htmlFor="booking-message"
                     className="mb-2 block text-xs font-medium uppercase tracking-widest text-muted-foreground"
@@ -1329,12 +1684,15 @@ export function BookingModal({
                     }
                     className="w-full resize-none rounded-xl border border-primary/20 bg-[#0e0a08] px-4 py-3.5 text-sm outline-none transition-all placeholder:text-muted-foreground/60 focus:border-primary focus:ring-1 focus:ring-primary/20"
                   />
+
                 </div>
 
-                {/* PRIVACY CONSENT */}
+                {/* PRIVACY */}
 
                 <div className="rounded-xl border border-primary/15 bg-[#15100e] p-4">
+
                   <label className="flex cursor-pointer items-start gap-3">
+
                     <input
                       type="checkbox"
                       checked={
@@ -1352,7 +1710,9 @@ export function BookingModal({
                     />
 
                     <span className="text-xs leading-5 text-muted-foreground">
+
                       Acepto la{' '}
+
                       <a
                         href="/politica-de-privacidad"
                         target="_blank"
@@ -1361,16 +1721,23 @@ export function BookingModal({
                       >
                         Política de Privacidad
                       </a>
+
                       {' '}y autorizo el tratamiento de mis datos personales para gestionar mi reserva.
+
                     </span>
+
                   </label>
+
                 </div>
+
               </div>
 
               {/* FINAL TOTAL */}
 
               <div className="mt-6 rounded-xl border border-primary/20 bg-[#15100e] px-5 py-4">
+
                 <div className="flex items-center justify-between">
+
                   <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
                     {t.booking.total}
                   </span>
@@ -1378,23 +1745,33 @@ export function BookingModal({
                   <span className="font-serif text-2xl text-primary">
                     €{finalTotal.toFixed(2)}
                   </span>
+
                 </div>
+
               </div>
 
               {/* SUBMIT */}
 
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={
+                  isSubmitting ||
+                  !selectedDate ||
+                  !selectedTime ||
+                  loadingBookedTimes
+                }
                 className="mt-4 w-full rounded-full border border-primary/40 bg-primary px-6 py-4 text-xs font-medium uppercase tracking-widest text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-[0_0_25px_rgba(178,141,32,0.15)] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isSubmitting
                   ? '...'
                   : t.booking.confirm}
               </button>
+
             </form>
           )}
+
         </div>
+
       </div>
     </div>
   )
