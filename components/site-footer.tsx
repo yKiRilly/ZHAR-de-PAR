@@ -2,8 +2,14 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 
-import { Clock, Mail, MapPin, Phone } from 'lucide-react'
+import {
+  Clock,
+  Mail,
+  MapPin,
+  Phone,
+} from 'lucide-react'
 
 import { useBooking } from '@/components/booking-provider'
 import { useLanguage } from '@/components/language-provider'
@@ -13,16 +19,22 @@ export function SiteFooter() {
   const { t } = useLanguage()
 
   return (
-    <footer id="contact" className="relative border-t border-border/50">
+    <footer
+      id="contact"
+      className="relative border-t border-border/50"
+    >
       {/* CTA */}
+
       <div
         className="relative overflow-hidden border-b border-border/50 bg-cover bg-center"
         style={{
-          backgroundImage: 'url("/photos/galery/grill.PNG")',
+          backgroundImage:
+            'url("/photos/galery/grill.PNG")',
           backgroundPosition: 'center 80%',
         }}
       >
         {/* Затемнение только фоновой картинки */}
+
         <div className="pointer-events-none absolute inset-0 bg-black/30" />
 
         <div
@@ -132,6 +144,7 @@ export function SiteFooter() {
       </div>
 
       {/* Footer content */}
+
       <div
         className="
           mx-auto
@@ -145,6 +158,7 @@ export function SiteFooter() {
         "
       >
         {/* Main footer columns */}
+
         <div
           className="
             grid
@@ -158,6 +172,7 @@ export function SiteFooter() {
           "
         >
           {/* Logo */}
+
           <div
             className="
               flex
@@ -187,18 +202,15 @@ export function SiteFooter() {
           </div>
 
           {/* Visit */}
-          <div
-            className="
-              text-center
-              sm:text-left
-            "
-          >
+
+          <div className="text-center sm:text-left">
             <h3 className="text-xs font-medium uppercase tracking-[0.3em] text-primary">
               {t.footerVisit}
             </h3>
 
             <ul className="mt-5 space-y-4 text-sm text-muted-foreground">
               {/* Google Maps */}
+
               <li
                 className="
                   flex
@@ -221,6 +233,7 @@ export function SiteFooter() {
               </li>
 
               {/* Hours */}
+
               <li
                 className="
                   flex
@@ -231,24 +244,24 @@ export function SiteFooter() {
                 "
               >
                 <Clock className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                <span>{t.footerHours}</span>
+
+                <span>
+                  {t.footerHours}
+                </span>
               </li>
             </ul>
           </div>
 
           {/* Concierge */}
-          <div
-            className="
-              text-center
-              sm:text-left
-            "
-          >
+
+          <div className="text-center sm:text-left">
             <h3 className="text-xs font-medium uppercase tracking-[0.3em] text-primary">
               {t.footerConcierge}
             </h3>
 
             <ul className="mt-5 space-y-4 text-sm text-muted-foreground">
               {/* Phone */}
+
               <li>
                 <a
                   href="tel:+34601801800"
@@ -263,11 +276,15 @@ export function SiteFooter() {
                   "
                 >
                   <Phone className="h-4 w-4 shrink-0 text-primary" />
-                  <span>+34 601 80 18 00</span>
+
+                  <span>
+                    +34 601 80 18 00
+                  </span>
                 </a>
               </li>
 
               {/* Email */}
+
               <li>
                 <a
                   href="mailto:zhardepar1@gmail.com"
@@ -284,7 +301,10 @@ export function SiteFooter() {
                   "
                 >
                   <Mail className="h-4 w-4 shrink-0 text-primary" />
-                  <span>zhardepar1@gmail.com</span>
+
+                  <span>
+                    zhardepar1@gmail.com
+                  </span>
                 </a>
               </li>
             </ul>
@@ -292,6 +312,7 @@ export function SiteFooter() {
         </div>
 
         {/* Social media */}
+
         <div
           className="
             mt-10
@@ -305,6 +326,7 @@ export function SiteFooter() {
           "
         >
           {/* Instagram */}
+
           <a
             href="https://www.instagram.com/banka_blanes/"
             target="_blank"
@@ -362,6 +384,7 @@ export function SiteFooter() {
           </a>
 
           {/* WhatsApp */}
+
           <a
             href="https://wa.me/34601801800?text=Здравствуйте!%20Хочу%20забронировать%20баню"
             target="_blank"
@@ -394,10 +417,43 @@ export function SiteFooter() {
           </a>
         </div>
 
+        {/* Legal links */}
+
+        <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 border-t border-border/40 pt-6 text-center text-xs text-muted-foreground">
+          <Link
+            href="/aviso-legal"
+            className="transition-colors hover:text-primary"
+          >
+            Aviso Legal
+          </Link>
+
+          <Link
+            href="/politica-de-privacidad"
+            className="transition-colors hover:text-primary"
+          >
+            Política de Privacidad
+          </Link>
+
+          <Link
+            href="/politica-de-cookies"
+            className="transition-colors hover:text-primary"
+          >
+            Política de Cookies
+          </Link>
+
+          <Link
+            href="/condiciones-de-reserva"
+            className="transition-colors hover:text-primary"
+          >
+            Condiciones de Reserva
+          </Link>
+        </div>
+
         {/* Bottom */}
+
         <div
           className="
-            mt-8
+            mt-6
             flex
             flex-col
             items-center
@@ -411,11 +467,12 @@ export function SiteFooter() {
             text-muted-foreground
             sm:flex-row
             sm:text-left
-            lg:mt-8
+            lg:mt-6
           "
         >
           <p>
-            © {new Date().getFullYear()} DUBъ. {t.footerRights}
+            © {new Date().getFullYear()} ZHAR de PAR.{' '}
+            {t.footerRights}
           </p>
 
           <p className="uppercase tracking-widest">

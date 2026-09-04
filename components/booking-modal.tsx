@@ -1,3 +1,4 @@
+
 'use client'
 
 import { useState, type FormEvent } from 'react'
@@ -123,23 +124,18 @@ function getCalendarDays(monthDate: Date) {
   return days
 }
 
-/**
- * Возвращает дату и время окончания брони.
- *
- * Например:
- * 2026-09-05 18:00 + 3 часа
- * = 2026-09-05 21:00:00
- */
 function getBookingEnd(
   date: string,
   time: string,
   durationMinutes: number,
 ) {
-  const [year, month, day] =
-    date.split('-').map(Number)
+  const [year, month, day] = date
+    .split('-')
+    .map(Number)
 
-  const [hours, minutes] =
-    time.split(':').map(Number)
+  const [hours, minutes] = time
+    .split(':')
+    .map(Number)
 
   const start = new Date(
     year,
@@ -156,8 +152,7 @@ function getBookingEnd(
       durationMinutes * 60 * 1000,
   )
 
-  const endYear =
-    end.getFullYear()
+  const endYear = end.getFullYear()
 
   const endMonth = String(
     end.getMonth() + 1,
@@ -215,6 +210,9 @@ export function BookingModal({
   const [isSubmitting, setIsSubmitting] =
     useState(false)
 
+  const [privacyAccepted, setPrivacyAccepted] =
+    useState(false)
+
   const extraGuests = Math.max(
     0,
     guests - 8,
@@ -267,13 +265,6 @@ export function BookingModal({
     }
   }
 
-  /**
-   * Ищем аренду сауны в корзине.
-   *
-   * quantity = количество часов.
-   *
-   * Минимум 3 часа.
-   */
   const saunaItem = cart.find(
     (item) => item.type === 'sauna',
   )
@@ -303,15 +294,23 @@ export function BookingModal({
       return
     }
 
-    // Проверяем дату
+    // DATE
     if (!selectedDate) {
       setDateOpen(true)
       return
     }
 
-    // Проверяем время
+    // TIME
     if (!selectedTime) {
       setTimeOpen(true)
+      return
+    }
+
+    // PRIVACY
+    if (!privacyAccepted) {
+      alert(
+        'Por favor, acepte la Política de Privacidad antes de continuar.',
+      )
       return
     }
 
@@ -331,7 +330,7 @@ export function BookingModal({
       formData.get('message') || '',
     ).trim()
 
-    // Проверяем имя
+    // NAME
     if (!name) {
       alert(
         'Пожалуйста, укажите имя.',
@@ -339,7 +338,7 @@ export function BookingModal({
       return
     }
 
-    // Проверяем телефон
+    // PHONE
     if (!phone) {
       alert(
         'Пожалуйста, укажите телефон.',
@@ -347,31 +346,15 @@ export function BookingModal({
       return
     }
 
-    /*
-     * Время начала.
-     *
-     * Например:
-     * 2026-09-05 18:00:00
-     */
     const bookingStart =
       `${selectedDate} ${selectedTime}:00`
 
-    /*
-     * Время окончания.
-     *
-     * Например:
-     * 18:00 + 3 часа = 21:00
-     */
     const bookingEnd = getBookingEnd(
       selectedDate,
       selectedTime,
       durationMinutes,
     )
 
-    /*
-     * Данные, которые отправляем
-     * в Supabase.
-     */
     const bookingData = {
       name,
       phone,
@@ -409,6 +392,11 @@ export function BookingModal({
     console.log(
       'DURATION MINUTES:',
       durationMinutes,
+    )
+
+    console.log(
+      'PRIVACY ACCEPTED:',
+      privacyAccepted,
     )
 
     console.log(
@@ -473,17 +461,9 @@ export function BookingModal({
           error.hint,
         )
 
-        /*
-         * 23P01 =
-         * EXCLUSION CONSTRAINT VIOLATION.
-         *
-         * Это означает,
-         * что время пересекается
-         * с другой бронью.
-         */
+        // 23P01 = бронь пересекается
         if (
-          error.code ===
-          '23P01'
+          error.code === '23P01'
         ) {
           alert(
             'Это время уже занято.\n\nПожалуйста, выберите другое время.',
@@ -530,6 +510,8 @@ export function BookingModal({
       alert(
         t.booking.thankYou,
       )
+
+      setPrivacyAccepted(false)
 
       onClose()
     } catch (error) {
@@ -908,7 +890,6 @@ export function BookingModal({
                         setDateOpen(
                           !dateOpen,
                         )
-
                         setTimeOpen(false)
                         setGuestsOpen(false)
                       }}
@@ -1078,7 +1059,6 @@ export function BookingModal({
                         setTimeOpen(
                           !timeOpen,
                         )
-
                         setDateOpen(false)
                         setGuestsOpen(false)
                       }}
@@ -1130,7 +1110,6 @@ export function BookingModal({
                                   setSelectedTime(
                                     time,
                                   )
-
                                   setTimeOpen(
                                     false,
                                   )
@@ -1172,7 +1151,6 @@ export function BookingModal({
                       setGuestsOpen(
                         !guestsOpen,
                       )
-
                       setDateOpen(false)
                       setTimeOpen(false)
                     }}
@@ -1223,7 +1201,6 @@ export function BookingModal({
                                 setGuests(
                                   number,
                                 )
-
                                 setGuestsOpen(
                                   false,
                                 )
@@ -1299,6 +1276,36 @@ export function BookingModal({
                     }
                     className="w-full resize-none rounded-xl border border-primary/20 bg-[#0e0a08] px-4 py-3.5 text-sm outline-none transition-all placeholder:text-muted-foreground/60 focus:border-primary focus:ring-1 focus:ring-primary/20"
                   />
+                </div>
+
+                {/* PRIVACY CONSENT */}
+
+                <div className="rounded-xl border border-primary/15 bg-[#15100e] p-4">
+                  <label className="flex cursor-pointer items-start gap-3">
+                    <input
+                      type="checkbox"
+                      checked={privacyAccepted}
+                      onChange={(event) =>
+                        setPrivacyAccepted(
+                          event.target.checked,
+                        )
+                      }
+                      className="mt-1 h-4 w-4 shrink-0 cursor-pointer accent-primary"
+                    />
+
+                    <span className="text-xs leading-5 text-muted-foreground">
+                      Acepto la{' '}
+                      <a
+                        href="/politica-de-privacidad"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary underline underline-offset-2 transition hover:text-primary/80"
+                      >
+                        Política de Privacidad
+                      </a>
+                      {' '}y autorizo el tratamiento de mis datos personales para gestionar mi reserva.
+                    </span>
+                  </label>
                 </div>
               </div>
 
