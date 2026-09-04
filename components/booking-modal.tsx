@@ -407,14 +407,12 @@ export function BookingModal({
 
     try {
       const {
-        data,
-        error,
-        status,
-        statusText,
-      } = await supabase
-        .from('bookings')
-        .insert(bookingData)
-        .select()
+  error,
+  status,
+  statusText,
+} = await supabase
+  .from('bookings')
+  .insert(bookingData)
 
       console.log(
         'SUPABASE STATUS:',
