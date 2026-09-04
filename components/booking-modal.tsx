@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 
 import {
   CalendarDays,
@@ -18,6 +18,7 @@ import {
 import type { CartItem } from '@/components/booking-provider'
 import { useBooking } from '@/components/booking-provider'
 import { useLanguage } from '@/components/language-provider'
+import { supabase } from '@/lib/supabase'
 
 type BookingModalProps = {
   open: boolean
@@ -25,8 +26,6 @@ type BookingModalProps = {
   cart: CartItem[]
   cartTotal: number
 }
-
-const GOLD = '#B28D20'
 
 function formatDate(date: string) {
   if (!date) return ''
@@ -63,7 +62,11 @@ function getCalendarDays(monthDate: Date) {
   // Monday = 0, Sunday = 6
   const startDay = (firstDay.getDay() + 6) % 7
 
-  const daysInMonth = new Date(year, month + 1, 0).getDate()
+  const daysInMonth = new Date(
+    year,
+    month + 1,
+    0,
+  ).getDate()
 
   const previousMonthDays = new Date(
     year,
@@ -71,7 +74,11 @@ function getCalendarDays(monthDate: Date) {
     0,
   ).getDate()
 
-  const days = []
+  const days: {
+    day: number
+    currentMonth: boolean
+    date: Date
+  }[] = []
 
   for (let i = startDay - 1; i >= 0; i--) {
     days.push({
@@ -99,7 +106,11 @@ function getCalendarDays(monthDate: Date) {
     days.push({
       day: nextDay,
       currentMonth: false,
-      date: new Date(year, month + 1, nextDay),
+      date: new Date(
+        year,
+        month + 1,
+        nextDay,
+      ),
     })
 
     nextDay++
@@ -123,7 +134,6 @@ export function BookingModal({
   const { t } = useLanguage()
 
   const [guests, setGuests] = useState(2)
-
   const [selectedDate, setSelectedDate] = useState('')
   const [selectedTime, setSelectedTime] = useState('')
 
@@ -135,21 +145,21 @@ export function BookingModal({
     new Date(),
   )
 
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   const extraGuests = Math.max(0, guests - 8)
-
   const guestSurcharge = extraGuests * 50
-
   const finalTotal = cartTotal + guestSurcharge
 
   const today = getTodayString()
-
   const calendarDays = getCalendarDays(calendarMonth)
 
-  // Без "Г." после года
+  // Без "г." после года
   const monthName =
     calendarMonth.toLocaleDateString('ru-RU', {
       month: 'long',
-    }) + ` ${calendarMonth.getFullYear()}`
+    }) +
+    ` ${calendarMonth.getFullYear()}`
 
   const timeOptions: string[] = []
 
@@ -169,39 +179,101 @@ export function BookingModal({
     return null
   }
 
-  const handleReserve = (
-    event: React.FormEvent<HTMLFormElement>,
+  // ==========================================
+  // СОХРАНЕНИЕ БРОНИРОВАНИЯ В SUPABASE
+  // ==========================================
+
+  const handleReserve = async (
+    event: FormEvent<HTMLFormElement>,
   ) => {
     event.preventDefault()
 
+    if (isSubmitting) {
+      return
+    }
+
+    // Проверяем дату
     if (!selectedDate) {
       setDateOpen(true)
       return
     }
 
+    // Проверяем время
     if (!selectedTime) {
       setTimeOpen(true)
       return
     }
 
-    const formData = new FormData(event.currentTarget)
+    const formData = new FormData(
+      event.currentTarget,
+    )
 
-    const booking = {
-      name: formData.get('name'),
-      phone: formData.get('phone'),
-      date: selectedDate,
-      time: selectedTime,
-      guests,
-      guestSurcharge,
-      message: formData.get('message'),
-      cart,
-      subtotal: cartTotal,
-      total: finalTotal,
+    const name = String(
+      formData.get('name') || '',
+    ).trim()
+
+    const phone = String(
+      formData.get('phone') || '',
+    ).trim()
+
+    // Проверяем имя
+    if (!name) {
+      alert('Пожалуйста, укажите имя.')
+      return
     }
 
-    console.log('BOOKING:', booking)
+    // Проверяем телефон
+    if (!phone) {
+      alert('Пожалуйста, укажите телефон.')
+      return
+    }
 
-    alert(t.booking.thankYou)
+    setIsSubmitting(true)
+
+    try {
+      const { error } = await supabase
+        .from('bookings')
+        .insert({
+          name,
+          phone,
+          cart,
+          total: finalTotal,
+          booking_date: selectedDate,
+          booking_time: selectedTime,
+        })
+
+      if (error) {
+        console.error(
+          'SUPABASE BOOKING ERROR:',
+          error,
+        )
+
+        alert(
+          'Не удалось отправить заявку. Пожалуйста, попробуйте ещё раз.',
+        )
+
+        return
+      }
+
+      console.log(
+        'BOOKING SAVED TO SUPABASE',
+      )
+
+      alert(t.booking.thankYou)
+
+      onClose()
+    } catch (error) {
+      console.error(
+        'BOOKING ERROR:',
+        error,
+      )
+
+      alert(
+        'Произошла ошибка. Пожалуйста, попробуйте ещё раз.',
+      )
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const selectDate = (date: Date) => {
@@ -288,7 +360,6 @@ export function BookingModal({
               </div>
             ) : (
               <div className="space-y-3">
-
                 {cart.map((item) => {
                   const isBroom =
                     item.type === 'broom'
@@ -341,7 +412,6 @@ export function BookingModal({
                         {/* QUANTITY */}
 
                         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-
                           <button
                             type="button"
                             onClick={() =>
@@ -371,7 +441,6 @@ export function BookingModal({
                           >
                             <Plus className="h-4 w-4" />
                           </button>
-
                         </div>
 
                         {/* TOTAL */}
@@ -399,7 +468,6 @@ export function BookingModal({
                             <Trash2 className="h-4 w-4" />
                           </button>
                         )}
-
                       </div>
 
                       <div className="mt-3 border-t border-primary/10 pt-3 text-right font-serif text-lg text-primary sm:hidden">
@@ -409,11 +477,9 @@ export function BookingModal({
                           item.quantity
                         ).toFixed(2)}
                       </div>
-
                     </div>
                   )
                 })}
-
               </div>
             )}
           </div>
@@ -422,9 +488,7 @@ export function BookingModal({
 
           {cart.length > 0 && (
             <div className="border-t border-primary/15 px-6 py-4 sm:px-8">
-
               <div className="flex items-center justify-between">
-
                 <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
                   {t.booking.total}
                 </span>
@@ -432,25 +496,19 @@ export function BookingModal({
                 <span className="font-serif text-3xl text-primary">
                   €{finalTotal.toFixed(2)}
                 </span>
-
               </div>
 
               {guestSurcharge > 0 && (
                 <div className="mt-2 flex items-center justify-between text-sm">
-
                   <span className="text-muted-foreground">
-                    Extra guests ({extraGuests} ×
-                    €50)
+                    Extra guests ({extraGuests} × €50)
                   </span>
 
                   <span className="font-medium text-primary">
-                    +€
-                    {guestSurcharge.toFixed(2)}
+                    +€{guestSurcharge.toFixed(2)}
                   </span>
-
                 </div>
               )}
-
             </div>
           )}
 
@@ -462,11 +520,9 @@ export function BookingModal({
               onSubmit={handleReserve}
               className="border-t border-primary/15 px-6 py-6 sm:px-8"
             >
-
               {/* FORM HEADING */}
 
               <div className="mb-6">
-
                 <p className="text-xs font-medium uppercase tracking-[0.3em] text-primary">
                   {t.booking.reservation}
                 </p>
@@ -478,7 +534,6 @@ export function BookingModal({
                 <p className="mt-2 text-sm text-muted-foreground">
                   {t.booking.detailsDescription}
                 </p>
-
               </div>
 
               <div className="space-y-5">
@@ -486,7 +541,6 @@ export function BookingModal({
                 {/* FULL NAME */}
 
                 <div>
-
                   <label
                     htmlFor="booking-name"
                     className="mb-2 block text-xs font-medium uppercase tracking-widest text-muted-foreground"
@@ -505,13 +559,11 @@ export function BookingModal({
                     }
                     className="h-[54px] w-full rounded-xl border border-primary/20 bg-[#0e0a08] px-4 text-sm outline-none transition-all placeholder:text-muted-foreground/60 focus:border-primary focus:ring-1 focus:ring-primary/20"
                   />
-
                 </div>
 
                 {/* PHONE */}
 
                 <div>
-
                   <label
                     htmlFor="booking-phone"
                     className="mb-2 block text-xs font-medium uppercase tracking-widest text-muted-foreground"
@@ -520,7 +572,6 @@ export function BookingModal({
                   </label>
 
                   <div className="flex h-[54px] w-full overflow-hidden rounded-xl border border-primary/20 bg-[#0e0a08] transition-all focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20">
-
                     <div className="flex shrink-0 items-center border-r border-primary/15 px-4 text-sm font-medium text-primary">
                       +
                     </div>
@@ -533,9 +584,7 @@ export function BookingModal({
                       inputMode="tel"
                       className="min-w-0 flex-1 bg-transparent px-4 text-sm outline-none"
                     />
-
                   </div>
-
                 </div>
 
                 {/* DATE + TIME */}
@@ -545,7 +594,6 @@ export function BookingModal({
                   {/* DATE */}
 
                   <div className="relative">
-
                     <label
                       htmlFor="booking-date"
                       className="mb-2 block text-xs font-medium uppercase tracking-widest text-muted-foreground"
@@ -565,7 +613,6 @@ export function BookingModal({
                       }}
                       className="flex h-[54px] w-full items-center rounded-xl border border-primary/20 bg-[#0e0a08] px-4 text-left text-sm outline-none transition-all hover:border-primary focus:border-primary"
                     >
-
                       <CalendarDays className="mr-3 h-[18px] w-[18px] shrink-0 text-primary" />
 
                       <span
@@ -589,7 +636,6 @@ export function BookingModal({
                             : ''
                         }`}
                       />
-
                     </button>
 
                     <input
@@ -606,7 +652,6 @@ export function BookingModal({
                         {/* CALENDAR HEADER */}
 
                         <div className="mb-4 flex items-center justify-between">
-
                           <button
                             type="button"
                             onClick={
@@ -630,13 +675,11 @@ export function BookingModal({
                           >
                             <ChevronRight className="h-4 w-4" />
                           </button>
-
                         </div>
 
                         {/* WEEKDAYS */}
 
                         <div className="mb-2 grid grid-cols-7 text-center text-[10px] font-semibold uppercase tracking-widest text-primary">
-
                           {[
                             'ПН',
                             'ВТ',
@@ -655,27 +698,25 @@ export function BookingModal({
                               </span>
                             ),
                           )}
-
                         </div>
 
                         {/* DAYS */}
 
                         <div className="grid grid-cols-7 gap-1">
-
                           {calendarDays.map(
                             ({
                               day,
                               currentMonth,
                               date,
                             }) => {
-
                               const value =
                                 dateToString(
                                   date,
                                 )
 
                               const disabled =
-                                value < today
+                                value <
+                                today
 
                               const selected =
                                 value ===
@@ -707,7 +748,7 @@ export function BookingModal({
                                     }
                                     ${
                                       selected
-                                        ? 'bg-primary text-black font-semibold hover:bg-primary'
+                                        ? 'bg-primary font-semibold text-black hover:bg-primary'
                                         : ''
                                     }
                                   `}
@@ -717,18 +758,14 @@ export function BookingModal({
                               )
                             },
                           )}
-
                         </div>
-
                       </div>
                     )}
-
                   </div>
 
                   {/* TIME */}
 
                   <div className="relative">
-
                     <label
                       htmlFor="booking-time"
                       className="mb-2 block text-xs font-medium uppercase tracking-widest text-muted-foreground"
@@ -748,7 +785,6 @@ export function BookingModal({
                       }}
                       className="flex h-[54px] w-full items-center rounded-xl border border-primary/20 bg-[#0e0a08] px-4 text-left text-sm outline-none transition-all hover:border-primary focus:border-primary"
                     >
-
                       <Clock3 className="mr-3 h-[18px] w-[18px] shrink-0 text-primary" />
 
                       <span
@@ -769,7 +805,6 @@ export function BookingModal({
                             : ''
                         }`}
                       />
-
                     </button>
 
                     <input
@@ -782,13 +817,11 @@ export function BookingModal({
 
                     {timeOpen && (
                       <div className="absolute left-0 right-0 top-[82px] z-50 rounded-2xl border border-primary/30 bg-[#17110e] p-4 shadow-2xl">
-
                         <div className="mb-3 text-center text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
                           {t.booking.time}
                         </div>
 
                         <div className="grid max-h-[260px] grid-cols-3 gap-2 overflow-y-auto pr-1">
-
                           {timeOptions.map(
                             (time) => (
                               <button
@@ -816,20 +849,15 @@ export function BookingModal({
                               </button>
                             ),
                           )}
-
                         </div>
-
                       </div>
                     )}
-
                   </div>
-
                 </div>
 
                 {/* GUESTS */}
 
                 <div className="relative">
-
                   <label
                     htmlFor="booking-guests"
                     className="mb-2 block text-xs font-medium uppercase tracking-widest text-muted-foreground"
@@ -849,12 +877,10 @@ export function BookingModal({
                     }}
                     className="flex h-[54px] w-full items-center rounded-xl border border-primary/20 bg-[#0e0a08] px-4 text-left text-sm outline-none transition-all hover:border-primary focus:border-primary"
                   >
-
                     <span className="text-foreground">
                       {guests}{' '}
                       {guests === 1
-                        ? t.booking
-                            .guest
+                        ? t.booking.guest
                         : t.booking
                             .guestsPlural}
                     </span>
@@ -866,7 +892,6 @@ export function BookingModal({
                           : ''
                       }`}
                     />
-
                   </button>
 
                   <input
@@ -879,21 +904,14 @@ export function BookingModal({
 
                   {guestsOpen && (
                     <div className="absolute left-0 right-0 top-[82px] z-50 rounded-2xl border border-primary/30 bg-[#17110e] p-3 shadow-2xl">
-
                       <div className="mb-2 px-2 py-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
                         {t.booking.guests}
                       </div>
 
                       <div className="grid max-h-[250px] grid-cols-2 gap-1 overflow-y-auto">
-
                         {Array.from(
-                          {
-                            length: 17,
-                          },
-                          (
-                            _,
-                            index,
-                          ) =>
+                          { length: 17 },
+                          (_, index) =>
                             index + 1,
                         ).map(
                           (number) => (
@@ -918,16 +936,12 @@ export function BookingModal({
                                 }
                               `}
                             >
-
                               <span>
                                 {number}{' '}
-                                {number ===
-                                1
-                                  ? t
-                                      .booking
+                                {number === 1
+                                  ? t.booking
                                       .guest
-                                  : t
-                                      .booking
+                                  : t.booking
                                       .guestsPlural}
                               </span>
 
@@ -937,13 +951,10 @@ export function BookingModal({
                                   ✓
                                 </span>
                               )}
-
                             </button>
                           ),
                         )}
-
                       </div>
-
                     </div>
                   )}
 
@@ -960,13 +971,11 @@ export function BookingModal({
                       {guestSurcharge}
                     </p>
                   )}
-
                 </div>
 
                 {/* ADDITIONAL INFORMATION */}
 
                 <div className="mt-6">
-
                   <label
                     htmlFor="booking-message"
                     className="mb-2 block text-xs font-medium uppercase tracking-widest text-muted-foreground"
@@ -987,46 +996,37 @@ export function BookingModal({
                     }
                     className="w-full resize-none rounded-xl border border-primary/20 bg-[#0e0a08] px-4 py-3.5 text-sm outline-none transition-all placeholder:text-muted-foreground/60 focus:border-primary focus:ring-1 focus:ring-primary/20"
                   />
-
                 </div>
-
               </div>
 
               {/* FINAL TOTAL */}
 
               <div className="mt-6 rounded-xl border border-primary/20 bg-[#15100e] px-5 py-4">
-
                 <div className="flex items-center justify-between">
-
                   <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
                     {t.booking.total}
                   </span>
 
                   <span className="font-serif text-2xl text-primary">
-                    €
-                    {finalTotal.toFixed(
-                      2,
-                    )}
+                    €{finalTotal.toFixed(2)}
                   </span>
-
                 </div>
-
               </div>
 
               {/* SUBMIT */}
 
               <button
                 type="submit"
-                className="mt-4 w-full rounded-full border border-primary/40 bg-primary px-6 py-4 text-xs font-medium uppercase tracking-widest text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-[0_0_25px_rgba(178,141,32,0.15)]"
+                disabled={isSubmitting}
+                className="mt-4 w-full rounded-full border border-primary/40 bg-primary px-6 py-4 text-xs font-medium uppercase tracking-widest text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-[0_0_25px_rgba(178,141,32,0.15)] disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {t.booking.confirm}
+                {isSubmitting
+                  ? '...'
+                  : t.booking.confirm}
               </button>
-
             </form>
           )}
-
         </div>
-
       </div>
     </div>
   )
