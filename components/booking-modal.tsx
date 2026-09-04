@@ -81,7 +81,11 @@ function getCalendarDays(monthDate: Date) {
     date: Date
   }[] = []
 
-  for (let i = startDay - 1; i >= 0; i--) {
+  for (
+    let i = startDay - 1;
+    i >= 0;
+    i--
+  ) {
     days.push({
       day: previousMonthDays - i,
       currentMonth: false,
@@ -124,6 +128,13 @@ function getCalendarDays(monthDate: Date) {
   return days
 }
 
+/**
+ * Рассчитывает дату и время окончания бронирования.
+ *
+ * Например:
+ * 2026-09-05 18:00 + 180 минут
+ * = 2026-09-05 21:00:00
+ */
 function getBookingEnd(
   date: string,
   time: string,
@@ -265,6 +276,13 @@ export function BookingModal({
     }
   }
 
+  /**
+   * Аренда сауны.
+   *
+   * quantity = количество часов.
+   *
+   * Минимум 3 часа.
+   */
   const saunaItem = cart.find(
     (item) => item.type === 'sauna',
   )
@@ -311,6 +329,7 @@ export function BookingModal({
       alert(
         'Por favor, acepte la Política de Privacidad antes de continuar.',
       )
+
       return
     }
 
@@ -335,6 +354,7 @@ export function BookingModal({
       alert(
         'Пожалуйста, укажите имя.',
       )
+
       return
     }
 
@@ -343,31 +363,56 @@ export function BookingModal({
       alert(
         'Пожалуйста, укажите телефон.',
       )
+
       return
     }
 
+    /**
+     * Время начала.
+     */
     const bookingStart =
       `${selectedDate} ${selectedTime}:00`
 
-    const bookingEnd = getBookingEnd(
-      selectedDate,
-      selectedTime,
-      durationMinutes,
-    )
+    /**
+     * Время окончания.
+     */
+    const bookingEnd =
+      getBookingEnd(
+        selectedDate,
+        selectedTime,
+        durationMinutes,
+      )
 
+    /**
+     * Данные для Supabase.
+     */
     const bookingData = {
       name,
       phone,
-      booking_date: selectedDate,
-      booking_time: selectedTime,
-      booking_start: bookingStart,
-      booking_end: bookingEnd,
+
+      booking_date:
+        selectedDate,
+
+      booking_time:
+        selectedTime,
+
+      booking_start:
+        bookingStart,
+
+      booking_end:
+        bookingEnd,
+
       duration_minutes:
         durationMinutes,
+
       guests,
+
       message,
+
       cart,
-      total: finalTotal,
+
+      total:
+        finalTotal,
     }
 
     console.log(
@@ -406,13 +451,22 @@ export function BookingModal({
     setIsSubmitting(true)
 
     try {
+      /*
+       * ВАЖНО:
+       *
+       * Здесь НЕТ .select()
+       *
+       * Потому что anon должен иметь право
+       * только создавать бронь, но не читать
+       * данные клиентов.
+       */
       const {
-  error,
-  status,
-  statusText,
-} = await supabase
-  .from('bookings')
-  .insert(bookingData)
+        error,
+        status,
+        statusText,
+      } = await supabase
+        .from('bookings')
+        .insert(bookingData)
 
       console.log(
         'SUPABASE STATUS:',
@@ -422,11 +476,6 @@ export function BookingModal({
       console.log(
         'SUPABASE STATUS TEXT:',
         statusText,
-      )
-
-      console.log(
-        'SUPABASE DATA:',
-        data,
       )
 
       console.log(
@@ -459,9 +508,13 @@ export function BookingModal({
           error.hint,
         )
 
-        // 23P01 = бронь пересекается
+        /**
+         * PostgreSQL 23P01 =
+         * пересечение времени бронирования.
+         */
         if (
-          error.code === '23P01'
+          error.code ===
+          '23P01'
         ) {
           alert(
             'Это время уже занято.\n\nПожалуйста, выберите другое время.',
@@ -470,28 +523,28 @@ export function BookingModal({
           return
         }
 
-        const message =
+        const errorMessage =
           error.message ||
           'Неизвестная ошибка Supabase'
 
-        const details =
+        const errorDetails =
           error.details ||
           'Нет дополнительных данных.'
 
-        const hint =
+        const errorHint =
           error.hint ||
           'Нет подсказки.'
 
-        const code =
+        const errorCode =
           error.code ||
           'NO_CODE'
 
         alert(
           `Ошибка бронирования\n\n` +
-          `Сообщение: ${message}\n\n` +
-          `Код: ${code}\n\n` +
-          `Details: ${details}\n\n` +
-          `Hint: ${hint}`,
+          `Сообщение: ${errorMessage}\n\n` +
+          `Код: ${errorCode}\n\n` +
+          `Details: ${errorDetails}\n\n` +
+          `Hint: ${errorHint}`,
         )
 
         return
@@ -1108,6 +1161,7 @@ export function BookingModal({
                                   setSelectedTime(
                                     time,
                                   )
+
                                   setTimeOpen(
                                     false,
                                   )
@@ -1199,6 +1253,7 @@ export function BookingModal({
                                 setGuests(
                                   number,
                                 )
+
                                 setGuestsOpen(
                                   false,
                                 )
@@ -1282,10 +1337,15 @@ export function BookingModal({
                   <label className="flex cursor-pointer items-start gap-3">
                     <input
                       type="checkbox"
-                      checked={privacyAccepted}
-                      onChange={(event) =>
+                      checked={
+                        privacyAccepted
+                      }
+                      onChange={(
+                        event,
+                      ) =>
                         setPrivacyAccepted(
-                          event.target.checked,
+                          event.target
+                            .checked,
                         )
                       }
                       className="mt-1 h-4 w-4 shrink-0 cursor-pointer accent-primary"
