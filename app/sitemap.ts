@@ -1,4 +1,3 @@
-
 import type { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -11,35 +10,47 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 1,
     },
+
     {
-      url: `${baseUrl}/russian-banya-near-barcelona`,
+      url: `${baseUrl}/russian-banya-spain`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.9,
     },
+
     {
-      url: `${baseUrl}/russian-banya-costa-brava`,
+      url: `${baseUrl}/russian-banya-barcelona`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.9,
     },
+
     {
       url: `${baseUrl}/russian-banya-blanes`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.9,
     },
+
     {
-      url: `${baseUrl}/russian-banya-lloret-de-mar`,
+      url: `${baseUrl}/russian-banya-girona`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.9,
     },
+
     {
-      url: `${baseUrl}/russian-banya-spain`,
+      url: `${baseUrl}/russian-banya-costa-brava`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.8,
+      priority: 0.9,
+    },
+
+    {
+      url: `${baseUrl}/russian-banya-near-barcelona`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.9,
     },
   ]
 }
