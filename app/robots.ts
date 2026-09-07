@@ -1,4 +1,3 @@
-
 import type { MetadataRoute } from 'next'
 
 export default function robots(): MetadataRoute.Robots {
@@ -9,7 +8,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
     },
-
     sitemap: `${baseUrl}/sitemap.xml`,
   }
 }
