@@ -1,3 +1,4 @@
+
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Cormorant_Garamond, Jost } from 'next/font/google'
@@ -28,13 +29,7 @@ export const metadata: Metadata = {
     google: 'L4RE2vGSQwVzUxglBVvdd0hZCZ6p0RAeLvyXBLNRV10',
   },
 
-  // ==========================================
-  // ОСНОВНОЕ НАЗВАНИЕ САЙТА
-  // ==========================================
-  title: {
-    default: 'ZHAR de PAR',
-    template: '%s | ZHAR de PAR',
-  },
+  title: 'ZHAR de PAR',
 
   description:
     'ZHAR de PAR — частная русская баня в Бланесе на Коста-Брава рядом с Барселоной. Парение веником, банные ритуалы, купель, джакузи и отдых на природе.',
@@ -60,22 +55,14 @@ export const metadata: Metadata = {
     },
   },
 
-  // ==========================================
-  // OPEN GRAPH
-  // ==========================================
-
   openGraph: {
     type: 'website',
     locale: 'ru_RU',
     url: siteUrl,
-
     siteName: 'ZHAR de PAR',
-
     title: 'ZHAR de PAR',
-
     description:
       'Частная русская баня ZHAR de PAR в Бланесе на Коста-Брава рядом с Барселоной. Парение веником, купель, джакузи и банные ритуалы.',
-
     images: [
       {
         url: '/photos/view/viewgeneral.PNG',
@@ -86,24 +73,13 @@ export const metadata: Metadata = {
     ],
   },
 
-  // ==========================================
-  // TWITTER / X
-  // ==========================================
-
   twitter: {
     card: 'summary_large_image',
-
     title: 'ZHAR de PAR',
-
     description:
       'Частная русская баня ZHAR de PAR в Бланесе рядом с Барселоной. Парение веником, банные ритуалы, купель, джакузи и отдых на природе.',
-
     images: ['/photos/view/viewgeneral.PNG'],
   },
-
-  // ==========================================
-  // ROBOTS
-  // ==========================================
 
   robots: {
     index: true,
@@ -118,10 +94,6 @@ export const metadata: Metadata = {
     },
   },
 
-  // ==========================================
-  // FAVICON
-  // ==========================================
-
   icons: {
     icon: [
       {
@@ -129,32 +101,21 @@ export const metadata: Metadata = {
         type: 'image/png',
       },
     ],
-
     shortcut: '/photos/logos/logogoogle.png',
-
     apple: '/photos/logos/logogoogle.png',
   },
 }
-
-/* =========================================================
-   STRUCTURED DATA — JSON-LD
-========================================================= */
 
 const jsonLd = {
   '@context': 'https://schema.org',
 
   '@graph': [
-    // =====================================================
-    // LOCAL BUSINESS
-    // =====================================================
-
     {
       '@type': 'LocalBusiness',
 
       '@id': `${siteUrl}/#business`,
 
       name: 'ZHAR de PAR',
-
       alternateName: 'ЖАР де ПАР',
 
       description:
@@ -176,13 +137,9 @@ const jsonLd = {
 
       address: {
         '@type': 'PostalAddress',
-
         addressLocality: 'Blanes',
-
         addressRegion: 'Girona',
-
         postalCode: '17300',
-
         addressCountry: 'ES',
       },
 
@@ -191,37 +148,30 @@ const jsonLd = {
           '@type': 'City',
           name: 'Blanes',
         },
-
         {
           '@type': 'City',
           name: 'Lloret de Mar',
         },
-
         {
           '@type': 'City',
           name: 'Tossa de Mar',
         },
-
         {
           '@type': 'City',
           name: 'Girona',
         },
-
         {
           '@type': 'AdministrativeArea',
           name: 'Costa Brava',
         },
-
         {
           '@type': 'AdministrativeArea',
           name: 'Catalonia',
         },
-
         {
           '@type': 'City',
           name: 'Barcelona',
         },
-
         {
           '@type': 'Country',
           name: 'Spain',
@@ -252,11 +202,8 @@ const jsonLd = {
 
       contactPoint: {
         '@type': 'ContactPoint',
-
         telephone: '+34601801800',
-
         contactType: 'customer service',
-
         availableLanguage: [
           'Russian',
           'Ukrainian',
@@ -273,70 +220,49 @@ const jsonLd = {
         itemListElement: [
           {
             '@type': 'Offer',
-
             itemOffered: {
               '@type': 'Service',
-
               name: 'Аренда частной русской бани',
             },
           },
-
           {
             '@type': 'Offer',
-
             itemOffered: {
               '@type': 'Service',
-
               name: 'Парение веником',
             },
           },
-
           {
             '@type': 'Offer',
-
             itemOffered: {
               '@type': 'Service',
-
               name: 'Банный ритуал',
             },
           },
-
           {
             '@type': 'Offer',
-
             itemOffered: {
               '@type': 'Service',
-
               name: 'Купель',
             },
           },
-
           {
             '@type': 'Offer',
-
             itemOffered: {
               '@type': 'Service',
-
               name: 'Джакузи',
             },
           },
-
           {
             '@type': 'Offer',
-
             itemOffered: {
               '@type': 'Service',
-
               name: 'Банный веник',
             },
           },
         ],
       },
     },
-
-    // =====================================================
-    // WEBSITE
-    // =====================================================
 
     {
       '@type': 'WebSite',
@@ -364,10 +290,6 @@ const jsonLd = {
       },
     },
 
-    // =====================================================
-    // WEBPAGE
-    // =====================================================
-
     {
       '@type': 'WebPage',
 
@@ -390,10 +312,6 @@ const jsonLd = {
 
       inLanguage: 'ru-RU',
     },
-
-    // =====================================================
-    // VIDEO
-    // =====================================================
 
     {
       '@type': 'VideoObject',
@@ -426,7 +344,6 @@ const jsonLd = {
 
         logo: {
           '@type': 'ImageObject',
-
           url: `${siteUrl}/photos/logos/logoof.png`,
         },
       },
@@ -438,18 +355,10 @@ const jsonLd = {
   ],
 }
 
-// =========================================================
-// VIEWPORT
-// =========================================================
-
 export const viewport: Viewport = {
   colorScheme: 'dark',
   themeColor: '#000000',
 }
-
-// =========================================================
-// ROOT LAYOUT
-// =========================================================
 
 export default function RootLayout({
   children,
@@ -461,6 +370,12 @@ export default function RootLayout({
       lang="ru"
       className={`${cormorant.variable} ${jost.variable} bg-background`}
     >
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="application-name" content="ZHAR de PAR" />
+        <meta name="apple-mobile-web-app-title" content="ZHAR de PAR" />
+      </head>
+
       <body className="font-sans antialiased">
         <LanguageProvider>
           {children}
