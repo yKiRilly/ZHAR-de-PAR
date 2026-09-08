@@ -1,7 +1,7 @@
-
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Cormorant_Garamond, Jost } from 'next/font/google'
+
 import { LanguageProvider } from '@/components/language-provider'
 import './globals.css'
 
@@ -29,22 +29,22 @@ export const metadata: Metadata = {
   },
 
   title: {
-    default: 'Русская баня на Коста-Брава рядом с Барселоной | ZHAR de PAR',
-    template: '%s | ZHAR de PAR',
+    default: 'Жар de Пар | Русская баня на Коста-Брава',
+    template: '%s | Жар de Пар',
   },
 
   description:
-    'Русская баня ZHAR de PAR в Бланесе на Коста-Брава. Частная баня рядом с Барселоной, Ллорет-де-Мар и Жироной. Парение веником, банные ритуалы, купель, джакузи и отдых на природе.',
+    'Жар de Пар — частная русская баня в Бланесе на Коста-Брава рядом с Барселоной. Парение веником, банные ритуалы, купель, джакузи и отдых на природе.',
 
   authors: [
     {
-      name: 'ZHAR de PAR',
+      name: 'Жар de Пар',
       url: siteUrl,
     },
   ],
 
-  creator: 'ZHAR de PAR',
-  publisher: 'ZHAR de PAR',
+  creator: 'Жар de Пар',
+  publisher: 'Жар de Пар',
 
   alternates: {
     canonical: siteUrl,
@@ -60,31 +60,38 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'ru_RU',
     url: siteUrl,
-    siteName: 'ZHAR de PAR',
-    title: 'Русская баня на Коста-Брава рядом с Барселоной | ZHAR de PAR',
+    siteName: 'Жар de Пар',
+
+    title: 'Жар de Пар | Русская баня на Коста-Брава',
+
     description:
-      'Частная русская баня в Бланесе на Коста-Брава. Рядом с Барселоной, Ллорет-де-Мар и Жироной. Парение веником, купель, джакузи и банные ритуалы.',
+      'Частная русская баня в Бланесе на Коста-Брава рядом с Барселоной. Парение веником, купель, джакузи и банные ритуалы.',
+
     images: [
       {
         url: '/photos/view/viewgeneral.PNG',
         width: 1200,
         height: 630,
-        alt: 'ZHAR de PAR — русская баня на Коста-Брава рядом с Барселоной',
+        alt: 'Жар de Пар — русская баня на Коста-Брава',
       },
     ],
   },
 
   twitter: {
     card: 'summary_large_image',
-    title: 'Русская баня на Коста-Брава | ZHAR de PAR',
+
+    title: 'Жар de Пар | Русская баня на Коста-Брава',
+
     description:
       'Частная русская баня в Бланесе рядом с Барселоной. Парение веником, банные ритуалы, купель, джакузи и отдых на природе.',
+
     images: ['/photos/view/viewgeneral.PNG'],
   },
 
   robots: {
     index: true,
     follow: true,
+
     googleBot: {
       index: true,
       follow: true,
@@ -116,10 +123,12 @@ const jsonLd = {
   '@graph': [
     {
       '@type': 'LocalBusiness',
+
       '@id': `${siteUrl}/#business`,
 
-      name: 'ZHAR de PAR',
-      alternateName: 'ЖАР де ПАР',
+      name: 'Жар de Пар',
+
+      alternateName: 'ZHAR de PAR',
 
       description:
         'Частная русская баня в Бланесе на Коста-Брава рядом с Барселоной, Ллорет-де-Мар и Жироной.',
@@ -127,12 +136,15 @@ const jsonLd = {
       url: siteUrl,
 
       logo: `${siteUrl}/photos/logos/logoof.png`,
+
       image: `${siteUrl}/photos/view/viewgeneral.PNG`,
 
       priceRange: '€€',
+
       currenciesAccepted: 'EUR',
 
       telephone: '+34601801800',
+
       email: 'zhardepar1@gmail.com',
 
       address: {
@@ -178,9 +190,7 @@ const jsonLd = {
         },
       ],
 
-      sameAs: [
-        'https://www.instagram.com/banka_blanes/',
-      ],
+      sameAs: ['https://www.instagram.com/banka_blanes/'],
 
       knowsAbout: [
         'Русская баня',
@@ -216,7 +226,8 @@ const jsonLd = {
 
       hasOfferCatalog: {
         '@type': 'OfferCatalog',
-        name: 'Услуги ZHAR de PAR',
+
+        name: 'Услуги Жар de Пар',
 
         itemListElement: [
           {
@@ -267,11 +278,14 @@ const jsonLd = {
 
     {
       '@type': 'WebSite',
+
       '@id': `${siteUrl}/#website`,
 
       url: siteUrl,
-      name: 'ZHAR de PAR',
-      alternateName: 'ЖАР де ПАР',
+
+      name: 'Жар de Пар',
+
+      alternateName: 'ZHAR de PAR',
 
       description:
         'Русская баня на Коста-Брава рядом с Барселоной.',
@@ -290,15 +304,15 @@ const jsonLd = {
 
     {
       '@type': 'WebPage',
+
       '@id': `${siteUrl}/#webpage`,
 
       url: siteUrl,
 
-      name:
-        'Русская баня на Коста-Брава рядом с Барселоной | ZHAR de PAR',
+      name: 'Жар de Пар | Русская баня на Коста-Брава',
 
       description:
-        'Частная русская баня ZHAR de PAR в Бланесе на Коста-Брава рядом с Барселоной.',
+        'Частная русская баня Жар de Пар в Бланесе на Коста-Брава рядом с Барселоной.',
 
       isPartOf: {
         '@id': `${siteUrl}/#website`,
@@ -313,12 +327,13 @@ const jsonLd = {
 
     {
       '@type': 'VideoObject',
+
       '@id': `${siteUrl}/#video`,
 
-      name: 'ZHAR de PAR — русская баня на Коста-Брава',
+      name: 'Жар de Пар — русская баня на Коста-Брава',
 
       description:
-        'Видео о ZHAR de PAR — частной русской бане в Бланесе на Коста-Брава рядом с Барселоной.',
+        'Видео о Жар de Пар — частной русской бане в Бланесе на Коста-Брава рядом с Барселоной.',
 
       thumbnailUrl: `${siteUrl}/photos/view/viewgeneral.PNG`,
 
@@ -334,7 +349,9 @@ const jsonLd = {
 
       publisher: {
         '@type': 'Organization',
-        name: 'ZHAR de PAR',
+
+        name: 'Жар de Пар',
+
         url: siteUrl,
 
         logo: {
