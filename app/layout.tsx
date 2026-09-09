@@ -27,12 +27,15 @@ export const metadata: Metadata = {
     google: 'L4RE2vGSQwVzUxglBVvdd0hZCZ6p0RAeLvyXBLNRV10',
   },
 
-  title: 'ZHAR de PAR',
+  title: {
+    default: 'ZHAR de PAR',
+    template: '%s | ZHAR de PAR',
+  },
 
   description:
     'ZHAR de PAR — частная русская баня в Бланесе на Коста-Брава рядом с Барселоной. Парение веником, банные ритуалы, купель, джакузи и отдых на природе.',
-
-  authors: [
+  
+    authors: [
     {
       name: 'ZHAR de PAR',
       url: siteUrl,
