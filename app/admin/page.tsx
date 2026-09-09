@@ -13,6 +13,7 @@ import {
   RefreshCw,
   Search,
   Trash2,
+  Users,
   X,
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
@@ -41,6 +42,17 @@ type Booking = {
   total: number | null
   status: string | null
   created_at: string | null
+}
+
+type ClientRecord = {
+  key: string
+  name: string
+  phone: string
+  bookings: Booking[]
+  visits: number
+  totalSpent: number
+  lastVisit: string | null
+  services: { name: string; quantity: number }[]
 }
 
 type EditForm = {
@@ -472,6 +484,9 @@ export default function AdminPage() {
 
   const [sortOrder, setSortOrder] =
     useState<'asc' | 'desc'>('asc')
+
+  const [activeView, setActiveView] =
+    useState<'bookings' | 'clients'>('bookings')
 
   const loadBookings = async () => {
     setLoading(true)
@@ -1181,6 +1196,77 @@ export default function AdminPage() {
           'cancelled',
     ).length
 
+  const clients = useMemo<ClientRecord[]>(() => {
+    const map = new Map<string, ClientRecord>()
+
+    bookings.forEach((booking) => {
+      const phone = booking.phone?.trim() || ''
+      const normalizedPhone = phone.replace(/\D/g, '')
+      const normalizedName =
+        booking.name?.trim().toLowerCase() || 'без имени'
+      const key = normalizedPhone
+        ? `phone:${normalizedPhone}`
+        : `name:${normalizedName}`
+
+      if (!map.has(key)) {
+        map.set(key, {
+          key,
+          name: booking.name?.trim() || 'Без имени',
+          phone,
+          bookings: [],
+          visits: 0,
+          totalSpent: 0,
+          lastVisit: null,
+          services: [],
+        })
+      }
+
+      const client = map.get(key)!
+      client.bookings.push(booking)
+
+      if (booking.name?.trim()) {
+        client.name = booking.name.trim()
+      }
+      if (phone) {
+        client.phone = phone
+      }
+
+      if (booking.status !== 'cancelled') {
+        client.visits += 1
+        client.totalSpent += Number(booking.total || 0)
+
+        if (booking.booking_date) {
+          if (!client.lastVisit || booking.booking_date > client.lastVisit) {
+            client.lastVisit = booking.booking_date
+          }
+        }
+
+        parseCart(booking.cart).forEach((item) => {
+          const serviceName = getServiceName(item)
+          const quantity = Math.max(1, Number(item.quantity || 1))
+          const existing = client.services.find(
+            (service) => service.name === serviceName,
+          )
+
+          if (existing) {
+            existing.quantity += quantity
+          } else {
+            client.services.push({
+              name: serviceName,
+              quantity,
+            })
+          }
+        })
+      }
+    })
+
+    return Array.from(map.values()).sort((a, b) => {
+      const dateA = a.lastVisit || ''
+      const dateB = b.lastVisit || ''
+      return dateB.localeCompare(dateA)
+    })
+  }, [bookings])
+
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#110d0b] text-foreground">
       <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-6 sm:py-8 lg:px-10">
@@ -1233,6 +1319,39 @@ export default function AdminPage() {
           </div>
         </header>
 
+        {/* NAVIGATION */}
+        <div className="mb-5 flex gap-2 rounded-2xl border border-primary/15 bg-[#15100e] p-2 sm:mb-8 sm:max-w-xl">
+          <button
+            type="button"
+            onClick={() => setActiveView('bookings')}
+            className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-xs font-medium transition ${
+              activeView === 'bookings'
+                ? 'bg-primary text-black'
+                : 'text-muted-foreground hover:text-primary'
+            }`}
+          >
+            <CalendarDays className="h-4 w-4" />
+            Бронирования
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveView('clients')}
+            className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-xs font-medium transition ${
+              activeView === 'clients'
+                ? 'bg-primary text-black'
+                : 'text-muted-foreground hover:text-primary'
+            }`}
+          >
+            <Users className="h-4 w-4" />
+            Клиенты
+            <span className="rounded-full bg-black/20 px-2 py-0.5 text-[10px]">
+              {clients.length}
+            </span>
+          </button>
+        </div>
+
+        {activeView === 'bookings' ? (
+          <>
         {/* STATS */}
 
         <div className="mb-5 grid grid-cols-2 gap-2 sm:mb-8 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
@@ -2236,6 +2355,127 @@ export default function AdminPage() {
             </div>
           )}
         </section>
+          </>
+        ) : (
+          <section className="space-y-4">
+            <div className="rounded-3xl border border-primary/15 bg-[#15100e] p-4 sm:p-6">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="text-[10px] font-medium uppercase tracking-[0.28em] text-primary sm:text-xs">
+                    CRM
+                  </p>
+                  <h2 className="mt-2 font-serif text-3xl font-light sm:text-4xl">
+                    Клиенты
+                  </h2>
+                  <p className="mt-2 text-xs text-muted-foreground sm:text-sm">
+                    Все клиенты собраны автоматически из бронирований.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-primary/15 px-4 py-3 text-center">
+                  <div className="text-2xl font-light text-primary">{clients.length}</div>
+                  <div className="text-[9px] uppercase tracking-widest text-muted-foreground">клиентов</div>
+                </div>
+              </div>
+
+              <div className="relative mt-5">
+                <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(event) => setSearch(event.target.value)}
+                  placeholder="Поиск по имени или телефону"
+                  className="h-12 w-full rounded-2xl border border-primary/20 bg-[#0e0a08] pl-11 pr-4 text-sm outline-none transition focus:border-primary"
+                />
+              </div>
+            </div>
+
+            {clients
+              .filter((client) => {
+                const query = search.trim().toLowerCase()
+                if (!query) return true
+                return (
+                  client.name.toLowerCase().includes(query) ||
+                  client.phone.toLowerCase().includes(query)
+                )
+              })
+              .map((client) => {
+                const topServices = [...client.services]
+                  .sort((a, b) => b.quantity - a.quantity)
+                  .slice(0, 3)
+
+                return (
+                  <div
+                    key={client.key}
+                    className="rounded-3xl border border-primary/15 bg-[#15100e] p-4 sm:p-6"
+                  >
+                    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                      <div className="min-w-0">
+                        <h3 className="truncate font-serif text-2xl font-light">
+                          {client.name}
+                        </h3>
+                        {client.phone ? (
+                          <a
+                            href={`tel:${getPhoneLink(client.phone)}`}
+                            className="mt-1 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary"
+                          >
+                            <Phone className="h-4 w-4" />
+                            {client.phone}
+                          </a>
+                        ) : (
+                          <p className="mt-1 text-sm text-muted-foreground">Телефон не указан</p>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:min-w-[520px]">
+                        <div className="rounded-2xl border border-primary/10 p-3">
+                          <div className="text-lg text-primary">{client.visits}</div>
+                          <div className="text-[9px] uppercase tracking-wider text-muted-foreground">визитов</div>
+                        </div>
+                        <div className="rounded-2xl border border-primary/10 p-3">
+                          <div className="text-lg text-primary">€{client.totalSpent.toFixed(0)}</div>
+                          <div className="text-[9px] uppercase tracking-wider text-muted-foreground">потрачено</div>
+                        </div>
+                        <div className="rounded-2xl border border-primary/10 p-3">
+                          <div className="text-sm text-primary">{formatDate(client.lastVisit)}</div>
+                          <div className="text-[9px] uppercase tracking-wider text-muted-foreground">последний визит</div>
+                        </div>
+                        <div className="rounded-2xl border border-primary/10 p-3">
+                          <div className="text-lg text-primary">
+                            €{client.visits ? (client.totalSpent / client.visits).toFixed(0) : '0'}
+                          </div>
+                          <div className="text-[9px] uppercase tracking-wider text-muted-foreground">средний чек</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {topServices.length > 0 && (
+                      <div className="mt-4 border-t border-primary/10 pt-4">
+                        <p className="text-[9px] uppercase tracking-widest text-muted-foreground">Чаще всего заказывает</p>
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {topServices.map((service) => (
+                            <span
+                              key={service.name}
+                              className="rounded-full border border-primary/15 bg-primary/5 px-3 py-1.5 text-xs text-primary"
+                            >
+                              {service.name} × {service.quantity}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+
+            {clients.length === 0 && (
+              <div className="rounded-3xl border border-primary/15 bg-[#15100e] p-10 text-center">
+                <Users className="mx-auto h-8 w-8 text-primary" />
+                <p className="mt-3 font-serif text-xl">Клиентов пока нет</p>
+              </div>
+            )}
+          </section>
+        )}
+
       </div>
 
       {/* EDIT MODAL */}
@@ -2530,4 +2770,3 @@ export default function AdminPage() {
     </main>
   )
 }
-
