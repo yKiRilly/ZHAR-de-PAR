@@ -1,5 +1,4 @@
-﻿
-'use client'
+﻿'use client'
 
 import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -52,7 +51,10 @@ type ClientRecord = {
   visits: number
   totalSpent: number
   lastVisit: string | null
-  services: { name: string; quantity: number }[]
+  services: {
+    name: string
+    quantity: number
+  }[]
 }
 
 type EditForm = {
@@ -62,6 +64,11 @@ type EditForm = {
   booking_time: string
   guests: number
   message: string
+}
+
+type ClientEditForm = {
+  name: string
+  phone: string
 }
 
 type BookingFilter =
@@ -271,11 +278,12 @@ function getTodayString() {
   const today = new Date()
 
   const year = today.getFullYear()
-  const month = String(today.getMonth() + 1).padStart(
-    2,
-    '0',
-  )
-  const day = String(today.getDate()).padStart(2, '0')
+  const month = String(
+    today.getMonth() + 1,
+  ).padStart(2, '0')
+  const day = String(
+    today.getDate(),
+  ).padStart(2, '0')
 
   return `${year}-${month}-${day}`
 }
@@ -291,11 +299,18 @@ function getCalendarDays(monthDate: Date) {
   const year = monthDate.getFullYear()
   const month = monthDate.getMonth()
 
-  const firstDay = new Date(year, month, 1)
+  const firstDay = new Date(
+    year,
+    month,
+    1,
+  )
 
   let startDay = firstDay.getDay()
 
-  startDay = startDay === 0 ? 6 : startDay - 1
+  startDay =
+    startDay === 0
+      ? 6
+      : startDay - 1
 
   const daysInMonth = new Date(
     year,
@@ -310,7 +325,11 @@ function getCalendarDays(monthDate: Date) {
 
   const days: Date[] = []
 
-  for (let index = 0; index < totalCells; index++) {
+  for (
+    let index = 0;
+    index < totalCells;
+    index++
+  ) {
     const dayNumber =
       index - startDay + 1
 
@@ -345,18 +364,29 @@ function parseLocalDateTime(value: string) {
     .replace('T', ' ')
     .slice(0, 16)
 
-  const [datePart, timePart] =
-    normalized.split(' ')
+  const [
+    datePart,
+    timePart,
+  ] = normalized.split(' ')
 
   if (!datePart || !timePart) {
     return new Date(value)
   }
 
-  const [year, month, day] =
-    datePart.split('-').map(Number)
+  const [
+    year,
+    month,
+    day,
+  ] = datePart
+    .split('-')
+    .map(Number)
 
-  const [hours, minutes] =
-    timePart.split(':').map(Number)
+  const [
+    hours,
+    minutes,
+  ] = timePart
+    .split(':')
+    .map(Number)
 
   return new Date(
     year,
@@ -374,11 +404,16 @@ function getBookingEnd(
   time: string,
   durationMinutes: number,
 ) {
-  const [year, month, day] =
-    date.split('-').map(Number)
+  const [
+    year,
+    month,
+    day,
+  ] = date.split('-').map(Number)
 
-  const [hours, minutes] =
-    time.split(':').map(Number)
+  const [
+    hours,
+    minutes,
+  ] = time.split(':').map(Number)
 
   const start = new Date(
     year,
@@ -392,26 +427,33 @@ function getBookingEnd(
 
   const end = new Date(
     start.getTime() +
-      durationMinutes * 60 * 1000,
+      durationMinutes *
+        60 *
+        1000,
   )
 
-  const endYear = end.getFullYear()
+  const endYear =
+    end.getFullYear()
 
-  const endMonth = String(
-    end.getMonth() + 1,
-  ).padStart(2, '0')
+  const endMonth =
+    String(
+      end.getMonth() + 1,
+    ).padStart(2, '0')
 
-  const endDay = String(
-    end.getDate(),
-  ).padStart(2, '0')
+  const endDay =
+    String(
+      end.getDate(),
+    ).padStart(2, '0')
 
-  const endHours = String(
-    end.getHours(),
-  ).padStart(2, '0')
+  const endHours =
+    String(
+      end.getHours(),
+    ).padStart(2, '0')
 
-  const endMinutes = String(
-    end.getMinutes(),
-  ).padStart(2, '0')
+  const endMinutes =
+    String(
+      end.getMinutes(),
+    ).padStart(2, '0')
 
   return `${endYear}-${endMonth}-${endDay} ${endHours}:${endMinutes}:00`
 }
@@ -420,17 +462,31 @@ function formatTime(value: string | null) {
   if (!value) return '—'
 
   if (value.includes(' ')) {
-    return value.split(' ').pop()?.slice(0, 5) || value
+    return (
+      value
+        .split(' ')
+        .pop()
+        ?.slice(0, 5) ||
+      value
+    )
   }
 
   if (value.includes('T')) {
-    return value.split('T').pop()?.slice(0, 5) || value
+    return (
+      value
+        .split('T')
+        .pop()
+        ?.slice(0, 5) ||
+      value
+    )
   }
 
   return value.slice(0, 5)
 }
 
-function getPhoneLink(phone: string | null) {
+function getPhoneLink(
+  phone: string | null,
+) {
   if (!phone) return ''
 
   return phone.replace(/\D/g, '')
@@ -439,648 +495,1013 @@ function getPhoneLink(phone: string | null) {
 export default function AdminPage() {
   const router = useRouter()
 
-  const [bookings, setBookings] =
-    useState<Booking[]>([])
+  const [
+    bookings,
+    setBookings,
+  ] = useState<Booking[]>([])
 
-  const [loading, setLoading] =
-    useState(true)
+  const [
+    loading,
+    setLoading,
+  ] = useState(true)
 
-  const [error, setError] =
-    useState('')
+  const [
+    error,
+    setError,
+  ] = useState('')
 
-  const [updatingId, setUpdatingId] =
-    useState<string | number | null>(null)
+  const [
+    updatingId,
+    setUpdatingId,
+  ] = useState<
+    string | number | null
+  >(null)
 
-  const [expandedId, setExpandedId] =
-    useState<string | number | null>(null)
+  const [
+    expandedId,
+    setExpandedId,
+  ] = useState<
+    string | number | null
+  >(null)
 
-  const [selectedDate, setSelectedDate] =
-    useState(getTodayString())
+  const [
+    selectedDate,
+    setSelectedDate,
+  ] = useState(
+    getTodayString(),
+  )
 
-  const [calendarMonth, setCalendarMonth] =
-    useState(() => new Date())
+  const [
+    calendarMonth,
+    setCalendarMonth,
+  ] = useState(
+    () => new Date(),
+  )
 
-  const [editingBooking, setEditingBooking] =
-    useState<Booking | null>(null)
+  const [
+    editingBooking,
+    setEditingBooking,
+  ] = useState<Booking | null>(
+    null,
+  )
 
-  const [editForm, setEditForm] =
-    useState<EditForm>({
-      name: '',
-      phone: '',
-      booking_date: '',
-      booking_time: '',
-      guests: 2,
-      message: '',
-    })
+  const [
+    editForm,
+    setEditForm,
+  ] = useState<EditForm>({
+    name: '',
+    phone: '',
+    booking_date: '',
+    booking_time: '',
+    guests: 2,
+    message: '',
+  })
 
-  const [savingEdit, setSavingEdit] =
-    useState(false)
+  const [
+    savingEdit,
+    setSavingEdit,
+  ] = useState(false)
 
-  const [filter, setFilter] =
-    useState<BookingFilter>('all')
+  /* CLIENT EDIT */
 
-  const [search, setSearch] =
-    useState('')
+  const [
+    editingClient,
+    setEditingClient,
+  ] = useState<ClientRecord | null>(
+    null,
+  )
 
-  const [sortOrder, setSortOrder] =
-    useState<'asc' | 'desc'>('asc')
+  const [
+    clientEditForm,
+    setClientEditForm,
+  ] = useState<ClientEditForm>({
+    name: '',
+    phone: '',
+  })
 
-  const [activeView, setActiveView] =
-    useState<'bookings' | 'clients'>('bookings')
+  const [
+    savingClient,
+    setSavingClient,
+  ] = useState(false)
 
-  const loadBookings = async () => {
-    setLoading(true)
-    setError('')
+  const [
+    filter,
+    setFilter,
+  ] = useState<BookingFilter>('all')
 
-    try {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
+  const [
+    search,
+    setSearch,
+  ] = useState('')
 
-      if (!session) {
-        router.replace('/admin/login')
-        return
-      }
+  const [
+    sortOrder,
+    setSortOrder,
+  ] = useState<
+    'asc' | 'desc'
+  >('asc')
 
-      if (session.user.email !== ADMIN_EMAIL) {
-        await supabase.auth.signOut()
-        router.replace('/admin/login')
-        return
-      }
+  const [
+    activeView,
+    setActiveView,
+  ] = useState<
+    'bookings' | 'clients'
+  >('bookings')
 
-      const {
-        data,
-        error: bookingsError,
-      } = await supabase
-        .from('bookings')
-        .select('*')
-        .order('booking_date', {
-          ascending: true,
-        })
-        .order('booking_time', {
-          ascending: true,
-        })
+  const loadBookings =
+    async () => {
+      setLoading(true)
+      setError('')
 
-      if (bookingsError) {
+      try {
+        const {
+          data: { session },
+        } =
+          await supabase.auth.getSession()
+
+        if (!session) {
+          router.replace(
+            '/admin/login',
+          )
+          return
+        }
+
+        if (
+          session.user.email !==
+          ADMIN_EMAIL
+        ) {
+          await supabase.auth.signOut()
+
+          router.replace(
+            '/admin/login',
+          )
+
+          return
+        }
+
+        const {
+          data,
+          error: bookingsError,
+        } =
+          await supabase
+            .from('bookings')
+            .select('*')
+            .order(
+              'booking_date',
+              {
+                ascending: true,
+              },
+            )
+            .order(
+              'booking_time',
+              {
+                ascending: true,
+              },
+            )
+
+        if (bookingsError) {
+          console.error(
+            'ADMIN BOOKINGS ERROR:',
+            bookingsError,
+          )
+
+          setError(
+            bookingsError.message ||
+              'Не удалось загрузить бронирования.',
+          )
+
+          return
+        }
+
+        setBookings(
+          (data || []) as Booking[],
+        )
+      } catch (err) {
         console.error(
-          'ADMIN BOOKINGS ERROR:',
-          bookingsError,
+          'ADMIN LOAD ERROR:',
+          err,
         )
 
         setError(
-          bookingsError.message ||
-            'Не удалось загрузить бронирования.',
+          'Не удалось загрузить бронирования.',
         )
-
-        return
+      } finally {
+        setLoading(false)
       }
-
-      setBookings((data || []) as Booking[])
-    } catch (err) {
-      console.error(
-        'ADMIN LOAD ERROR:',
-        err,
-      )
-
-      setError(
-        'Не удалось загрузить бронирования.',
-      )
-    } finally {
-      setLoading(false)
     }
-  }
 
   useEffect(() => {
     loadBookings()
   }, [router])
 
-  const filteredBookings = useMemo(() => {
-    const query = search
-      .trim()
-      .toLowerCase()
+  const filteredBookings =
+    useMemo(() => {
+      const query =
+        search
+          .trim()
+          .toLowerCase()
 
-    const now = new Date()
+      const now = new Date()
 
-    return [...bookings]
-      .filter((booking) => {
-        const status =
-          booking.status || 'new'
+      return [...bookings]
+        .filter((booking) => {
+          const status =
+            booking.status ||
+            'new'
 
-        if (filter === 'today') {
-          return (
-            booking.booking_date ===
-            getTodayString()
-          )
-        }
-
-        if (filter === 'upcoming') {
-          if (status === 'cancelled') {
-            return false
+          if (
+            filter === 'today'
+          ) {
+            return (
+              booking.booking_date ===
+              getTodayString()
+            )
           }
 
-          if (!booking.booking_date) {
-            return false
+          if (
+            filter === 'upcoming'
+          ) {
+            if (
+              status ===
+              'cancelled'
+            ) {
+              return false
+            }
+
+            if (
+              !booking.booking_date
+            ) {
+              return false
+            }
+
+            const dateTime =
+              booking.booking_time
+                ? parseLocalDateTime(
+                    `${booking.booking_date} ${booking.booking_time}:00`,
+                  )
+                : parseLocalDateTime(
+                    `${booking.booking_date} 23:59:59`,
+                  )
+
+            return (
+              dateTime >= now
+            )
           }
 
-          const dateTime =
-            booking.booking_time
-              ? parseLocalDateTime(
-                  `${booking.booking_date} ${booking.booking_time}:00`,
-                )
-              : parseLocalDateTime(
-                  `${booking.booking_date} 23:59:59`,
-                )
+          if (
+            filter === 'new'
+          ) {
+            return (
+              status === 'new'
+            )
+          }
 
-          return dateTime >= now
-        }
+          if (
+            filter ===
+            'confirmed'
+          ) {
+            return (
+              status ===
+              'confirmed'
+            )
+          }
 
-        if (filter === 'new') {
-          return status === 'new'
-        }
+          if (
+            filter ===
+            'completed'
+          ) {
+            return (
+              status ===
+              'completed'
+            )
+          }
 
-        if (filter === 'confirmed') {
-          return status === 'confirmed'
-        }
+          if (
+            filter ===
+            'cancelled'
+          ) {
+            return (
+              status ===
+              'cancelled'
+            )
+          }
 
-        if (filter === 'completed') {
-          return status === 'completed'
-        }
-
-        if (filter === 'cancelled') {
-          return status === 'cancelled'
-        }
-
-        return true
-      })
-      .filter((booking) => {
-        if (!query) {
           return true
+        })
+        .filter((booking) => {
+          if (!query) {
+            return true
+          }
+
+          const name =
+            booking.name?.toLowerCase() ||
+            ''
+
+          const phone =
+            booking.phone?.toLowerCase() ||
+            ''
+
+          return (
+            name.includes(query) ||
+            phone.includes(query)
+          )
+        })
+        .sort((a, b) => {
+          const dateA =
+            `${a.booking_date || ''} ${a.booking_time || ''}`
+
+          const dateB =
+            `${b.booking_date || ''} ${b.booking_time || ''}`
+
+          const comparison =
+            dateA.localeCompare(
+              dateB,
+            )
+
+          return sortOrder ===
+            'asc'
+            ? comparison
+            : -comparison
+        })
+    }, [
+      bookings,
+      filter,
+      search,
+      sortOrder,
+    ])
+
+  const updateStatus =
+    async (
+      bookingId:
+        | string
+        | number,
+      newStatus: string,
+    ) => {
+      if (
+        newStatus ===
+        'cancelled'
+      ) {
+        const confirmed =
+          window.confirm(
+            'Вы действительно хотите отменить эту бронь?\n\nПосле отмены это время снова станет доступным для клиентов.',
+          )
+
+        if (!confirmed) return
+      }
+
+      setUpdatingId(
+        bookingId,
+      )
+
+      try {
+        const {
+          error: updateError,
+        } =
+          await supabase
+            .from('bookings')
+            .update({
+              status: newStatus,
+            })
+            .eq(
+              'id',
+              bookingId,
+            )
+
+        if (updateError) {
+          console.error(
+            'UPDATE BOOKING ERROR:',
+            updateError,
+          )
+
+          alert(
+            updateError.message ||
+              'Не удалось изменить статус.',
+          )
+
+          return
         }
 
-        const name =
-          booking.name?.toLowerCase() || ''
-
-        const phone =
-          booking.phone?.toLowerCase() || ''
-
-        return (
-          name.includes(query) ||
-          phone.includes(query)
+        setBookings(
+          (current) =>
+            current.map(
+              (booking) =>
+                booking.id ===
+                bookingId
+                  ? {
+                      ...booking,
+                      status:
+                        newStatus,
+                    }
+                  : booking,
+            ),
         )
-      })
-      .sort((a, b) => {
-        const dateA =
-          `${a.booking_date || ''} ${a.booking_time || ''}`
+      } finally {
+        setUpdatingId(null)
+      }
+    }
 
-        const dateB =
-          `${b.booking_date || ''} ${b.booking_time || ''}`
-
-        const comparison =
-          dateA.localeCompare(dateB)
-
-        return sortOrder === 'asc'
-          ? comparison
-          : -comparison
-      })
-  }, [
-    bookings,
-    filter,
-    search,
-    sortOrder,
-  ])
-
-  const updateStatus = async (
-    bookingId: string | number,
-    newStatus: string,
-  ) => {
-    if (newStatus === 'cancelled') {
-      const confirmed = window.confirm(
-        'Вы действительно хотите отменить эту бронь?\n\nПосле отмены это время снова станет доступным для клиентов.',
-      )
+  const cancelBooking =
+    async (
+      bookingId:
+        | string
+        | number,
+    ) => {
+      const confirmed =
+        window.confirm(
+          'Отменить эту бронь?\n\nПосле отмены время снова будет доступно для бронирования.',
+        )
 
       if (!confirmed) return
-    }
 
-    setUpdatingId(bookingId)
-
-    try {
-      const {
-        error: updateError,
-      } = await supabase
-        .from('bookings')
-        .update({
-          status: newStatus,
-        })
-        .eq('id', bookingId)
-
-      if (updateError) {
-        console.error(
-          'UPDATE BOOKING ERROR:',
-          updateError,
-        )
-
-        alert(
-          updateError.message ||
-            'Не удалось изменить статус.',
-        )
-
-        return
-      }
-
-      setBookings((current) =>
-        current.map((booking) =>
-          booking.id === bookingId
-            ? {
-                ...booking,
-                status: newStatus,
-              }
-            : booking,
-        ),
+      setUpdatingId(
+        bookingId,
       )
-    } finally {
-      setUpdatingId(null)
-    }
-  }
 
-  const cancelBooking = async (
-    bookingId: string | number,
-  ) => {
-    const confirmed = window.confirm(
-      'Отменить эту бронь?\n\nПосле отмены время снова будет доступно для бронирования.',
-    )
+      try {
+        const {
+          error: updateError,
+        } =
+          await supabase
+            .from('bookings')
+            .update({
+              status:
+                'cancelled',
+            })
+            .eq(
+              'id',
+              bookingId,
+            )
 
-    if (!confirmed) return
+        if (updateError) {
+          console.error(
+            'CANCEL BOOKING ERROR:',
+            updateError,
+          )
 
-    setUpdatingId(bookingId)
+          alert(
+            updateError.message ||
+              'Не удалось отменить бронь.',
+          )
 
-    try {
-      const {
-        error: updateError,
-      } = await supabase
-        .from('bookings')
-        .update({
-          status: 'cancelled',
-        })
-        .eq('id', bookingId)
+          return
+        }
 
-      if (updateError) {
-        console.error(
-          'CANCEL BOOKING ERROR:',
-          updateError,
+        setBookings(
+          (current) =>
+            current.map(
+              (booking) =>
+                booking.id ===
+                bookingId
+                  ? {
+                      ...booking,
+                      status:
+                        'cancelled',
+                    }
+                  : booking,
+            ),
         )
-
-        alert(
-          updateError.message ||
-            'Не удалось отменить бронь.',
-        )
-
-        return
+      } finally {
+        setUpdatingId(null)
       }
-
-      setBookings((current) =>
-        current.map((booking) =>
-          booking.id === bookingId
-            ? {
-                ...booking,
-                status: 'cancelled',
-              }
-            : booking,
-        ),
-      )
-    } finally {
-      setUpdatingId(null)
     }
-  }
 
   const openEdit = (
     booking: Booking,
   ) => {
-    setEditingBooking(booking)
+    setEditingBooking(
+      booking,
+    )
 
     setEditForm({
-      name: booking.name || '',
-      phone: booking.phone || '',
+      name:
+        booking.name || '',
+      phone:
+        booking.phone || '',
       booking_date:
-        booking.booking_date || '',
+        booking.booking_date ||
+        '',
       booking_time:
-        booking.booking_time || '',
+        booking.booking_time ||
+        '',
       guests: Math.max(
         1,
-        Number(booking.guests || 2),
+        Number(
+          booking.guests || 2,
+        ),
       ),
-      message: booking.message || '',
+      message:
+        booking.message || '',
     })
   }
 
   const closeEdit = () => {
     if (savingEdit) return
 
-    setEditingBooking(null)
+    setEditingBooking(
+      null,
+    )
   }
 
-  const saveEdit = async () => {
-    if (!editingBooking) return
+  const saveEdit =
+    async () => {
+      if (!editingBooking)
+        return
 
-    const name =
-      editForm.name.trim()
+      const name =
+        editForm.name.trim()
 
-    const phone =
-      editForm.phone.trim()
+      const phone =
+        editForm.phone.trim()
 
-    const bookingDate =
-      editForm.booking_date
+      const bookingDate =
+        editForm.booking_date
 
-    const bookingTime =
-      editForm.booking_time
+      const bookingTime =
+        editForm.booking_time
 
-    const guests = Math.max(
-      1,
-      Number(editForm.guests || 1),
-    )
-
-    const message =
-      editForm.message.trim()
-
-    if (!name) {
-      alert('Введите имя клиента.')
-      return
-    }
-
-    if (!phone) {
-      alert('Введите телефон клиента.')
-      return
-    }
-
-    if (!bookingDate) {
-      alert('Выберите дату.')
-      return
-    }
-
-    if (!bookingTime) {
-      alert('Выберите время.')
-      return
-    }
-
-    if (
-      !Number.isFinite(guests) ||
-      guests > 50
-    ) {
-      alert(
-        'Количество гостей должно быть от 1 до 50.',
-      )
-      return
-    }
-
-    const cartItems = parseCart(
-      editingBooking.cart,
-    )
-
-    const saunaItem = cartItems.find(
-      (item) => {
-        const id =
-          item.id?.toLowerCase()
-
-        return (
-          id === 'sauna-rental' ||
-          id === 'sauna'
-        )
-      },
-    )
-
-    let durationMinutes =
-      Number(
-        editingBooking.duration_minutes ||
-          0,
-      )
-
-    if (saunaItem) {
-      const saunaHours = Math.max(
-        3,
-        Number(
-          saunaItem.quantity || 3,
-        ),
-      )
-
-      durationMinutes =
-        saunaHours * 60
-    }
-
-    if (!durationMinutes) {
-      durationMinutes = 180
-    }
-
-    const bookingStart =
-      `${bookingDate} ${bookingTime}:00`
-
-    const bookingEnd =
-      getBookingEnd(
-        bookingDate,
-        bookingTime,
-        durationMinutes,
-      )
-
-    if (
-      editingBooking.status !==
-      'cancelled'
-    ) {
-      const {
-        data: existingBookings,
-        error: conflictError,
-      } = await supabase
-        .from('bookings')
-        .select(
-          'id, booking_start, booking_end, status',
-        )
-        .neq(
-          'id',
-          editingBooking.id,
+      const guests =
+        Math.max(
+          1,
+          Number(
+            editForm.guests || 1,
+          ),
         )
 
-      if (conflictError) {
-        console.error(
-          'CHECK CONFLICT ERROR:',
-          conflictError,
-        )
+      const message =
+        editForm.message.trim()
 
+      if (!name) {
         alert(
-          conflictError.message ||
-            'Не удалось проверить занятость времени.',
+          'Введите имя клиента.',
         )
-
         return
       }
 
-      const newStart =
-        parseLocalDateTime(
-          bookingStart,
+      if (!phone) {
+        alert(
+          'Введите телефон клиента.',
+        )
+        return
+      }
+
+      if (!bookingDate) {
+        alert(
+          'Выберите дату.',
+        )
+        return
+      }
+
+      if (!bookingTime) {
+        alert(
+          'Выберите время.',
+        )
+        return
+      }
+
+      if (
+        !Number.isFinite(
+          guests,
+        ) ||
+        guests > 50
+      ) {
+        alert(
+          'Количество гостей должно быть от 1 до 50.',
+        )
+        return
+      }
+
+      const cartItems =
+        parseCart(
+          editingBooking.cart,
         )
 
-      const newEnd =
-        parseLocalDateTime(
-          bookingEnd,
-        )
-
-      const hasConflict =
-        (existingBookings || [])
-          .filter(
-            (booking) =>
-              booking.status !==
-                'cancelled' &&
-              booking.booking_start &&
-              booking.booking_end,
-          )
-          .some((booking) => {
-            const existingStart =
-              parseLocalDateTime(
-                booking.booking_start,
-              )
-
-            const existingEnd =
-              parseLocalDateTime(
-                booking.booking_end,
-              )
+      const saunaItem =
+        cartItems.find(
+          (item) => {
+            const id =
+              item.id?.toLowerCase()
 
             return (
-              newStart <
-                existingEnd &&
-              newEnd >
-                existingStart
+              id ===
+                'sauna-rental' ||
+              id === 'sauna'
             )
-          })
-
-      if (hasConflict) {
-        alert(
-          'Это время уже занято другой бронью.\n\nПожалуйста, выберите другое время.',
+          },
         )
 
-        return
-      }
-    }
+      let durationMinutes =
+        Number(
+          editingBooking.duration_minutes ||
+            0,
+        )
 
-    const cartTotal =
-      cartItems.reduce(
-        (sum, item) => {
-          const price = Number(
-            item.price || 0,
-          )
-
-          const quantity = Math.max(
-            1,
+      if (saunaItem) {
+        const saunaHours =
+          Math.max(
+            3,
             Number(
-              item.quantity || 1,
+              saunaItem.quantity ||
+                3,
             ),
           )
 
-          return (
-            sum +
-            price * quantity
+        durationMinutes =
+          saunaHours * 60
+      }
+
+      if (!durationMinutes) {
+        durationMinutes = 180
+      }
+
+      const bookingStart =
+        `${bookingDate} ${bookingTime}:00`
+
+      const bookingEnd =
+        getBookingEnd(
+          bookingDate,
+          bookingTime,
+          durationMinutes,
+        )
+
+      if (
+        editingBooking.status !==
+        'cancelled'
+      ) {
+        const {
+          data: existingBookings,
+          error:
+            conflictError,
+        } =
+          await supabase
+            .from('bookings')
+            .select(
+              'id, booking_start, booking_end, status',
+            )
+            .neq(
+              'id',
+              editingBooking.id,
+            )
+
+        if (conflictError) {
+          console.error(
+            'CHECK CONFLICT ERROR:',
+            conflictError,
           )
-        },
-        0,
-      )
 
-    const guestSurcharge =
-      Math.max(0, guests - 8) * 50
+          alert(
+            conflictError.message ||
+              'Не удалось проверить занятость времени.',
+          )
 
-    const finalTotal =
-      cartTotal + guestSurcharge
+          return
+        }
 
-    setSavingEdit(true)
-
-    try {
-      const {
-        data: updatedBooking,
-        error: updateError,
-      } = await supabase
-        .from('bookings')
-        .update({
-          name,
-          phone,
-          booking_date:
-            bookingDate,
-          booking_time:
-            bookingTime,
-          booking_start:
+        const newStart =
+          parseLocalDateTime(
             bookingStart,
-          booking_end:
+          )
+
+        const newEnd =
+          parseLocalDateTime(
             bookingEnd,
-          duration_minutes:
-            durationMinutes,
-          guests,
-          message,
-          total: finalTotal,
-        })
-        .eq(
-          'id',
-          editingBooking.id,
-        )
-        .select('*')
-        .single()
+          )
 
-      if (updateError) {
-        console.error(
-          'SAVE EDIT ERROR:',
-          updateError,
-        )
+        const hasConflict =
+          (
+            existingBookings ||
+            []
+          )
+            .filter(
+              (booking) =>
+                booking.status !==
+                  'cancelled' &&
+                booking.booking_start &&
+                booking.booking_end,
+            )
+            .some(
+              (booking) => {
+                const existingStart =
+                  parseLocalDateTime(
+                    booking.booking_start,
+                  )
 
-        if (
-          updateError.code ===
-          '23P01'
-        ) {
+                const existingEnd =
+                  parseLocalDateTime(
+                    booking.booking_end,
+                  )
+
+                return (
+                  newStart <
+                    existingEnd &&
+                  newEnd >
+                    existingStart
+                )
+              },
+            )
+
+        if (hasConflict) {
           alert(
             'Это время уже занято другой бронью.\n\nПожалуйста, выберите другое время.',
           )
-        } else {
-          alert(
-            updateError.message ||
-              'Не удалось сохранить изменения.',
+
+          return
+        }
+      }
+
+      const cartTotal =
+        cartItems.reduce(
+          (sum, item) => {
+            const price =
+              Number(
+                item.price || 0,
+              )
+
+            const quantity =
+              Math.max(
+                1,
+                Number(
+                  item.quantity ||
+                    1,
+                ),
+              )
+
+            return (
+              sum +
+              price *
+                quantity
+            )
+          },
+          0,
+        )
+
+      const guestSurcharge =
+        Math.max(
+          0,
+          guests - 8,
+        ) * 50
+
+      const finalTotal =
+        cartTotal +
+        guestSurcharge
+
+      setSavingEdit(true)
+
+      try {
+        const {
+          data:
+            updatedBooking,
+          error:
+            updateError,
+        } =
+          await supabase
+            .from('bookings')
+            .update({
+              name,
+              phone,
+              booking_date:
+                bookingDate,
+              booking_time:
+                bookingTime,
+              booking_start:
+                bookingStart,
+              booking_end:
+                bookingEnd,
+              duration_minutes:
+                durationMinutes,
+              guests,
+              message,
+              total:
+                finalTotal,
+            })
+            .eq(
+              'id',
+              editingBooking.id,
+            )
+            .select('*')
+            .single()
+
+        if (updateError) {
+          console.error(
+            'SAVE EDIT ERROR:',
+            updateError,
           )
+
+          if (
+            updateError.code ===
+            '23P01'
+          ) {
+            alert(
+              'Это время уже занято другой бронью.\n\nПожалуйста, выберите другое время.',
+            )
+          } else {
+            alert(
+              updateError.message ||
+                'Не удалось сохранить изменения.',
+            )
+          }
+
+          return
         }
 
+        setBookings(
+          (current) =>
+            current.map(
+              (booking) =>
+                booking.id ===
+                editingBooking.id
+                  ? (updatedBooking as Booking)
+                  : booking,
+            ),
+        )
+
+        setSelectedDate(
+          bookingDate,
+        )
+
+        setCalendarMonth(
+          new Date(
+            Number(
+              bookingDate.slice(
+                0,
+                4,
+              ),
+            ),
+            Number(
+              bookingDate.slice(
+                5,
+                7,
+              ),
+            ) - 1,
+            1,
+          ),
+        )
+
+        setEditingBooking(
+          null,
+        )
+
+        alert(
+          'Бронь успешно изменена.',
+        )
+      } finally {
+        setSavingEdit(
+          false,
+        )
+      }
+    }
+
+  /* CLIENT EDIT */
+
+  const openClientEdit = (
+    client: ClientRecord,
+  ) => {
+    setEditingClient(
+      client,
+    )
+
+    setClientEditForm({
+      name:
+        client.name ===
+        'Без имени'
+          ? ''
+          : client.name,
+      phone:
+        client.phone || '',
+    })
+  }
+
+  const closeClientEdit =
+    () => {
+      if (savingClient)
+        return
+
+      setEditingClient(
+        null,
+      )
+    }
+
+  const saveClientEdit =
+    async () => {
+      if (!editingClient)
+        return
+
+      const name =
+        clientEditForm.name.trim()
+
+      const phone =
+        clientEditForm.phone.trim()
+
+      if (!name) {
+        alert(
+          'Введите имя клиента.',
+        )
         return
       }
 
-      setBookings((current) =>
-        current.map((booking) =>
-          booking.id ===
-          editingBooking.id
-            ? (updatedBooking as Booking)
-            : booking,
-        ),
-      )
+      if (!phone) {
+        alert(
+          'Введите телефон клиента.',
+        )
+        return
+      }
 
-      setSelectedDate(
-        bookingDate,
-      )
+      const bookingIds =
+        editingClient.bookings.map(
+          (booking) =>
+            booking.id,
+        )
 
-      setCalendarMonth(
-        new Date(
-          Number(
-            bookingDate.slice(0, 4),
-          ),
-          Number(
-            bookingDate.slice(5, 7),
-          ) - 1,
-          1,
-        ),
-      )
+      if (
+        bookingIds.length ===
+        0
+      ) {
+        alert(
+          'У клиента нет бронирований для изменения.',
+        )
+        return
+      }
 
-      setEditingBooking(null)
+      setSavingClient(true)
 
-      alert(
-        'Бронь успешно изменена.',
-      )
-    } finally {
-      setSavingEdit(false)
+      try {
+        const {
+          error:
+            updateError,
+        } =
+          await supabase
+            .from('bookings')
+            .update({
+              name,
+              phone,
+            })
+            .in(
+              'id',
+              bookingIds,
+            )
+
+        if (updateError) {
+          console.error(
+            'SAVE CLIENT ERROR:',
+            updateError,
+          )
+
+          alert(
+            updateError.message ||
+              'Не удалось сохранить данные клиента.',
+          )
+
+          return
+        }
+
+        setBookings(
+          (current) =>
+            current.map(
+              (booking) =>
+                bookingIds.includes(
+                  booking.id,
+                )
+                  ? {
+                      ...booking,
+                      name,
+                      phone,
+                    }
+                  : booking,
+            ),
+        )
+
+        setEditingClient(
+          null,
+        )
+
+        alert(
+          'Данные клиента успешно изменены.',
+        )
+      } catch (err) {
+        console.error(
+          'SAVE CLIENT ERROR:',
+          err,
+        )
+
+        alert(
+          'Произошла ошибка при сохранении клиента.',
+        )
+      } finally {
+        setSavingClient(
+          false,
+        )
+      }
     }
-  }
 
-  const logout = async () => {
-    await supabase.auth.signOut()
+  const logout =
+    async () => {
+      await supabase.auth.signOut()
 
-    router.replace('/admin/login')
-    router.refresh()
-  }
+      router.replace(
+        '/admin/login',
+      )
+
+      router.refresh()
+    }
 
   const selectedDayBookings =
     useMemo(() => {
@@ -1094,9 +1515,11 @@ export default function AdminPage() {
         )
         .sort((a, b) =>
           (
-            a.booking_time || ''
+            a.booking_time ||
+            ''
           ).localeCompare(
-            b.booking_time || '',
+            b.booking_time ||
+              '',
           ),
         )
     }, [
@@ -1116,9 +1539,11 @@ export default function AdminPage() {
         )
         .sort((a, b) =>
           (
-            a.booking_time || ''
+            a.booking_time ||
+            ''
           ).localeCompare(
-            b.booking_time || '',
+            b.booking_time ||
+              '',
           ),
         )
     }, [
@@ -1126,13 +1551,14 @@ export default function AdminPage() {
       selectedDate,
     ])
 
-  const calendarDays = useMemo(
-    () =>
-      getCalendarDays(
-        calendarMonth,
-      ),
-    [calendarMonth],
-  )
+  const calendarDays =
+    useMemo(
+      () =>
+        getCalendarDays(
+          calendarMonth,
+        ),
+      [calendarMonth],
+    )
 
   const hasBookingOnDate = (
     date: Date,
@@ -1149,27 +1575,31 @@ export default function AdminPage() {
     )
   }
 
-  const goPreviousMonth = () => {
-    setCalendarMonth(
-      (current) =>
-        new Date(
-          current.getFullYear(),
-          current.getMonth() - 1,
-          1,
-        ),
-    )
-  }
+  const goPreviousMonth =
+    () => {
+      setCalendarMonth(
+        (current) =>
+          new Date(
+            current.getFullYear(),
+            current.getMonth() -
+              1,
+            1,
+          ),
+      )
+    }
 
-  const goNextMonth = () => {
-    setCalendarMonth(
-      (current) =>
-        new Date(
-          current.getFullYear(),
-          current.getMonth() + 1,
-          1,
-        ),
-    )
-  }
+  const goNextMonth =
+    () => {
+      setCalendarMonth(
+        (current) =>
+          new Date(
+            current.getFullYear(),
+            current.getMonth() +
+              1,
+            1,
+          ),
+      )
+    }
 
   const goToday = () => {
     const today = new Date()
@@ -1196,76 +1626,160 @@ export default function AdminPage() {
           'cancelled',
     ).length
 
-  const clients = useMemo<ClientRecord[]>(() => {
-    const map = new Map<string, ClientRecord>()
+  const clients =
+    useMemo<ClientRecord[]>(
+      () => {
+        const map =
+          new Map<
+            string,
+            ClientRecord
+          >()
 
-    bookings.forEach((booking) => {
-      const phone = booking.phone?.trim() || ''
-      const normalizedPhone = phone.replace(/\D/g, '')
-      const normalizedName =
-        booking.name?.trim().toLowerCase() || 'без имени'
-      const key = normalizedPhone
-        ? `phone:${normalizedPhone}`
-        : `name:${normalizedName}`
+        bookings.forEach(
+          (booking) => {
+            const phone =
+              booking.phone?.trim() ||
+              ''
 
-      if (!map.has(key)) {
-        map.set(key, {
-          key,
-          name: booking.name?.trim() || 'Без имени',
-          phone,
-          bookings: [],
-          visits: 0,
-          totalSpent: 0,
-          lastVisit: null,
-          services: [],
-        })
-      }
+            const normalizedPhone =
+              phone.replace(
+                /\D/g,
+                '',
+              )
 
-      const client = map.get(key)!
-      client.bookings.push(booking)
+            const normalizedName =
+              booking.name
+                ?.trim()
+                .toLowerCase() ||
+              'без имени'
 
-      if (booking.name?.trim()) {
-        client.name = booking.name.trim()
-      }
-      if (phone) {
-        client.phone = phone
-      }
+            const key =
+              normalizedPhone
+                ? `phone:${normalizedPhone}`
+                : `name:${normalizedName}`
 
-      if (booking.status !== 'cancelled') {
-        client.visits += 1
-        client.totalSpent += Number(booking.total || 0)
+            if (!map.has(key)) {
+              map.set(key, {
+                key,
+                name:
+                  booking.name?.trim() ||
+                  'Без имени',
+                phone,
+                bookings: [],
+                visits: 0,
+                totalSpent: 0,
+                lastVisit:
+                  null,
+                services: [],
+              })
+            }
 
-        if (booking.booking_date) {
-          if (!client.lastVisit || booking.booking_date > client.lastVisit) {
-            client.lastVisit = booking.booking_date
-          }
-        }
+            const client =
+              map.get(key)!
 
-        parseCart(booking.cart).forEach((item) => {
-          const serviceName = getServiceName(item)
-          const quantity = Math.max(1, Number(item.quantity || 1))
-          const existing = client.services.find(
-            (service) => service.name === serviceName,
-          )
+            client.bookings.push(
+              booking,
+            )
 
-          if (existing) {
-            existing.quantity += quantity
-          } else {
-            client.services.push({
-              name: serviceName,
-              quantity,
-            })
-          }
-        })
-      }
-    })
+            if (
+              booking.name?.trim()
+            ) {
+              client.name =
+                booking.name.trim()
+            }
 
-    return Array.from(map.values()).sort((a, b) => {
-      const dateA = a.lastVisit || ''
-      const dateB = b.lastVisit || ''
-      return dateB.localeCompare(dateA)
-    })
-  }, [bookings])
+            if (phone) {
+              client.phone =
+                phone
+            }
+
+            if (
+              booking.status !==
+              'cancelled'
+            ) {
+              client.visits +=
+                1
+
+              client.totalSpent +=
+                Number(
+                  booking.total ||
+                    0,
+                )
+
+              if (
+                booking.booking_date
+              ) {
+                if (
+                  !client.lastVisit ||
+                  booking.booking_date >
+                    client.lastVisit
+                ) {
+                  client.lastVisit =
+                    booking.booking_date
+                }
+              }
+
+              parseCart(
+                booking.cart,
+              ).forEach(
+                (item) => {
+                  const serviceName =
+                    getServiceName(
+                      item,
+                    )
+
+                  const quantity =
+                    Math.max(
+                      1,
+                      Number(
+                        item.quantity ||
+                          1,
+                      ),
+                    )
+
+                  const existing =
+                    client.services.find(
+                      (service) =>
+                        service.name ===
+                        serviceName,
+                    )
+
+                  if (existing) {
+                    existing.quantity +=
+                      quantity
+                  } else {
+                    client.services.push(
+                      {
+                        name:
+                          serviceName,
+                        quantity,
+                      },
+                    )
+                  }
+                },
+              )
+            }
+          },
+        )
+
+        return Array.from(
+          map.values(),
+        ).sort(
+          (a, b) => {
+            const dateA =
+              a.lastVisit || ''
+
+            const dateB =
+              b.lastVisit || ''
+
+            return dateB.localeCompare(
+              dateA,
+            )
+          },
+        )
+      },
+      [bookings],
+    )
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#110d0b] text-foreground">
@@ -1292,8 +1806,12 @@ export default function AdminPage() {
             <div className="grid grid-cols-2 gap-2 sm:flex sm:gap-3">
               <button
                 type="button"
-                onClick={loadBookings}
-                disabled={loading}
+                onClick={
+                  loadBookings
+                }
+                disabled={
+                  loading
+                }
                 className="flex min-h-11 items-center justify-center gap-2 rounded-full border border-primary/30 px-3 py-3 text-[10px] font-medium uppercase tracking-wider text-primary transition active:scale-[0.98] hover:bg-primary hover:text-black disabled:cursor-not-allowed disabled:opacity-50 sm:px-5 sm:text-xs sm:tracking-widest"
               >
                 <RefreshCw
@@ -1303,6 +1821,7 @@ export default function AdminPage() {
                       : ''
                   }`}
                 />
+
                 {loading
                   ? 'Загрузка'
                   : 'Обновить'}
@@ -1310,7 +1829,9 @@ export default function AdminPage() {
 
               <button
                 type="button"
-                onClick={logout}
+                onClick={
+                  logout
+                }
                 className="min-h-11 rounded-full border border-red-500/30 px-3 py-3 text-[10px] font-medium uppercase tracking-wider text-red-300 transition active:scale-[0.98] hover:bg-red-500 hover:text-white sm:px-5 sm:text-xs sm:tracking-widest"
               >
                 Выйти
@@ -1320,12 +1841,18 @@ export default function AdminPage() {
         </header>
 
         {/* NAVIGATION */}
+
         <div className="mb-5 flex gap-2 rounded-2xl border border-primary/15 bg-[#15100e] p-2 sm:mb-8 sm:max-w-xl">
           <button
             type="button"
-            onClick={() => setActiveView('bookings')}
+            onClick={() =>
+              setActiveView(
+                'bookings',
+              )
+            }
             className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-xs font-medium transition ${
-              activeView === 'bookings'
+              activeView ===
+              'bookings'
                 ? 'bg-primary text-black'
                 : 'text-muted-foreground hover:text-primary'
             }`}
@@ -1333,893 +1860,767 @@ export default function AdminPage() {
             <CalendarDays className="h-4 w-4" />
             Бронирования
           </button>
+
           <button
             type="button"
-            onClick={() => setActiveView('clients')}
+            onClick={() =>
+              setActiveView(
+                'clients',
+              )
+            }
             className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-xs font-medium transition ${
-              activeView === 'clients'
+              activeView ===
+              'clients'
                 ? 'bg-primary text-black'
                 : 'text-muted-foreground hover:text-primary'
             }`}
           >
             <Users className="h-4 w-4" />
             Клиенты
+
             <span className="rounded-full bg-black/20 px-2 py-0.5 text-[10px]">
               {clients.length}
             </span>
           </button>
         </div>
 
-        {activeView === 'bookings' ? (
+        {activeView ===
+        'bookings' ? (
           <>
-        {/* STATS */}
+            {/* STATS */}
 
-        <div className="mb-5 grid grid-cols-2 gap-2 sm:mb-8 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
-          {[
-            {
-              label: 'Всего',
-              value: bookings.length,
-            },
-            {
-              label: 'Новые',
-              value: bookings.filter(
-                (booking) =>
-                  !booking.status ||
-                  booking.status ===
-                    'new',
-              ).length,
-            },
-            {
-              label: 'Подтверждены',
-              value: bookings.filter(
-                (booking) =>
-                  booking.status ===
-                  'confirmed',
-              ).length,
-            },
-            {
-              label: 'Отменены',
-              value: bookings.filter(
-                (booking) =>
-                  booking.status ===
-                  'cancelled',
-              ).length,
-            },
-          ].map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-2xl border border-primary/15 bg-[#15100e] p-3 sm:p-5"
-            >
-              <p className="text-[9px] uppercase tracking-widest text-muted-foreground sm:text-xs">
-                {stat.label}
-              </p>
-
-              <p className="mt-1 font-serif text-2xl text-primary sm:mt-2 sm:text-3xl">
-                {stat.value}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        {error && (
-          <div className="mb-5 rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-300 sm:mb-6 sm:p-5">
-            {error}
-          </div>
-        )}
-
-        {/* CALENDAR */}
-
-        <section className="mb-7 rounded-3xl border border-primary/15 bg-[#15100e] p-3 sm:mb-10 sm:p-6">
-          <div className="mb-4 flex items-center justify-between gap-2 sm:mb-6">
-            <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <CalendarDays className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
-
-                <p className="text-[10px] uppercase tracking-[0.2em] text-primary sm:text-xs sm:tracking-[0.25em]">
-                  Календарь
-                </p>
-              </div>
-
-              <h2 className="mt-1 truncate font-serif text-xl capitalize sm:text-3xl">
-                {getMonthName(
-                  calendarMonth,
-                )}
-              </h2>
-            </div>
-
-            <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-              <button
-                type="button"
-                onClick={
-                  goPreviousMonth
-                }
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/20 text-primary transition active:scale-95 hover:bg-primary hover:text-black"
-                aria-label="Предыдущий месяц"
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </button>
-
-              <button
-                type="button"
-                onClick={goToday}
-                className="h-10 rounded-full border border-primary/20 px-3 text-[9px] uppercase tracking-wider text-primary transition active:scale-95 hover:bg-primary hover:text-black sm:px-4 sm:text-xs sm:tracking-widest"
-              >
-                Сегодня
-              </button>
-
-              <button
-                type="button"
-                onClick={goNextMonth}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/20 text-primary transition active:scale-95 hover:bg-primary hover:text-black"
-                aria-label="Следующий месяц"
-              >
-                <ChevronRight className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
-
-          {/* WEEK DAYS */}
-
-          <div className="mb-1 grid grid-cols-7 gap-1 sm:mb-2 sm:gap-2">
-            {[
-              'Пн',
-              'Вт',
-              'Ср',
-              'Чт',
-              'Пт',
-              'Сб',
-              'Вс',
-            ].map((day) => (
-              <div
-                key={day}
-                className="py-1.5 text-center text-[9px] uppercase tracking-wider text-muted-foreground sm:py-2 sm:text-xs sm:tracking-widest"
-              >
-                {day}
-              </div>
-            ))}
-          </div>
-
-          {/* DAYS */}
-
-          <div className="grid grid-cols-7 gap-1 sm:gap-2">
-            {calendarDays.map(
-              (date, index) => {
-                const dateString =
-                  dateToString(date)
-
-                const currentMonth =
-                  date.getMonth() ===
-                    calendarMonth.getMonth() &&
-                  date.getFullYear() ===
-                    calendarMonth.getFullYear()
-
-                const selected =
-                  dateString ===
-                  selectedDate
-
-                const today =
-                  dateString ===
-                  getTodayString()
-
-                const hasBooking =
-                  hasBookingOnDate(
-                    date,
-                  )
-
-                return (
-                  <button
-                    key={`${dateString}-${index}`}
-                    type="button"
-                    onClick={() => {
-                      setSelectedDate(
-                        dateString,
-                      )
-
-                      if (
-                        !currentMonth
-                      ) {
-                        setCalendarMonth(
-                          new Date(
-                            date.getFullYear(),
-                            date.getMonth(),
-                            1,
-                          ),
-                        )
-                      }
-                    }}
-                    className={`relative min-h-[48px] rounded-lg border p-1.5 text-left transition active:scale-[0.97] sm:min-h-[76px] sm:rounded-xl sm:p-2 ${
-                      selected
-                        ? 'border-primary bg-primary/15'
-                        : 'border-primary/10 hover:border-primary/40 hover:bg-primary/5'
-                    } ${
-                      !currentMonth
-                        ? 'opacity-25'
-                        : ''
-                    }`}
-                  >
-                    <span
-                      className={`text-xs sm:text-sm ${
-                        today
-                          ? 'font-bold text-primary'
-                          : ''
-                      }`}
-                    >
-                      {date.getDate()}
-                    </span>
-
-                    {today && (
-                      <span className="absolute right-1 top-1 hidden text-[7px] uppercase tracking-widest text-primary sm:block">
-                        сегодня
-                      </span>
-                    )}
-
-                    {hasBooking && (
-                      <div className="absolute bottom-1.5 left-1.5 right-1.5 sm:bottom-2 sm:left-2 sm:right-2">
-                        <div className="h-1 rounded-full bg-primary sm:h-1.5" />
-
-                        <span className="mt-1 hidden text-[9px] text-primary sm:block">
-                          Есть бронь
-                        </span>
-                      </div>
-                    )}
-                  </button>
-                )
-              },
-            )}
-          </div>
-
-          {/* SELECTED DATE */}
-
-          <div className="mt-4 rounded-2xl border border-primary/15 bg-[#0e0a08] p-3 sm:mt-6 sm:p-4">
-            <div className="flex items-center justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-[9px] uppercase tracking-widest text-muted-foreground sm:text-[10px]">
-                  Выбранная дата
-                </p>
-
-                <p className="mt-1 font-serif text-xl text-primary sm:text-2xl">
-                  {formatDate(
-                    selectedDate,
-                  )}
-                </p>
-              </div>
-
-              <div className="shrink-0 rounded-full border border-primary/15 px-3 py-2 text-xs text-muted-foreground">
-                Занято:{' '}
-                <span className="text-primary">
-                  {
-                    selectedDayBookings.length
-                  }
-                </span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* SELECTED DAY */}
-
-        <section className="mb-8 sm:mb-10">
-          <div className="mb-4">
-            <div className="flex items-center gap-2">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-primary sm:text-xs sm:tracking-[0.25em]">
-                Занятость
-              </p>
-
-              {selectedDate ===
-                getTodayString() && (
-                <span className="rounded-full bg-primary/10 px-2 py-1 text-[8px] uppercase tracking-widest text-primary">
-                  Сегодня
-                </span>
-              )}
-            </div>
-
-            <h2 className="mt-1 font-serif text-2xl sm:text-3xl">
-              {formatDate(
-                selectedDate,
-              )}
-            </h2>
-          </div>
-
-          {selectedDayBookings.length ===
-          0 ? (
-            <div className="rounded-2xl border border-green-500/20 bg-green-500/5 p-5 sm:p-6">
-              <p className="font-serif text-xl text-green-300 sm:text-2xl">
-                День свободен
-              </p>
-
-              <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
-                На выбранную дату активных бронирований нет.
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-2.5 sm:space-y-3">
-              {selectedDayBookings.map(
-                (booking) => (
+            <div className="mb-5 grid grid-cols-2 gap-2 sm:mb-8 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+              {[
+                {
+                  label:
+                    'Всего',
+                  value:
+                    bookings.length,
+                },
+                {
+                  label:
+                    'Новые',
+                  value:
+                    bookings.filter(
+                      (booking) =>
+                        !booking.status ||
+                        booking.status ===
+                          'new',
+                    ).length,
+                },
+                {
+                  label:
+                    'Подтверждены',
+                  value:
+                    bookings.filter(
+                      (booking) =>
+                        booking.status ===
+                        'confirmed',
+                    ).length,
+                },
+                {
+                  label:
+                    'Отменены',
+                  value:
+                    bookings.filter(
+                      (booking) =>
+                        booking.status ===
+                        'cancelled',
+                    ).length,
+                },
+              ].map(
+                (stat) => (
                   <div
-                    key={`calendar-${booking.id}`}
-                    className="rounded-2xl border border-primary/20 bg-[#15100e] p-3 sm:p-5"
+                    key={
+                      stat.label
+                    }
+                    className="rounded-2xl border border-primary/15 bg-[#15100e] p-3 sm:p-5"
                   >
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="flex min-w-0 items-center gap-3">
-                        <div className="shrink-0">
-                          <p className="font-serif text-2xl text-primary sm:text-3xl">
-                            {formatTime(
-                              booking.booking_time,
-                            )}
-                          </p>
+                    <p className="text-[9px] uppercase tracking-widest text-muted-foreground sm:text-xs">
+                      {
+                        stat.label
+                      }
+                    </p>
 
-                          <p className="text-[10px] text-muted-foreground sm:text-xs">
-                            {booking.booking_end
-                              ? `до ${formatTime(
-                                  booking.booking_end,
-                                )}`
-                              : booking.duration_minutes
-                                ? `${booking.duration_minutes / 60} ч.`
-                                : ''}
-                          </p>
-                        </div>
-
-                        <div className="min-w-0 border-l border-primary/10 pl-3">
-                          <p className="truncate text-sm font-medium sm:text-base">
-                            {booking.name ||
-                              'Без имени'}
-                          </p>
-
-                          <p className="text-xs text-muted-foreground">
-                            {booking.guests ||
-                              0}{' '}
-                            гостей
-                          </p>
-                        </div>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setExpandedId(
-                            booking.id,
-                          )
-
-                          window.scrollTo({
-                            top:
-                              document.body
-                                .scrollHeight,
-                            behavior:
-                              'smooth',
-                          })
-                        }}
-                        className="shrink-0 rounded-full border border-primary/20 px-3 py-2 text-[9px] uppercase tracking-wider text-primary transition active:scale-95 hover:bg-primary hover:text-black sm:px-4 sm:text-xs sm:tracking-widest"
-                      >
-                        Подробнее
-                      </button>
-                    </div>
-
-                    <div className="mt-3 flex items-center justify-between border-t border-primary/10 pt-3">
-                      <span
-                        className={`rounded-full border px-2.5 py-1 text-[10px] ${getStatusClass(
-                          booking.status,
-                        )}`}
-                      >
-                        {getStatusLabel(
-                          booking.status,
-                        )}
-                      </span>
-
-                      {booking.phone && (
-                        <a
-                          href={`tel:${booking.phone}`}
-                          className="flex items-center gap-1.5 text-xs text-primary"
-                        >
-                          <Phone className="h-3.5 w-3.5" />
-                          Позвонить
-                        </a>
-                      )}
-                    </div>
+                    <p className="mt-1 font-serif text-2xl text-primary sm:mt-2 sm:text-3xl">
+                      {
+                        stat.value
+                      }
+                    </p>
                   </div>
                 ),
               )}
             </div>
-          )}
 
-          {selectedDayCancelledBookings.length >
-            0 && (
-            <div className="mt-4 rounded-2xl border border-red-500/15 bg-red-500/5 p-4 sm:p-5">
-              <p className="mb-3 text-[10px] uppercase tracking-widest text-red-300">
-                Отменённые брони
-              </p>
+            {error && (
+              <div className="mb-5 rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-300 sm:mb-6 sm:p-5">
+                {error}
+              </div>
+            )}
 
-              <div className="space-y-2">
-                {selectedDayCancelledBookings.map(
-                  (booking) => (
+            {/* CALENDAR */}
+
+            <section className="mb-7 rounded-3xl border border-primary/15 bg-[#15100e] p-3 sm:mb-10 sm:p-6">
+              <div className="mb-4 flex items-center justify-between gap-2 sm:mb-6">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <CalendarDays className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
+
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-primary sm:text-xs sm:tracking-[0.25em]">
+                      Календарь
+                    </p>
+                  </div>
+
+                  <h2 className="mt-1 truncate font-serif text-xl capitalize sm:text-3xl">
+                    {getMonthName(
+                      calendarMonth,
+                    )}
+                  </h2>
+                </div>
+
+                <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+                  <button
+                    type="button"
+                    onClick={
+                      goPreviousMonth
+                    }
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/20 text-primary transition active:scale-95 hover:bg-primary hover:text-black"
+                    aria-label="Предыдущий месяц"
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={
+                      goToday
+                    }
+                    className="h-10 rounded-full border border-primary/20 px-3 text-[9px] uppercase tracking-wider text-primary transition active:scale-95 hover:bg-primary hover:text-black sm:px-4 sm:text-xs sm:tracking-widest"
+                  >
+                    Сегодня
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={
+                      goNextMonth
+                    }
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/20 text-primary transition active:scale-95 hover:bg-primary hover:text-black"
+                    aria-label="Следующий месяц"
+                  >
+                    <ChevronRight className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* WEEK DAYS */}
+
+              <div className="mb-1 grid grid-cols-7 gap-1 sm:mb-2 sm:gap-2">
+                {[
+                  'Пн',
+                  'Вт',
+                  'Ср',
+                  'Чт',
+                  'Пт',
+                  'Сб',
+                  'Вс',
+                ].map(
+                  (day) => (
                     <div
-                      key={`cancelled-${booking.id}`}
-                      className="flex items-center justify-between gap-3 text-xs"
+                      key={day}
+                      className="py-1.5 text-center text-[9px] uppercase tracking-wider text-muted-foreground sm:py-2 sm:text-xs sm:tracking-widest"
                     >
-                      <span className="min-w-0 truncate text-muted-foreground">
-                        {formatTime(
-                          booking.booking_time,
-                        )}{' '}
-                        —{' '}
-                        {booking.name ||
-                          'Без имени'}
-                      </span>
-
-                      <span className="shrink-0 text-red-300">
-                        Отменена
-                      </span>
+                      {day}
                     </div>
                   ),
                 )}
               </div>
-            </div>
-          )}
-        </section>
 
-        {/* ALL BOOKINGS */}
+              {/* DAYS */}
 
-        <section>
-          <div className="mb-4">
-            <p className="text-[10px] uppercase tracking-[0.2em] text-primary sm:text-xs sm:tracking-[0.25em]">
-              Все заявки
-            </p>
+              <div className="grid grid-cols-7 gap-1 sm:gap-2">
+                {calendarDays.map(
+                  (
+                    date,
+                    index,
+                  ) => {
+                    const dateString =
+                      dateToString(
+                        date,
+                      )
 
-            <div className="mt-1 flex items-end justify-between gap-3">
-              <h2 className="font-serif text-2xl sm:text-3xl">
-                Бронирования
-              </h2>
+                    const currentMonth =
+                      date.getMonth() ===
+                        calendarMonth.getMonth() &&
+                      date.getFullYear() ===
+                        calendarMonth.getFullYear()
 
-              <span className="shrink-0 text-[10px] text-muted-foreground sm:text-xs">
-                Сегодня:{' '}
-                <span className="text-primary">
-                  {todayBookingsCount}
-                </span>
-              </span>
-            </div>
-          </div>
+                    const selected =
+                      dateString ===
+                      selectedDate
 
-          {/* FILTER PANEL */}
+                    const today =
+                      dateString ===
+                      getTodayString()
 
-          <div className="mb-5 rounded-3xl border border-primary/15 bg-[#15100e] p-3 sm:p-5">
-            {/* SEARCH */}
+                    const hasBooking =
+                      hasBookingOnDate(
+                        date,
+                      )
 
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-
-              <input
-                type="text"
-                value={search}
-                onChange={(event) =>
-                  setSearch(
-                    event.target.value,
-                  )
-                }
-                placeholder="Поиск по имени или телефону..."
-                className="min-h-12 w-full rounded-2xl border border-primary/20 bg-[#0e0a08] py-3 pl-11 pr-10 text-sm outline-none transition placeholder:text-muted-foreground/50 focus:border-primary"
-              />
-
-              {search && (
-                <button
-                  type="button"
-                  onClick={() =>
-                    setSearch('')
-                  }
-                  className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground transition hover:text-primary"
-                  aria-label="Очистить поиск"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              )}
-            </div>
-
-            {/* FILTERS */}
-
-            <div className="mt-3">
-              <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 scrollbar-none">
-                {filters.map(
-                  (item) => (
-                    <button
-                      key={item.value}
-                      type="button"
-                      onClick={() =>
-                        setFilter(
-                          item.value,
-                        )
-                      }
-                      className={`min-h-10 shrink-0 rounded-full border px-4 py-2 text-[10px] transition active:scale-[0.98] sm:text-xs ${
-                        filter ===
-                        item.value
-                          ? 'border-primary bg-primary text-black'
-                          : 'border-primary/20 text-muted-foreground hover:border-primary hover:text-primary'
-                      }`}
-                    >
-                      {item.label}
-                    </button>
-                  ),
-                )}
-              </div>
-            </div>
-
-            {/* RESULT / SORT */}
-
-            <div className="mt-3 flex flex-col gap-2 border-t border-primary/10 pt-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-[11px] text-muted-foreground">
-                Показано:{' '}
-                <span className="font-medium text-primary">
-                  {
-                    filteredBookings.length
-                  }
-                </span>{' '}
-                из{' '}
-                <span className="font-medium text-primary">
-                  {bookings.length}
-                </span>
-              </p>
-
-              <button
-                type="button"
-                onClick={() =>
-                  setSortOrder(
-                    (current) =>
-                      current ===
-                      'asc'
-                        ? 'desc'
-                        : 'asc',
-                  )
-                }
-                className="self-start rounded-full border border-primary/20 px-4 py-2 text-[9px] uppercase tracking-wider text-primary transition active:scale-95 hover:bg-primary hover:text-black sm:self-auto sm:text-xs sm:tracking-widest"
-              >
-                {sortOrder === 'asc'
-                  ? 'Ближайшие ↑'
-                  : 'Поздние ↓'}
-              </button>
-            </div>
-          </div>
-
-          {loading ? (
-            <div className="rounded-2xl border border-primary/15 bg-[#15100e] p-10 text-center text-sm text-muted-foreground">
-              Загружаем бронирования...
-            </div>
-          ) : bookings.length ===
-            0 ? (
-            <div className="rounded-2xl border border-primary/15 bg-[#15100e] p-10 text-center">
-              <p className="font-serif text-xl sm:text-2xl">
-                Бронирований пока нет
-              </p>
-
-              <p className="mt-2 text-xs text-muted-foreground sm:text-sm">
-                Новые заявки появятся здесь.
-              </p>
-            </div>
-          ) : filteredBookings.length ===
-            0 ? (
-            <div className="rounded-2xl border border-primary/15 bg-[#15100e] p-8 text-center sm:p-10">
-              <p className="font-serif text-xl sm:text-2xl">
-                Ничего не найдено
-              </p>
-
-              <p className="mt-2 text-xs text-muted-foreground sm:text-sm">
-                Попробуйте изменить фильтр или поисковый запрос.
-              </p>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setFilter('all')
-                  setSearch('')
-                }}
-                className="mt-5 min-h-11 rounded-full border border-primary/30 px-5 py-3 text-[10px] uppercase tracking-widest text-primary transition active:scale-95 hover:bg-primary hover:text-black"
-              >
-                Сбросить фильтры
-              </button>
-            </div>
-          ) : (
-            <div className="space-y-3 sm:space-y-4">
-              {filteredBookings.map(
-                (booking) => {
-                  const isExpanded =
-                    expandedId ===
-                    booking.id
-
-                  const cartItems =
-                    parseCart(
-                      booking.cart,
-                    )
-
-                  const isCancelled =
-                    booking.status ===
-                    'cancelled'
-
-                  const phoneLink =
-                    getPhoneLink(
-                      booking.phone,
-                    )
-
-                  return (
-                    <div
-                      key={booking.id}
-                      className={`overflow-hidden rounded-2xl border bg-[#15100e] ${
-                        isCancelled
-                          ? 'border-red-500/20'
-                          : 'border-primary/15'
-                      }`}
-                    >
-                      {/* MOBILE / DESKTOP CARD HEADER */}
-
+                    return (
                       <button
+                        key={`${dateString}-${index}`}
                         type="button"
-                        onClick={() =>
-                          setExpandedId(
-                            isExpanded
-                              ? null
-                              : booking.id,
+                        onClick={() => {
+                          setSelectedDate(
+                            dateString,
                           )
-                        }
-                        className="w-full text-left"
+
+                          if (
+                            !currentMonth
+                          ) {
+                            setCalendarMonth(
+                              new Date(
+                                date.getFullYear(),
+                                date.getMonth(),
+                                1,
+                              ),
+                            )
+                          }
+                        }}
+                        className={`relative min-h-[48px] rounded-lg border p-1.5 text-left transition active:scale-[0.97] sm:min-h-[76px] sm:rounded-xl sm:p-2 ${
+                          selected
+                            ? 'border-primary bg-primary/15'
+                            : 'border-primary/10 hover:border-primary/40 hover:bg-primary/5'
+                        } ${
+                          !currentMonth
+                            ? 'opacity-25'
+                            : ''
+                        }`}
                       >
-                        <div className="p-4 sm:p-5">
-                          <div className="flex items-start justify-between gap-3">
-                            <div className="min-w-0">
-                              <div className="flex flex-wrap items-center gap-2">
-                                <span className="font-serif text-2xl text-primary sm:text-3xl">
-                                  {formatTime(
-                                    booking.booking_time,
-                                  )}
-                                </span>
+                        <span
+                          className={`text-xs sm:text-sm ${
+                            today
+                              ? 'font-bold text-primary'
+                              : ''
+                          }`}
+                        >
+                          {date.getDate()}
+                        </span>
 
-                                <span
-                                  className={`rounded-full border px-2.5 py-1 text-[9px] ${getStatusClass(
-                                    booking.status,
-                                  )}`}
-                                >
-                                  {getStatusLabel(
-                                    booking.status,
-                                  )}
-                                </span>
-                              </div>
+                        {today && (
+                          <span className="absolute right-1 top-1 hidden text-[7px] uppercase tracking-widest text-primary sm:block">
+                            сегодня
+                          </span>
+                        )}
 
-                              <p className="mt-1 text-xs text-muted-foreground">
-                                {formatDate(
-                                  booking.booking_date,
-                                )}
-                                {booking.duration_minutes
-                                  ? ` · ${booking.duration_minutes / 60} ч.`
-                                  : ''}
-                              </p>
-                            </div>
+                        {hasBooking && (
+                          <div className="absolute bottom-1.5 left-1.5 right-1.5 sm:bottom-2 sm:left-2 sm:right-2">
+                            <div className="h-1 rounded-full bg-primary sm:h-1.5" />
 
-                            <span className="shrink-0 rounded-full border border-primary/15 px-2.5 py-1 text-[9px] uppercase tracking-wider text-muted-foreground">
-                              #{booking.id}
+                            <span className="mt-1 hidden text-[9px] text-primary sm:block">
+                              Есть бронь
                             </span>
                           </div>
+                        )}
+                      </button>
+                    )
+                  },
+                )}
+              </div>
 
-                          <div className="mt-4 grid grid-cols-2 gap-3 border-t border-primary/10 pt-4 sm:grid-cols-4">
-                            <div className="min-w-0">
-                              <p className="text-[9px] uppercase tracking-widest text-muted-foreground">
-                                Клиент
-                              </p>
+              {/* SELECTED DATE */}
 
-                              <p className="mt-1 truncate text-sm font-medium">
-                                {booking.name ||
-                                  '—'}
-                              </p>
-                            </div>
+              <div className="mt-4 rounded-2xl border border-primary/15 bg-[#0e0a08] p-3 sm:mt-6 sm:p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-[9px] uppercase tracking-widest text-muted-foreground sm:text-[10px]">
+                      Выбранная дата
+                    </p>
 
-                            <div className="min-w-0">
-                              <p className="text-[9px] uppercase tracking-widest text-muted-foreground">
-                                Телефон
-                              </p>
+                    <p className="mt-1 font-serif text-xl text-primary sm:text-2xl">
+                      {formatDate(
+                        selectedDate,
+                      )}
+                    </p>
+                  </div>
 
-                              <p className="mt-1 truncate text-xs text-muted-foreground">
-                                {booking.phone ||
-                                  '—'}
-                              </p>
-                            </div>
+                  <div className="shrink-0 rounded-full border border-primary/15 px-3 py-2 text-xs text-muted-foreground">
+                    Занято:{' '}
+                    <span className="text-primary">
+                      {
+                        selectedDayBookings.length
+                      }
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </section>
 
-                            <div>
-                              <p className="text-[9px] uppercase tracking-widest text-muted-foreground">
-                                Гости
-                              </p>
+            {/* SELECTED DAY */}
 
-                              <p className="mt-1 text-sm">
-                                {booking.guests ||
-                                  '—'}
-                              </p>
-                            </div>
+            <section className="mb-8 sm:mb-10">
+              <div className="mb-4">
+                <div className="flex items-center gap-2">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-primary sm:text-xs sm:tracking-[0.25em]">
+                    Занятость
+                  </p>
 
-                            <div>
-                              <p className="text-[9px] uppercase tracking-widest text-muted-foreground">
-                                Сумма
-                              </p>
+                  {selectedDate ===
+                    getTodayString() && (
+                    <span className="rounded-full bg-primary/10 px-2 py-1 text-[8px] uppercase tracking-widest text-primary">
+                      Сегодня
+                    </span>
+                  )}
+                </div>
 
-                              <p className="mt-1 font-serif text-lg text-primary">
-                                €
-                                {Number(
-                                  booking.total ||
-                                    0,
-                                ).toFixed(
-                                  2,
+                <h2 className="mt-1 font-serif text-2xl sm:text-3xl">
+                  {formatDate(
+                    selectedDate,
+                  )}
+                </h2>
+              </div>
+
+              {selectedDayBookings.length ===
+              0 ? (
+                <div className="rounded-2xl border border-green-500/20 bg-green-500/5 p-5 sm:p-6">
+                  <p className="font-serif text-xl text-green-300 sm:text-2xl">
+                    День свободен
+                  </p>
+
+                  <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
+                    На выбранную дату активных бронирований нет.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-2.5 sm:space-y-3">
+                  {selectedDayBookings.map(
+                    (booking) => (
+                      <div
+                        key={`calendar-${booking.id}`}
+                        className="rounded-2xl border border-primary/20 bg-[#15100e] p-3 sm:p-5"
+                      >
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex min-w-0 items-center gap-3">
+                            <div className="shrink-0">
+                              <p className="font-serif text-2xl text-primary sm:text-3xl">
+                                {formatTime(
+                                  booking.booking_time,
                                 )}
+                              </p>
+
+                              <p className="text-[10px] text-muted-foreground sm:text-xs">
+                                {booking.booking_end
+                                  ? `до ${formatTime(
+                                      booking.booking_end,
+                                    )}`
+                                  : booking.duration_minutes
+                                    ? `${booking.duration_minutes / 60} ч.`
+                                    : ''}
+                              </p>
+                            </div>
+
+                            <div className="min-w-0 border-l border-primary/10 pl-3">
+                              <p className="truncate text-sm font-medium sm:text-base">
+                                {booking.name ||
+                                  'Без имени'}
+                              </p>
+
+                              <p className="text-xs text-muted-foreground">
+                                {booking.guests ||
+                                  0}{' '}
+                                гостей
                               </p>
                             </div>
                           </div>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setExpandedId(
+                                booking.id,
+                              )
+
+                              window.scrollTo(
+                                {
+                                  top:
+                                    document.body
+                                      .scrollHeight,
+                                  behavior:
+                                    'smooth',
+                                },
+                              )
+                            }}
+                            className="shrink-0 rounded-full border border-primary/20 px-3 py-2 text-[9px] uppercase tracking-wider text-primary transition active:scale-95 hover:bg-primary hover:text-black sm:px-4 sm:text-xs sm:tracking-widest"
+                          >
+                            Подробнее
+                          </button>
                         </div>
-                      </button>
 
-                      {/* EXPANDED DETAILS */}
+                        <div className="mt-3 flex items-center justify-between border-t border-primary/10 pt-3">
+                          <span
+                            className={`rounded-full border px-2.5 py-1 text-[10px] ${getStatusClass(
+                              booking.status,
+                            )}`}
+                          >
+                            {getStatusLabel(
+                              booking.status,
+                            )}
+                          </span>
 
-                      {isExpanded && (
-                        <div className="border-t border-primary/10 px-4 py-5 sm:px-5 sm:py-6">
-                          <div className="grid gap-6 lg:grid-cols-2">
+                          {booking.phone && (
+                            <a
+                              href={`tel:${booking.phone}`}
+                              className="flex items-center gap-1.5 text-xs text-primary"
+                            >
+                              <Phone className="h-3.5 w-3.5" />
+                              Позвонить
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    ),
+                  )}
+                </div>
+              )}
 
-                            {/* DETAILS */}
+              {selectedDayCancelledBookings.length >
+                0 && (
+                <div className="mt-4 rounded-2xl border border-red-500/15 bg-red-500/5 p-4 sm:p-5">
+                  <p className="mb-3 text-[10px] uppercase tracking-widest text-red-300">
+                    Отменённые брони
+                  </p>
 
-                            <div>
-                              <h2 className="mb-4 font-serif text-2xl">
-                                Детали
-                              </h2>
+                  <div className="space-y-2">
+                    {selectedDayCancelledBookings.map(
+                      (booking) => (
+                        <div
+                          key={`cancelled-${booking.id}`}
+                          className="flex items-center justify-between gap-3 text-xs"
+                        >
+                          <span className="min-w-0 truncate text-muted-foreground">
+                            {formatTime(
+                              booking.booking_time,
+                            )}{' '}
+                            —{' '}
+                            {booking.name ||
+                              'Без имени'}
+                          </span>
 
-                              <div className="space-y-0 rounded-2xl border border-primary/10 bg-[#0e0a08]">
-                                <div className="flex items-center justify-between gap-4 border-b border-primary/10 p-3.5 text-sm">
-                                  <span className="text-muted-foreground">
-                                    Имя
-                                  </span>
+                          <span className="shrink-0 text-red-300">
+                            Отменена
+                          </span>
+                        </div>
+                      ),
+                    )}
+                  </div>
+                </div>
+              )}
+            </section>
 
-                                  <span className="text-right">
-                                    {booking.name ||
-                                      '—'}
-                                  </span>
-                                </div>
+            {/* ALL BOOKINGS */}
 
-                                <div className="flex items-center justify-between gap-4 border-b border-primary/10 p-3.5 text-sm">
-                                  <span className="text-muted-foreground">
-                                    Телефон
-                                  </span>
+            <section>
+              <div className="mb-4">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-primary sm:text-xs sm:tracking-[0.25em]">
+                  Все заявки
+                </p>
 
-                                  {booking.phone ? (
-                                    <a
-                                      href={`tel:${booking.phone}`}
-                                      className="flex items-center gap-1.5 text-right text-primary hover:underline"
-                                    >
-                                      <Phone className="h-3.5 w-3.5" />
-                                      {booking.phone}
-                                    </a>
-                                  ) : (
-                                    <span>
-                                      —
+                <div className="mt-1 flex items-end justify-between gap-3">
+                  <h2 className="font-serif text-2xl sm:text-3xl">
+                    Бронирования
+                  </h2>
+
+                  <span className="shrink-0 text-[10px] text-muted-foreground sm:text-xs">
+                    Сегодня:{' '}
+                    <span className="text-primary">
+                      {
+                        todayBookingsCount
+                      }
+                    </span>
+                  </span>
+                </div>
+              </div>
+
+              {/* FILTER PANEL */}
+
+              <div className="mb-5 rounded-3xl border border-primary/15 bg-[#15100e] p-3 sm:p-5">
+                {/* SEARCH */}
+
+                <div className="relative">
+                  <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+
+                  <input
+                    type="text"
+                    value={
+                      search
+                    }
+                    onChange={(
+                      event,
+                    ) =>
+                      setSearch(
+                        event.target
+                          .value,
+                      )
+                    }
+                    placeholder="Поиск по имени или телефону..."
+                    className="min-h-12 w-full rounded-2xl border border-primary/20 bg-[#0e0a08] py-3 pl-11 pr-10 text-sm outline-none transition placeholder:text-muted-foreground/50 focus:border-primary"
+                  />
+
+                  {search && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setSearch(
+                          '',
+                        )
+                      }
+                      className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground transition hover:text-primary"
+                      aria-label="Очистить поиск"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
+
+                {/* FILTERS */}
+
+                <div className="mt-3">
+                  <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 scrollbar-none">
+                    {filters.map(
+                      (item) => (
+                        <button
+                          key={
+                            item.value
+                          }
+                          type="button"
+                          onClick={() =>
+                            setFilter(
+                              item.value,
+                            )
+                          }
+                          className={`min-h-10 shrink-0 rounded-full border px-4 py-2 text-[10px] transition active:scale-[0.98] sm:text-xs ${
+                            filter ===
+                            item.value
+                              ? 'border-primary bg-primary text-black'
+                              : 'border-primary/20 text-muted-foreground hover:border-primary hover:text-primary'
+                          }`}
+                        >
+                          {
+                            item.label
+                          }
+                        </button>
+                      ),
+                    )}
+                  </div>
+                </div>
+
+                {/* RESULT / SORT */}
+
+                <div className="mt-3 flex flex-col gap-2 border-t border-primary/10 pt-3 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-[11px] text-muted-foreground">
+                    Показано:{' '}
+                    <span className="font-medium text-primary">
+                      {
+                        filteredBookings.length
+                      }
+                    </span>{' '}
+                    из{' '}
+                    <span className="font-medium text-primary">
+                      {
+                        bookings.length
+                      }
+                    </span>
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setSortOrder(
+                        (
+                          current,
+                        ) =>
+                          current ===
+                          'asc'
+                            ? 'desc'
+                            : 'asc',
+                      )
+                    }
+                    className="self-start rounded-full border border-primary/20 px-4 py-2 text-[9px] uppercase tracking-wider text-primary transition active:scale-95 hover:bg-primary hover:text-black sm:self-auto sm:text-xs sm:tracking-widest"
+                  >
+                    {sortOrder ===
+                    'asc'
+                      ? 'Ближайшие ↑'
+                      : 'Поздние ↓'}
+                  </button>
+                </div>
+              </div>
+
+              {loading ? (
+                <div className="rounded-2xl border border-primary/15 bg-[#15100e] p-10 text-center text-sm text-muted-foreground">
+                  Загружаем бронирования...
+                </div>
+              ) : bookings.length ===
+                0 ? (
+                <div className="rounded-2xl border border-primary/15 bg-[#15100e] p-10 text-center">
+                  <p className="font-serif text-xl sm:text-2xl">
+                    Бронирований пока нет
+                  </p>
+
+                  <p className="mt-2 text-xs text-muted-foreground sm:text-sm">
+                    Новые заявки появятся здесь.
+                  </p>
+                </div>
+              ) : filteredBookings.length ===
+                0 ? (
+                <div className="rounded-2xl border border-primary/15 bg-[#15100e] p-8 text-center sm:p-10">
+                  <p className="font-serif text-xl sm:text-2xl">
+                    Ничего не найдено
+                  </p>
+
+                  <p className="mt-2 text-xs text-muted-foreground sm:text-sm">
+                    Попробуйте изменить фильтр или поисковый запрос.
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFilter(
+                        'all',
+                      )
+                      setSearch(
+                        '',
+                      )
+                    }}
+                    className="mt-5 min-h-11 rounded-full border border-primary/30 px-5 py-3 text-[10px] uppercase tracking-widest text-primary transition active:scale-95 hover:bg-primary hover:text-black"
+                  >
+                    Сбросить фильтры
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-3 sm:space-y-4">
+                  {filteredBookings.map(
+                    (
+                      booking,
+                    ) => {
+                      const isExpanded =
+                        expandedId ===
+                        booking.id
+
+                      const cartItems =
+                        parseCart(
+                          booking.cart,
+                        )
+
+                      const isCancelled =
+                        booking.status ===
+                        'cancelled'
+
+                      const phoneLink =
+                        getPhoneLink(
+                          booking.phone,
+                        )
+
+                      return (
+                        <div
+                          key={
+                            booking.id
+                          }
+                          className={`overflow-hidden rounded-2xl border bg-[#15100e] ${
+                            isCancelled
+                              ? 'border-red-500/20'
+                              : 'border-primary/15'
+                          }`}
+                        >
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setExpandedId(
+                                isExpanded
+                                  ? null
+                                  : booking.id,
+                              )
+                            }
+                            className="w-full text-left"
+                          >
+                            <div className="p-4 sm:p-5">
+                              <div className="flex items-start justify-between gap-3">
+                                <div className="min-w-0">
+                                  <div className="flex flex-wrap items-center gap-2">
+                                    <span className="font-serif text-2xl text-primary sm:text-3xl">
+                                      {formatTime(
+                                        booking.booking_time,
+                                      )}
                                     </span>
-                                  )}
-                                </div>
 
-                                <div className="flex items-center justify-between gap-4 border-b border-primary/10 p-3.5 text-sm">
-                                  <span className="text-muted-foreground">
-                                    Дата
-                                  </span>
+                                    <span
+                                      className={`rounded-full border px-2.5 py-1 text-[9px] ${getStatusClass(
+                                        booking.status,
+                                      )}`}
+                                    >
+                                      {getStatusLabel(
+                                        booking.status,
+                                      )}
+                                    </span>
+                                  </div>
 
-                                  <span>
+                                  <p className="mt-1 text-xs text-muted-foreground">
                                     {formatDate(
                                       booking.booking_date,
                                     )}
-                                  </span>
+
+                                    {booking.duration_minutes
+                                      ? ` · ${booking.duration_minutes / 60} ч.`
+                                      : ''}
+                                  </p>
                                 </div>
 
-                                <div className="flex items-center justify-between gap-4 border-b border-primary/10 p-3.5 text-sm">
-                                  <span className="text-muted-foreground">
-                                    Начало
-                                  </span>
+                                <span className="shrink-0 rounded-full border border-primary/15 px-2.5 py-1 text-[9px] uppercase tracking-wider text-muted-foreground">
+                                  #{booking.id}
+                                </span>
+                              </div>
 
-                                  <span>
-                                    {formatTime(
-                                      booking.booking_start ||
-                                        booking.booking_time,
-                                    )}
-                                  </span>
+                              <div className="mt-4 grid grid-cols-2 gap-3 border-t border-primary/10 pt-4 sm:grid-cols-4">
+                                <div className="min-w-0">
+                                  <p className="text-[9px] uppercase tracking-widest text-muted-foreground">
+                                    Клиент
+                                  </p>
+
+                                  <p className="mt-1 truncate text-sm font-medium">
+                                    {booking.name ||
+                                      '—'}
+                                  </p>
                                 </div>
 
-                                <div className="flex items-center justify-between gap-4 border-b border-primary/10 p-3.5 text-sm">
-                                  <span className="text-muted-foreground">
-                                    Конец
-                                  </span>
+                                <div className="min-w-0">
+                                  <p className="text-[9px] uppercase tracking-widest text-muted-foreground">
+                                    Телефон
+                                  </p>
 
-                                  <span>
-                                    {formatTime(
-                                      booking.booking_end,
-                                    )}
-                                  </span>
+                                  <p className="mt-1 truncate text-xs text-muted-foreground">
+                                    {booking.phone ||
+                                      '—'}
+                                  </p>
                                 </div>
 
-                                <div className="flex items-center justify-between gap-4 border-b border-primary/10 p-3.5 text-sm">
-                                  <span className="text-muted-foreground">
+                                <div>
+                                  <p className="text-[9px] uppercase tracking-widest text-muted-foreground">
                                     Гости
-                                  </span>
+                                  </p>
 
-                                  <span>
+                                  <p className="mt-1 text-sm">
                                     {booking.guests ||
                                       '—'}
-                                  </span>
-                                </div>
-
-                                <div className="p-3.5 text-sm">
-                                  <p className="text-muted-foreground">
-                                    Комментарий
-                                  </p>
-
-                                  <p className="mt-1 break-words">
-                                    {booking.message ||
-                                      '—'}
                                   </p>
                                 </div>
-                              </div>
-                            </div>
 
-                            {/* SERVICES */}
-
-                            <div>
-                              <h2 className="mb-4 font-serif text-2xl">
-                                Услуги
-                              </h2>
-
-                              <div className="space-y-2">
-                                {cartItems.length >
-                                0 ? (
-                                  cartItems.map(
-                                    (
-                                      item,
-                                      index,
-                                    ) => {
-                                      const quantity =
-                                        Number(
-                                          item.quantity ||
-                                            1,
-                                        )
-
-                                      const price =
-                                        Number(
-                                          item.price ||
-                                            0,
-                                        )
-
-                                      return (
-                                        <div
-                                          key={`${booking.id}-${index}`}
-                                          className="flex items-start justify-between gap-3 rounded-xl border border-primary/10 bg-[#0e0a08] p-3 text-sm"
-                                        >
-                                          <span className="min-w-0 break-words">
-                                            {getServiceName(
-                                              item,
-                                            )}{' '}
-                                            ×{' '}
-                                            {
-                                              quantity
-                                            }
-                                          </span>
-
-                                          <span className="shrink-0 whitespace-nowrap text-primary">
-                                            €
-                                            {(
-                                              price *
-                                              quantity
-                                            ).toFixed(
-                                              2,
-                                            )}
-                                          </span>
-                                        </div>
-                                      )
-                                    },
-                                  )
-                                ) : (
-                                  <p className="text-sm text-muted-foreground">
-                                    Услуги не указаны.
+                                <div>
+                                  <p className="text-[9px] uppercase tracking-widest text-muted-foreground">
+                                    Сумма
                                   </p>
-                                )}
-                              </div>
 
-                              <div className="mt-4 rounded-xl border border-primary/20 bg-[#0e0a08] p-4">
-                                <div className="flex items-center justify-between">
-                                  <span className="text-sm text-muted-foreground">
-                                    Итого
-                                  </span>
-
-                                  <span className="font-serif text-2xl text-primary">
+                                  <p className="mt-1 font-serif text-lg text-primary">
                                     €
                                     {Number(
                                       booking.total ||
@@ -2227,136 +2628,326 @@ export default function AdminPage() {
                                     ).toFixed(
                                       2,
                                     )}
-                                  </span>
+                                  </p>
                                 </div>
                               </div>
+                            </div>
+                          </button>
 
-                              {/* ACTION BUTTONS */}
+                          {isExpanded && (
+                            <div className="border-t border-primary/10 px-4 py-5 sm:px-5 sm:py-6">
+                              <div className="grid gap-6 lg:grid-cols-2">
 
-                              <div className="mt-5 grid gap-2 sm:grid-cols-2">
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    openEdit(
-                                      booking,
-                                    )
-                                  }
-                                  className="flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-[10px] font-medium uppercase tracking-widest text-black transition active:scale-[0.98] hover:bg-primary/90 sm:col-span-2"
-                                >
-                                  <Pencil className="h-4 w-4" />
-                                  Редактировать бронь
-                                </button>
+                                {/* DETAILS */}
 
-                                {booking.phone && (
-                                  <>
-                                    <a
-                                      href={`tel:${booking.phone}`}
-                                      className="flex min-h-12 items-center justify-center gap-2 rounded-full border border-primary/20 px-4 py-3 text-[10px] uppercase tracking-widest text-primary transition active:scale-[0.98] hover:bg-primary hover:text-black"
-                                    >
-                                      <Phone className="h-4 w-4" />
-                                      Позвонить
-                                    </a>
+                                <div>
+                                  <h2 className="mb-4 font-serif text-2xl">
+                                    Детали
+                                  </h2>
 
-                                    <a
-                                      href={`https://wa.me/${phoneLink}`}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="flex min-h-12 items-center justify-center gap-2 rounded-full border border-primary/30 bg-primary px-4 py-3 text-[10px] font-medium uppercase tracking-widest text-black transition active:scale-[0.98] hover:bg-primary/90"
-                                    >
-                                      <MessageCircle className="h-4 w-4" />
-                                      WhatsApp
-                                    </a>
-                                  </>
-                                )}
-                              </div>
+                                  <div className="space-y-0 rounded-2xl border border-primary/10 bg-[#0e0a08]">
+                                    <div className="flex items-center justify-between gap-4 border-b border-primary/10 p-3.5 text-sm">
+                                      <span className="text-muted-foreground">
+                                        Имя
+                                      </span>
 
-                              {/* STATUS */}
+                                      <span className="text-right">
+                                        {booking.name ||
+                                          '—'}
+                                      </span>
+                                    </div>
 
-                              <div className="mt-6">
-                                <p className="mb-3 text-[10px] uppercase tracking-widest text-muted-foreground">
-                                  Изменить статус
-                                </p>
+                                    <div className="flex items-center justify-between gap-4 border-b border-primary/10 p-3.5 text-sm">
+                                      <span className="text-muted-foreground">
+                                        Телефон
+                                      </span>
 
-                                <div className="grid grid-cols-2 gap-2">
-                                  {statuses.map(
-                                    (
-                                      status,
-                                    ) => (
-                                      <button
-                                        key={
-                                          status.value
-                                        }
-                                        type="button"
-                                        disabled={
-                                          updatingId ===
-                                          booking.id
-                                        }
-                                        onClick={() =>
-                                          updateStatus(
-                                            booking.id,
-                                            status.value,
+                                      {booking.phone ? (
+                                        <a
+                                          href={`tel:${booking.phone}`}
+                                          className="flex items-center gap-1.5 text-right text-primary hover:underline"
+                                        >
+                                          <Phone className="h-3.5 w-3.5" />
+                                          {
+                                            booking.phone
+                                          }
+                                        </a>
+                                      ) : (
+                                        <span>
+                                          —
+                                        </span>
+                                      )}
+                                    </div>
+
+                                    <div className="flex items-center justify-between gap-4 border-b border-primary/10 p-3.5 text-sm">
+                                      <span className="text-muted-foreground">
+                                        Дата
+                                      </span>
+
+                                      <span>
+                                        {formatDate(
+                                          booking.booking_date,
+                                        )}
+                                      </span>
+                                    </div>
+
+                                    <div className="flex items-center justify-between gap-4 border-b border-primary/10 p-3.5 text-sm">
+                                      <span className="text-muted-foreground">
+                                        Начало
+                                      </span>
+
+                                      <span>
+                                        {formatTime(
+                                          booking.booking_start ||
+                                            booking.booking_time,
+                                        )}
+                                      </span>
+                                    </div>
+
+                                    <div className="flex items-center justify-between gap-4 border-b border-primary/10 p-3.5 text-sm">
+                                      <span className="text-muted-foreground">
+                                        Конец
+                                      </span>
+
+                                      <span>
+                                        {formatTime(
+                                          booking.booking_end,
+                                        )}
+                                      </span>
+                                    </div>
+
+                                    <div className="flex items-center justify-between gap-4 border-b border-primary/10 p-3.5 text-sm">
+                                      <span className="text-muted-foreground">
+                                        Гости
+                                      </span>
+
+                                      <span>
+                                        {booking.guests ||
+                                          '—'}
+                                      </span>
+                                    </div>
+
+                                    <div className="p-3.5 text-sm">
+                                      <p className="text-muted-foreground">
+                                        Комментарий
+                                      </p>
+
+                                      <p className="mt-1 break-words">
+                                        {booking.message ||
+                                          '—'}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* SERVICES */}
+
+                                <div>
+                                  <h2 className="mb-4 font-serif text-2xl">
+                                    Услуги
+                                  </h2>
+
+                                  <div className="space-y-2">
+                                    {cartItems.length >
+                                    0 ? (
+                                      cartItems.map(
+                                        (
+                                          item,
+                                          index,
+                                        ) => {
+                                          const quantity =
+                                            Number(
+                                              item.quantity ||
+                                                1,
+                                            )
+
+                                          const price =
+                                            Number(
+                                              item.price ||
+                                                0,
+                                            )
+
+                                          return (
+                                            <div
+                                              key={`${booking.id}-${index}`}
+                                              className="flex items-start justify-between gap-3 rounded-xl border border-primary/10 bg-[#0e0a08] p-3 text-sm"
+                                            >
+                                              <span className="min-w-0 break-words">
+                                                {getServiceName(
+                                                  item,
+                                                )}{' '}
+                                                ×{' '}
+                                                {
+                                                  quantity
+                                                }
+                                              </span>
+
+                                              <span className="shrink-0 whitespace-nowrap text-primary">
+                                                €
+                                                {(
+                                                  price *
+                                                  quantity
+                                                ).toFixed(
+                                                  2,
+                                                )}
+                                              </span>
+                                            </div>
                                           )
-                                        }
-                                        className={`min-h-11 rounded-full border px-3 py-2 text-[10px] transition active:scale-[0.98] ${
-                                          (booking.status ||
-                                            'new') ===
-                                          status.value
-                                            ? getStatusClass(
+                                        },
+                                      )
+                                    ) : (
+                                      <p className="text-sm text-muted-foreground">
+                                        Услуги не указаны.
+                                      </p>
+                                    )}
+                                  </div>
+
+                                  <div className="mt-4 rounded-xl border border-primary/20 bg-[#0e0a08] p-4">
+                                    <div className="flex items-center justify-between">
+                                      <span className="text-sm text-muted-foreground">
+                                        Итого
+                                      </span>
+
+                                      <span className="font-serif text-2xl text-primary">
+                                        €
+                                        {Number(
+                                          booking.total ||
+                                            0,
+                                        ).toFixed(
+                                          2,
+                                        )}
+                                      </span>
+                                    </div>
+                                  </div>
+
+                                  {/* ACTION BUTTONS */}
+
+                                  <div className="mt-5 grid gap-2 sm:grid-cols-2">
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        openEdit(
+                                          booking,
+                                        )
+                                      }
+                                      className="flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-[10px] font-medium uppercase tracking-widest text-black transition active:scale-[0.98] hover:bg-primary/90 sm:col-span-2"
+                                    >
+                                      <Pencil className="h-4 w-4" />
+                                      Редактировать бронь
+                                    </button>
+
+                                    {booking.phone && (
+                                      <>
+                                        <a
+                                          href={`tel:${booking.phone}`}
+                                          className="flex min-h-12 items-center justify-center gap-2 rounded-full border border-primary/20 px-4 py-3 text-[10px] uppercase tracking-widest text-primary transition active:scale-[0.98] hover:bg-primary hover:text-black"
+                                        >
+                                          <Phone className="h-4 w-4" />
+                                          Позвонить
+                                        </a>
+
+                                        <a
+                                          href={`https://wa.me/${phoneLink}`}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="flex min-h-12 items-center justify-center gap-2 rounded-full border border-primary/30 bg-primary px-4 py-3 text-[10px] font-medium uppercase tracking-widest text-black transition active:scale-[0.98] hover:bg-primary/90"
+                                        >
+                                          <MessageCircle className="h-4 w-4" />
+                                          WhatsApp
+                                        </a>
+                                      </>
+                                    )}
+                                  </div>
+
+                                  {/* STATUS */}
+
+                                  <div className="mt-6">
+                                    <p className="mb-3 text-[10px] uppercase tracking-widest text-muted-foreground">
+                                      Изменить статус
+                                    </p>
+
+                                    <div className="grid grid-cols-2 gap-2">
+                                      {statuses.map(
+                                        (
+                                          status,
+                                        ) => (
+                                          <button
+                                            key={
+                                              status.value
+                                            }
+                                            type="button"
+                                            disabled={
+                                              updatingId ===
+                                              booking.id
+                                            }
+                                            onClick={() =>
+                                              updateStatus(
+                                                booking.id,
                                                 status.value,
                                               )
-                                            : 'border-primary/20 text-muted-foreground hover:border-primary hover:text-primary'
-                                        } disabled:cursor-not-allowed disabled:opacity-50`}
-                                      >
-                                        {updatingId ===
-                                          booking.id &&
-                                        (booking.status ||
-                                          'new') !==
-                                          status.value
-                                          ? '...'
-                                          : status.label}
-                                      </button>
-                                    ),
+                                            }
+                                            className={`min-h-11 rounded-full border px-3 py-2 text-[10px] transition active:scale-[0.98] ${
+                                              (booking.status ||
+                                                'new') ===
+                                              status.value
+                                                ? getStatusClass(
+                                                    status.value,
+                                                  )
+                                                : 'border-primary/20 text-muted-foreground hover:border-primary hover:text-primary'
+                                            } disabled:cursor-not-allowed disabled:opacity-50`}
+                                          >
+                                            {updatingId ===
+                                              booking.id &&
+                                            (booking.status ||
+                                              'new') !==
+                                              status.value
+                                              ? '...'
+                                              : status.label}
+                                          </button>
+                                        ),
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  {/* CANCEL */}
+
+                                  {!isCancelled && (
+                                    <button
+                                      type="button"
+                                      disabled={
+                                        updatingId ===
+                                        booking.id
+                                      }
+                                      onClick={() =>
+                                        cancelBooking(
+                                          booking.id,
+                                        )
+                                      }
+                                      className="mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-red-500/30 px-5 py-3 text-[10px] font-medium uppercase tracking-widest text-red-300 transition active:scale-[0.98] hover:bg-red-500 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                                    >
+                                      <Trash2 className="h-4 w-4" />
+
+                                      {updatingId ===
+                                      booking.id
+                                        ? 'Отменяем...'
+                                        : 'Отменить бронь'}
+                                    </button>
                                   )}
                                 </div>
                               </div>
-
-                              {/* CANCEL */}
-
-                              {!isCancelled && (
-                                <button
-                                  type="button"
-                                  disabled={
-                                    updatingId ===
-                                    booking.id
-                                  }
-                                  onClick={() =>
-                                    cancelBooking(
-                                      booking.id,
-                                    )
-                                  }
-                                  className="mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-red-500/30 px-5 py-3 text-[10px] font-medium uppercase tracking-widest text-red-300 transition active:scale-[0.98] hover:bg-red-500 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
-                                >
-                                  <Trash2 className="h-4 w-4" />
-
-                                  {updatingId ===
-                                  booking.id
-                                    ? 'Отменяем...'
-                                    : 'Отменить бронь'}
-                                </button>
-                              )}
                             </div>
-                          </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  )
-                },
+                      )
+                    },
+                  )}
+                </div>
               )}
-            </div>
-          )}
-        </section>
+            </section>
           </>
         ) : (
+          /* CLIENTS */
+
           <section className="space-y-4">
             <div className="rounded-3xl border border-primary/15 bg-[#15100e] p-4 sm:p-6">
               <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
@@ -2364,25 +2955,45 @@ export default function AdminPage() {
                   <p className="text-[10px] font-medium uppercase tracking-[0.28em] text-primary sm:text-xs">
                     CRM
                   </p>
+
                   <h2 className="mt-2 font-serif text-3xl font-light sm:text-4xl">
                     Клиенты
                   </h2>
+
                   <p className="mt-2 text-xs text-muted-foreground sm:text-sm">
                     Все клиенты собраны автоматически из бронирований.
                   </p>
                 </div>
+
                 <div className="rounded-2xl border border-primary/15 px-4 py-3 text-center">
-                  <div className="text-2xl font-light text-primary">{clients.length}</div>
-                  <div className="text-[9px] uppercase tracking-widest text-muted-foreground">клиентов</div>
+                  <div className="text-2xl font-light text-primary">
+                    {
+                      clients.length
+                    }
+                  </div>
+
+                  <div className="text-[9px] uppercase tracking-widest text-muted-foreground">
+                    клиентов
+                  </div>
                 </div>
               </div>
 
               <div className="relative mt-5">
                 <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+
                 <input
                   type="text"
-                  value={search}
-                  onChange={(event) => setSearch(event.target.value)}
+                  value={
+                    search
+                  }
+                  onChange={(
+                    event,
+                  ) =>
+                    setSearch(
+                      event.target
+                        .value,
+                    )
+                  }
                   placeholder="Поиск по имени или телефону"
                   className="h-12 w-full rounded-2xl border border-primary/20 bg-[#0e0a08] pl-11 pr-4 text-sm outline-none transition focus:border-primary"
                 />
@@ -2390,100 +3001,354 @@ export default function AdminPage() {
             </div>
 
             {clients
-              .filter((client) => {
-                const query = search.trim().toLowerCase()
-                if (!query) return true
-                return (
-                  client.name.toLowerCase().includes(query) ||
-                  client.phone.toLowerCase().includes(query)
-                )
-              })
-              .map((client) => {
-                const topServices = [...client.services]
-                  .sort((a, b) => b.quantity - a.quantity)
-                  .slice(0, 3)
+              .filter(
+                (client) => {
+                  const query =
+                    search
+                      .trim()
+                      .toLowerCase()
 
-                return (
-                  <div
-                    key={client.key}
-                    className="rounded-3xl border border-primary/15 bg-[#15100e] p-4 sm:p-6"
-                  >
-                    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                      <div className="min-w-0">
-                        <h3 className="truncate font-serif text-2xl font-light">
-                          {client.name}
-                        </h3>
-                        {client.phone ? (
-                          <a
-                            href={`tel:${getPhoneLink(client.phone)}`}
-                            className="mt-1 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary"
-                          >
-                            <Phone className="h-4 w-4" />
-                            {client.phone}
-                          </a>
-                        ) : (
-                          <p className="mt-1 text-sm text-muted-foreground">Телефон не указан</p>
+                  if (!query)
+                    return true
+
+                  return (
+                    client.name
+                      .toLowerCase()
+                      .includes(
+                        query,
+                      ) ||
+                    client.phone
+                      .toLowerCase()
+                      .includes(
+                        query,
+                      )
+                  )
+                },
+              )
+              .map(
+                (client) => {
+                  const topServices =
+                    [
+                      ...client.services,
+                    ]
+                      .sort(
+                        (
+                          a,
+                          b,
+                        ) =>
+                          b.quantity -
+                          a.quantity,
+                      )
+                      .slice(
+                        0,
+                        3,
+                      )
+
+                  const phoneLink =
+                    getPhoneLink(
+                      client.phone,
+                    )
+
+                  return (
+                    <div
+                      key={
+                        client.key
+                      }
+                      className="rounded-3xl border border-primary/15 bg-[#15100e] p-4 sm:p-6"
+                    >
+                      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                        {/* CLIENT INFO */}
+
+                        <div className="min-w-0">
+                          <h3 className="truncate font-serif text-2xl font-light">
+                            {
+                              client.name
+                            }
+                          </h3>
+
+                          {client.phone ? (
+                            <a
+                              href={`tel:${phoneLink}`}
+                              className="mt-1 inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-primary"
+                            >
+                              <Phone className="h-4 w-4" />
+                              {
+                                client.phone
+                              }
+                            </a>
+                          ) : (
+                            <p className="mt-1 text-sm text-muted-foreground">
+                              Телефон не указан
+                            </p>
+                          )}
+
+                          {/* CLIENT ACTIONS */}
+
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                openClientEdit(
+                                  client,
+                                )
+                              }
+                              className="inline-flex min-h-10 items-center gap-2 rounded-full bg-primary px-4 py-2 text-[10px] font-medium uppercase tracking-widest text-black transition active:scale-[0.98] hover:bg-primary/90"
+                            >
+                              <Pencil className="h-4 w-4" />
+                              Редактировать
+                            </button>
+
+                            {client.phone && (
+                              <a
+                                href={`https://wa.me/${phoneLink}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex min-h-10 items-center gap-2 rounded-full border border-primary/20 px-4 py-2 text-[10px] uppercase tracking-widest text-primary transition active:scale-[0.98] hover:bg-primary hover:text-black"
+                              >
+                                <MessageCircle className="h-4 w-4" />
+                                WhatsApp
+                              </a>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* CLIENT STATS */}
+
+                        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:min-w-[520px]">
+                          <div className="rounded-2xl border border-primary/10 p-3">
+                            <div className="text-lg text-primary">
+                              {
+                                client.visits
+                              }
+                            </div>
+
+                            <div className="text-[9px] uppercase tracking-wider text-muted-foreground">
+                              визитов
+                            </div>
+                          </div>
+
+                          <div className="rounded-2xl border border-primary/10 p-3">
+                            <div className="text-lg text-primary">
+                              €
+                              {client.totalSpent.toFixed(
+                                0,
+                              )}
+                            </div>
+
+                            <div className="text-[9px] uppercase tracking-wider text-muted-foreground">
+                              потрачено
+                            </div>
+                          </div>
+
+                          <div className="rounded-2xl border border-primary/10 p-3">
+                            <div className="text-sm text-primary">
+                              {formatDate(
+                                client.lastVisit,
+                              )}
+                            </div>
+
+                            <div className="text-[9px] uppercase tracking-wider text-muted-foreground">
+                              последний визит
+                            </div>
+                          </div>
+
+                          <div className="rounded-2xl border border-primary/10 p-3">
+                            <div className="text-lg text-primary">
+                              €
+                              {client.visits
+                                ? (
+                                    client.totalSpent /
+                                    client.visits
+                                  ).toFixed(
+                                    0,
+                                  )
+                                : '0'}
+                            </div>
+
+                            <div className="text-[9px] uppercase tracking-wider text-muted-foreground">
+                              средний чек
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* SERVICES */}
+
+                      {topServices.length >
+                        0 && (
+                        <div className="mt-4 border-t border-primary/10 pt-4">
+                          <p className="text-[9px] uppercase tracking-widest text-muted-foreground">
+                            Чаще всего заказывает
+                          </p>
+
+                          <div className="mt-2 flex flex-wrap gap-2">
+                            {topServices.map(
+                              (
+                                service,
+                              ) => (
+                                <span
+                                  key={
+                                    service.name
+                                  }
+                                  className="rounded-full border border-primary/15 bg-primary/5 px-3 py-1.5 text-xs text-primary"
+                                >
+                                  {
+                                    service.name
+                                  }{' '}
+                                  ×{' '}
+                                  {
+                                    service.quantity
+                                  }
+                                </span>
+                              ),
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* BOOKING HISTORY */}
+
+                      <div className="mt-4 border-t border-primary/10 pt-4">
+                        <p className="text-[9px] uppercase tracking-widest text-muted-foreground">
+                          История бронирований
+                        </p>
+
+                        <div className="mt-3 space-y-2">
+                          {[
+                            ...client.bookings,
+                          ]
+                            .sort(
+                              (
+                                a,
+                                b,
+                              ) =>
+                                (
+                                  b.booking_date ||
+                                  ''
+                                ).localeCompare(
+                                  a.booking_date ||
+                                    '',
+                                ),
+                            )
+                            .slice(
+                              0,
+                              5,
+                            )
+                            .map(
+                              (
+                                booking,
+                              ) => (
+                                <button
+                                  key={`${client.key}-${booking.id}`}
+                                  type="button"
+                                  onClick={() => {
+                                    setActiveView(
+                                      'bookings',
+                                    )
+
+                                    setExpandedId(
+                                      booking.id,
+                                    )
+
+                                    if (
+                                      booking.booking_date
+                                    ) {
+                                      setSelectedDate(
+                                        booking.booking_date,
+                                      )
+                                    }
+
+                                    window.scrollTo(
+                                      {
+                                        top: 0,
+                                        behavior:
+                                          'smooth',
+                                      },
+                                    )
+                                  }}
+                                  className="flex w-full items-center justify-between gap-3 rounded-xl border border-primary/10 bg-[#0e0a08] p-3 text-left transition hover:border-primary/30"
+                                >
+                                  <div className="min-w-0">
+                                    <div className="flex flex-wrap items-center gap-2">
+                                      <span className="font-medium text-primary">
+                                        {formatDate(
+                                          booking.booking_date,
+                                        )}
+                                      </span>
+
+                                      <span className="text-xs text-muted-foreground">
+                                        {formatTime(
+                                          booking.booking_time,
+                                        )}
+                                      </span>
+
+                                      <span
+                                        className={`rounded-full border px-2 py-0.5 text-[8px] ${getStatusClass(
+                                          booking.status,
+                                        )}`}
+                                      >
+                                        {getStatusLabel(
+                                          booking.status,
+                                        )}
+                                      </span>
+                                    </div>
+
+                                    <p className="mt-1 truncate text-xs text-muted-foreground">
+                                      {booking.guests ||
+                                        0}{' '}
+                                      гостей
+                                    </p>
+                                  </div>
+
+                                  <span className="shrink-0 font-serif text-lg text-primary">
+                                    €
+                                    {Number(
+                                      booking.total ||
+                                        0,
+                                    ).toFixed(
+                                      0,
+                                    )}
+                                  </span>
+                                </button>
+                              ),
+                            )}
+                        </div>
+
+                        {client.bookings
+                          .length >
+                          5 && (
+                          <p className="mt-2 text-center text-[9px] uppercase tracking-widest text-muted-foreground">
+                            Показаны последние 5 бронирований
+                          </p>
                         )}
                       </div>
-
-                      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:min-w-[520px]">
-                        <div className="rounded-2xl border border-primary/10 p-3">
-                          <div className="text-lg text-primary">{client.visits}</div>
-                          <div className="text-[9px] uppercase tracking-wider text-muted-foreground">визитов</div>
-                        </div>
-                        <div className="rounded-2xl border border-primary/10 p-3">
-                          <div className="text-lg text-primary">€{client.totalSpent.toFixed(0)}</div>
-                          <div className="text-[9px] uppercase tracking-wider text-muted-foreground">потрачено</div>
-                        </div>
-                        <div className="rounded-2xl border border-primary/10 p-3">
-                          <div className="text-sm text-primary">{formatDate(client.lastVisit)}</div>
-                          <div className="text-[9px] uppercase tracking-wider text-muted-foreground">последний визит</div>
-                        </div>
-                        <div className="rounded-2xl border border-primary/10 p-3">
-                          <div className="text-lg text-primary">
-                            €{client.visits ? (client.totalSpent / client.visits).toFixed(0) : '0'}
-                          </div>
-                          <div className="text-[9px] uppercase tracking-wider text-muted-foreground">средний чек</div>
-                        </div>
-                      </div>
                     </div>
+                  )
+                },
+              )}
 
-                    {topServices.length > 0 && (
-                      <div className="mt-4 border-t border-primary/10 pt-4">
-                        <p className="text-[9px] uppercase tracking-widest text-muted-foreground">Чаще всего заказывает</p>
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          {topServices.map((service) => (
-                            <span
-                              key={service.name}
-                              className="rounded-full border border-primary/15 bg-primary/5 px-3 py-1.5 text-xs text-primary"
-                            >
-                              {service.name} × {service.quantity}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )
-              })}
-
-            {clients.length === 0 && (
+            {clients.length ===
+              0 && (
               <div className="rounded-3xl border border-primary/15 bg-[#15100e] p-10 text-center">
                 <Users className="mx-auto h-8 w-8 text-primary" />
-                <p className="mt-3 font-serif text-xl">Клиентов пока нет</p>
+
+                <p className="mt-3 font-serif text-xl">
+                  Клиентов пока нет
+                </p>
               </div>
             )}
           </section>
         )}
-
       </div>
 
-      {/* EDIT MODAL */}
+      {/* BOOKING EDIT MODAL */}
 
       {editingBooking && (
         <div
           className="fixed inset-0 z-50 flex items-end justify-center bg-black/80 backdrop-blur-sm sm:items-center sm:p-4"
-          onMouseDown={(event) => {
+          onMouseDown={(
+            event,
+          ) => {
             if (
               event.target ===
               event.currentTarget
@@ -2504,7 +3369,10 @@ export default function AdminPage() {
                   </p>
 
                   <h2 className="mt-1 truncate font-serif text-2xl sm:text-3xl">
-                    Бронь #{editingBooking.id}
+                    Бронь #
+                    {
+                      editingBooking.id
+                    }
                   </h2>
 
                   <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
@@ -2514,8 +3382,12 @@ export default function AdminPage() {
 
                 <button
                   type="button"
-                  onClick={closeEdit}
-                  disabled={savingEdit}
+                  onClick={
+                    closeEdit
+                  }
+                  disabled={
+                    savingEdit
+                  }
                   className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-primary/20 text-muted-foreground transition active:scale-95 hover:border-primary hover:text-primary disabled:opacity-50"
                   aria-label="Закрыть"
                 >
@@ -2538,13 +3410,21 @@ export default function AdminPage() {
 
                   <input
                     type="text"
-                    value={editForm.name}
-                    onChange={(event) =>
+                    value={
+                      editForm.name
+                    }
+                    onChange={(
+                      event,
+                    ) =>
                       setEditForm(
-                        (current) => ({
+                        (
+                          current,
+                        ) => ({
                           ...current,
-                          name: event.target
-                            .value,
+                          name:
+                            event
+                              .target
+                              .value,
                         }),
                       )
                     }
@@ -2563,13 +3443,21 @@ export default function AdminPage() {
                   <input
                     type="tel"
                     inputMode="tel"
-                    value={editForm.phone}
-                    onChange={(event) =>
+                    value={
+                      editForm.phone
+                    }
+                    onChange={(
+                      event,
+                    ) =>
                       setEditForm(
-                        (current) => ({
+                        (
+                          current,
+                        ) => ({
                           ...current,
-                          phone: event.target
-                            .value,
+                          phone:
+                            event
+                              .target
+                              .value,
                         }),
                       )
                     }
@@ -2591,12 +3479,17 @@ export default function AdminPage() {
                       value={
                         editForm.booking_date
                       }
-                      onChange={(event) =>
+                      onChange={(
+                        event,
+                      ) =>
                         setEditForm(
-                          (current) => ({
+                          (
+                            current,
+                          ) => ({
                             ...current,
                             booking_date:
-                              event.target
+                              event
+                                .target
                                 .value,
                           }),
                         )
@@ -2615,12 +3508,17 @@ export default function AdminPage() {
                       value={
                         editForm.booking_time
                       }
-                      onChange={(event) =>
+                      onChange={(
+                        event,
+                      ) =>
                         setEditForm(
-                          (current) => ({
+                          (
+                            current,
+                          ) => ({
                             ...current,
                             booking_time:
-                              event.target
+                              event
+                                .target
                                 .value,
                           }),
                         )
@@ -2642,15 +3540,23 @@ export default function AdminPage() {
                     min={1}
                     max={50}
                     inputMode="numeric"
-                    value={editForm.guests}
-                    onChange={(event) =>
+                    value={
+                      editForm.guests
+                    }
+                    onChange={(
+                      event,
+                    ) =>
                       setEditForm(
-                        (current) => ({
+                        (
+                          current,
+                        ) => ({
                           ...current,
-                          guests: Number(
-                            event.target
-                              .value,
-                          ),
+                          guests:
+                            Number(
+                              event
+                                .target
+                                .value,
+                            ),
                         }),
                       )
                     }
@@ -2672,13 +3578,20 @@ export default function AdminPage() {
 
                   <textarea
                     rows={4}
-                    value={editForm.message}
-                    onChange={(event) =>
+                    value={
+                      editForm.message
+                    }
+                    onChange={(
+                      event,
+                    ) =>
                       setEditForm(
-                        (current) => ({
+                        (
+                          current,
+                        ) => ({
                           ...current,
                           message:
-                            event.target
+                            event
+                              .target
                               .value,
                         }),
                       )
@@ -2745,8 +3658,12 @@ export default function AdminPage() {
               <div className="grid gap-2 sm:flex sm:flex-row sm:justify-end">
                 <button
                   type="button"
-                  onClick={closeEdit}
-                  disabled={savingEdit}
+                  onClick={
+                    closeEdit
+                  }
+                  disabled={
+                    savingEdit
+                  }
                   className="min-h-12 rounded-full border border-primary/20 px-6 py-3 text-[10px] font-medium uppercase tracking-widest text-muted-foreground transition active:scale-[0.98] hover:border-primary hover:text-primary disabled:opacity-50"
                 >
                   Отмена
@@ -2754,13 +3671,300 @@ export default function AdminPage() {
 
                 <button
                   type="button"
-                  onClick={saveEdit}
-                  disabled={savingEdit}
+                  onClick={
+                    saveEdit
+                  }
+                  disabled={
+                    savingEdit
+                  }
                   className="min-h-12 rounded-full bg-primary px-6 py-3 text-[10px] font-medium uppercase tracking-widest text-black transition active:scale-[0.98] hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {savingEdit
                     ? 'Сохраняем...'
                     : 'Сохранить изменения'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CLIENT EDIT MODAL */}
+
+      {editingClient && (
+        <div
+          className="fixed inset-0 z-[60] flex items-end justify-center bg-black/80 backdrop-blur-sm sm:items-center sm:p-4"
+          onMouseDown={(
+            event,
+          ) => {
+            if (
+              event.target ===
+              event.currentTarget
+            ) {
+              closeClientEdit()
+            }
+          }}
+        >
+          <div className="flex max-h-[96vh] w-full flex-col overflow-hidden rounded-t-3xl border border-primary/20 bg-[#15100e] shadow-2xl sm:max-h-[90vh] sm:max-w-xl sm:rounded-3xl">
+
+            {/* CLIENT MODAL HEADER */}
+
+            <div className="shrink-0 border-b border-primary/10 bg-[#15100e] p-4 sm:p-6">
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-primary sm:text-xs sm:tracking-[0.25em]">
+                    CRM
+                  </p>
+
+                  <h2 className="mt-1 truncate font-serif text-2xl sm:text-3xl">
+                    Редактирование клиента
+                  </h2>
+
+                  <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
+                    Изменения применятся ко всем бронированиям этого клиента.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={
+                    closeClientEdit
+                  }
+                  disabled={
+                    savingClient
+                  }
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-primary/20 text-muted-foreground transition active:scale-95 hover:border-primary hover:text-primary disabled:opacity-50"
+                  aria-label="Закрыть"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* CLIENT MODAL CONTENT */}
+
+            <div className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6">
+              <div className="space-y-5">
+
+                {/* NAME */}
+
+                <div>
+                  <label className="mb-2 block text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
+                    Имя клиента
+                  </label>
+
+                  <input
+                    type="text"
+                    value={
+                      clientEditForm.name
+                    }
+                    onChange={(
+                      event,
+                    ) =>
+                      setClientEditForm(
+                        (
+                          current,
+                        ) => ({
+                          ...current,
+                          name:
+                            event
+                              .target
+                              .value,
+                        }),
+                      )
+                    }
+                    className="min-h-12 w-full rounded-2xl border border-primary/20 bg-[#0e0a08] px-4 py-3 text-sm outline-none transition focus:border-primary"
+                    placeholder="Имя клиента"
+                  />
+                </div>
+
+                {/* PHONE */}
+
+                <div>
+                  <label className="mb-2 block text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
+                    Телефон
+                  </label>
+
+                  <input
+                    type="tel"
+                    inputMode="tel"
+                    value={
+                      clientEditForm.phone
+                    }
+                    onChange={(
+                      event,
+                    ) =>
+                      setClientEditForm(
+                        (
+                          current,
+                        ) => ({
+                          ...current,
+                          phone:
+                            event
+                              .target
+                              .value,
+                        }),
+                      )
+                    }
+                    className="min-h-12 w-full rounded-2xl border border-primary/20 bg-[#0e0a08] px-4 py-3 text-sm outline-none transition focus:border-primary"
+                    placeholder="+34..."
+                  />
+                </div>
+
+                {/* CLIENT INFO */}
+
+                <div className="rounded-2xl border border-primary/10 bg-[#0e0a08] p-4">
+                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                    Информация о клиенте
+                  </p>
+
+                  <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                    <div>
+                      <p className="text-xs text-muted-foreground">
+                        Визитов
+                      </p>
+
+                      <p className="mt-1 text-lg text-primary">
+                        {
+                          editingClient.visits
+                        }
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-xs text-muted-foreground">
+                        Потрачено
+                      </p>
+
+                      <p className="mt-1 text-lg text-primary">
+                        €
+                        {editingClient.totalSpent.toFixed(
+                          0,
+                        )}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-xs text-muted-foreground">
+                        Последний визит
+                      </p>
+
+                      <p className="mt-1 text-sm text-primary">
+                        {formatDate(
+                          editingClient.lastVisit,
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* SERVICES */}
+
+                {editingClient
+                  .services
+                  .length >
+                  0 && (
+                  <div className="rounded-2xl border border-primary/10 bg-[#0e0a08] p-4">
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                      Заказывал
+                    </p>
+
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {[
+                        ...editingClient.services,
+                      ]
+                        .sort(
+                          (
+                            a,
+                            b,
+                          ) =>
+                            b.quantity -
+                            a.quantity,
+                        )
+                        .map(
+                          (
+                            service,
+                          ) => (
+                            <span
+                              key={
+                                service.name
+                              }
+                              className="rounded-full border border-primary/15 bg-primary/5 px-3 py-1.5 text-xs text-primary"
+                            >
+                              {
+                                service.name
+                              }{' '}
+                              ×{' '}
+                              {
+                                service.quantity
+                              }
+                            </span>
+                          ),
+                        )}
+                    </div>
+                  </div>
+                )}
+
+                {/* BOOKINGS */}
+
+                <div className="rounded-2xl border border-primary/10 bg-[#0e0a08] p-4">
+                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                    Бронирований
+                  </p>
+
+                  <p className="mt-2 font-serif text-2xl text-primary">
+                    {
+                      editingClient
+                        .bookings
+                        .length
+                    }
+                  </p>
+
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Имя и телефон будут обновлены во всех бронированиях этого клиента.
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-primary/10 bg-primary/5 p-4">
+                  <p className="text-xs leading-relaxed text-muted-foreground">
+                    После сохранения клиент останется
+                    одним клиентом в CRM, а его история
+                    бронирований и статистика сохранятся.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* CLIENT MODAL FOOTER */}
+
+            <div className="shrink-0 border-t border-primary/10 bg-[#15100e] p-4 sm:p-6">
+              <div className="grid gap-2 sm:flex sm:flex-row sm:justify-end">
+                <button
+                  type="button"
+                  onClick={
+                    closeClientEdit
+                  }
+                  disabled={
+                    savingClient
+                  }
+                  className="min-h-12 rounded-full border border-primary/20 px-6 py-3 text-[10px] font-medium uppercase tracking-widest text-muted-foreground transition active:scale-[0.98] hover:border-primary hover:text-primary disabled:opacity-50"
+                >
+                  Отмена
+                </button>
+
+                <button
+                  type="button"
+                  onClick={
+                    saveClientEdit
+                  }
+                  disabled={
+                    savingClient
+                  }
+                  className="min-h-12 rounded-full bg-primary px-6 py-3 text-[10px] font-medium uppercase tracking-widest text-black transition active:scale-[0.98] hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {savingClient
+                    ? 'Сохраняем...'
+                    : 'Сохранить клиента'}
                 </button>
               </div>
             </div>
