@@ -2,9 +2,7 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Cormorant_Garamond, Jost } from 'next/font/google'
-
 import { LanguageProvider } from '@/components/language-provider'
-
 import './globals.css'
 
 const cormorant = Cormorant_Garamond({
@@ -53,8 +51,6 @@ export const metadata: Metadata = {
     languages: {
       'ru-RU': siteUrl,
       'uk-UA': siteUrl,
-      'es-ES': siteUrl,
-      'en-US': siteUrl,
     },
   },
 
@@ -63,9 +59,12 @@ export const metadata: Metadata = {
     locale: 'ru_RU',
     url: siteUrl,
     siteName: 'ZHAR de PAR',
+
     title: 'ZHAR de PAR',
+
     description:
       'Частная русская баня ZHAR de PAR в Бланесе на Коста-Брава рядом с Барселоной. Парение веником, купель, джакузи и банные ритуалы.',
+
     images: [
       {
         url: '/photos/view/viewgeneral.PNG',
@@ -78,15 +77,19 @@ export const metadata: Metadata = {
 
   twitter: {
     card: 'summary_large_image',
+
     title: 'ZHAR de PAR',
+
     description:
       'Частная русская баня ZHAR de PAR в Бланесе рядом с Барселоной. Парение веником, банные ритуалы, купель, джакузи и отдых на природе.',
+
     images: ['/photos/view/viewgeneral.PNG'],
   },
 
   robots: {
     index: true,
     follow: true,
+
     googleBot: {
       index: true,
       follow: true,
@@ -103,6 +106,7 @@ export const metadata: Metadata = {
         type: 'image/png',
       },
     ],
+
     shortcut: '/photos/logos/logogoogle.png',
     apple: '/photos/logos/logogoogle.png',
   },
@@ -110,19 +114,27 @@ export const metadata: Metadata = {
 
 const jsonLd = {
   '@context': 'https://schema.org',
+
   '@graph': [
     {
       '@type': 'LocalBusiness',
+
       '@id': `${siteUrl}/#business`,
+
       name: 'ZHAR de PAR',
       alternateName: 'ЖАР де ПАР',
+
       description:
         'Частная русская баня в Бланесе на Коста-Брава рядом с Барселоной, Ллорет-де-Мар и Жироной.',
+
       url: siteUrl,
+
       logo: `${siteUrl}/photos/logos/logoof.png`,
       image: `${siteUrl}/photos/view/viewgeneral.PNG`,
+
       priceRange: '€€',
       currenciesAccepted: 'EUR',
+
       telephone: '+34601801800',
       email: 'zhardepar1@gmail.com',
 
@@ -169,7 +181,9 @@ const jsonLd = {
         },
       ],
 
-      sameAs: ['https://www.instagram.com/banka_blanes/'],
+      sameAs: [
+        'https://www.instagram.com/banka_blanes/',
+      ],
 
       knowsAbout: [
         'Русская баня',
@@ -195,11 +209,10 @@ const jsonLd = {
         '@type': 'ContactPoint',
         telephone: '+34601801800',
         contactType: 'customer service',
+
         availableLanguage: [
           'Russian',
           'Ukrainian',
-          'Spanish',
-          'English',
         ],
       },
 
@@ -210,41 +223,52 @@ const jsonLd = {
         itemListElement: [
           {
             '@type': 'Offer',
+
             itemOffered: {
               '@type': 'Service',
               name: 'Аренда частной русской бани',
             },
           },
+
           {
             '@type': 'Offer',
+
             itemOffered: {
               '@type': 'Service',
               name: 'Парение веником',
             },
           },
+
           {
             '@type': 'Offer',
+
             itemOffered: {
               '@type': 'Service',
               name: 'Банный ритуал',
             },
           },
+
           {
             '@type': 'Offer',
+
             itemOffered: {
               '@type': 'Service',
               name: 'Купель',
             },
           },
+
           {
             '@type': 'Offer',
+
             itemOffered: {
               '@type': 'Service',
               name: 'Джакузи',
             },
           },
+
           {
             '@type': 'Offer',
+
             itemOffered: {
               '@type': 'Service',
               name: 'Банный веник',
@@ -256,13 +280,22 @@ const jsonLd = {
 
     {
       '@type': 'WebSite',
+
       '@id': `${siteUrl}/#website`,
+
       url: siteUrl,
+
       name: 'ZHAR de PAR',
       alternateName: 'ЖАР де ПАР',
+
       description:
         'Русская баня ZHAR de PAR на Коста-Брава рядом с Барселоной.',
-      inLanguage: ['ru-RU', 'uk-UA', 'es-ES', 'en-US'],
+
+      inLanguage: [
+        'ru-RU',
+        'uk-UA',
+      ],
+
       publisher: {
         '@id': `${siteUrl}/#business`,
       },
@@ -270,37 +303,56 @@ const jsonLd = {
 
     {
       '@type': 'WebPage',
+
       '@id': `${siteUrl}/#webpage`,
+
       url: siteUrl,
+
       name: 'ZHAR de PAR',
+
       description:
         'Частная русская баня ZHAR de PAR в Бланесе на Коста-Брава рядом с Барселоной.',
+
       isPartOf: {
         '@id': `${siteUrl}/#website`,
       },
+
       about: {
         '@id': `${siteUrl}/#business`,
       },
+
       inLanguage: 'ru-RU',
     },
 
     {
       '@type': 'VideoObject',
+
       '@id': `${siteUrl}/#video`,
+
       name: 'ZHAR de PAR — русская баня на Коста-Брава',
+
       description:
         'Видео о ZHAR de PAR — частной русской бане в Бланесе на Коста-Брава рядом с Барселоной.',
+
       thumbnailUrl: `${siteUrl}/photos/view/viewgeneral.PNG`,
+
       uploadDate: '2026-08-26',
+
       contentUrl: `${siteUrl}/video/videobanya.mp4`,
+
       embedUrl: siteUrl,
+
       inLanguage: 'ru-RU',
+
       isFamilyFriendly: true,
 
       publisher: {
         '@type': 'Organization',
+
         name: 'ZHAR de PAR',
+
         url: siteUrl,
+
         logo: {
           '@type': 'ImageObject',
           url: `${siteUrl}/photos/logos/logoof.png`,
@@ -327,10 +379,14 @@ export default function RootLayout({
   return (
     <html
       lang="ru"
+      translate="no"
       className={`${cormorant.variable} ${jost.variable} bg-background`}
     >
       <head>
         <meta charSet="utf-8" />
+
+        {/* Запрещаем автоматический перевод Google */}
+        <meta name="google" content="notranslate" />
 
         {/* Название вкладки браузера */}
         <title>ZHAR de PAR</title>
@@ -351,7 +407,9 @@ export default function RootLayout({
           {children}
         </LanguageProvider>
 
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        {process.env.NODE_ENV === 'production' && (
+          <Analytics />
+        )}
 
         <script
           type="application/ld+json"
