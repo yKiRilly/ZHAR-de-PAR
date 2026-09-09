@@ -59,7 +59,6 @@ export const metadata: Metadata = {
     locale: 'ru_RU',
     url: siteUrl,
     siteName: 'ZHAR de PAR',
-
     title: 'ZHAR de PAR',
 
     description:
@@ -77,7 +76,6 @@ export const metadata: Metadata = {
 
   twitter: {
     card: 'summary_large_image',
-
     title: 'ZHAR de PAR',
 
     description:
@@ -106,7 +104,6 @@ export const metadata: Metadata = {
         type: 'image/png',
       },
     ],
-
     shortcut: '/photos/logos/logogoogle.png',
     apple: '/photos/logos/logogoogle.png',
   },
@@ -223,52 +220,41 @@ const jsonLd = {
         itemListElement: [
           {
             '@type': 'Offer',
-
             itemOffered: {
               '@type': 'Service',
               name: 'Аренда частной русской бани',
             },
           },
-
           {
             '@type': 'Offer',
-
             itemOffered: {
               '@type': 'Service',
               name: 'Парение веником',
             },
           },
-
           {
             '@type': 'Offer',
-
             itemOffered: {
               '@type': 'Service',
               name: 'Банный ритуал',
             },
           },
-
           {
             '@type': 'Offer',
-
             itemOffered: {
               '@type': 'Service',
               name: 'Купель',
             },
           },
-
           {
             '@type': 'Offer',
-
             itemOffered: {
               '@type': 'Service',
               name: 'Джакузи',
             },
           },
-
           {
             '@type': 'Offer',
-
             itemOffered: {
               '@type': 'Service',
               name: 'Банный веник',
@@ -399,6 +385,19 @@ export default function RootLayout({
         <meta
           name="apple-mobile-web-app-title"
           content="ZHAR de PAR"
+        />
+
+        {/* Favicon для Google и браузера */}
+        <link
+          rel="icon"
+          type="image/png"
+          href="/photos/logos/logogoogle.png"
+        />
+
+        <link
+          rel="shortcut icon"
+          type="image/png"
+          href="/photos/logos/logogoogle.png"
         />
       </head>
 
