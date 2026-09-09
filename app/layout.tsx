@@ -1,20 +1,18 @@
-
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Cormorant_Garamond, Jost } from 'next/font/google'
-
 import { LanguageProvider } from '@/components/language-provider'
 import './globals.css'
 
 const cormorant = Cormorant_Garamond({
-  subsets: ['latin'],
+  subsets: ['latin', 'cyrillic'],
   weight: ['300', '400', '500', '600'],
   variable: '--font-cormorant',
   display: 'swap',
 })
 
 const jost = Jost({
-  subsets: ['latin'],
+  subsets: ['latin', 'cyrillic'],
   weight: ['300', '400', '500', '600'],
   variable: '--font-jost',
   display: 'swap',
@@ -46,7 +44,6 @@ export const metadata: Metadata = {
 
   alternates: {
     canonical: siteUrl,
-
     languages: {
       'ru-RU': siteUrl,
       'uk-UA': siteUrl,
@@ -84,7 +81,6 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
-
     googleBot: {
       index: true,
       follow: true,
@@ -112,9 +108,7 @@ const jsonLd = {
   '@graph': [
     {
       '@type': 'LocalBusiness',
-
       '@id': `${siteUrl}/#business`,
-
       name: 'ZHAR de PAR',
       alternateName: 'ЖАР де ПАР',
 
@@ -124,15 +118,12 @@ const jsonLd = {
       url: siteUrl,
 
       logo: `${siteUrl}/photos/logos/logoof.png`,
-
       image: `${siteUrl}/photos/view/viewgeneral.PNG`,
 
       priceRange: '€€',
-
       currenciesAccepted: 'EUR',
 
       telephone: '+34601801800',
-
       email: 'zhardepar1@gmail.com',
 
       address: {
@@ -214,7 +205,6 @@ const jsonLd = {
 
       hasOfferCatalog: {
         '@type': 'OfferCatalog',
-
         name: 'Услуги ZHAR de PAR',
 
         itemListElement: [
@@ -266,24 +256,15 @@ const jsonLd = {
 
     {
       '@type': 'WebSite',
-
       '@id': `${siteUrl}/#website`,
-
       url: siteUrl,
-
       name: 'ZHAR de PAR',
-
       alternateName: 'ЖАР де ПАР',
 
       description:
         'Русская баня ZHAR de PAR на Коста-Брава рядом с Барселоной.',
 
-      inLanguage: [
-        'ru-RU',
-        'uk-UA',
-        'es-ES',
-        'en-US',
-      ],
+      inLanguage: ['ru-RU', 'uk-UA', 'es-ES', 'en-US'],
 
       publisher: {
         '@id': `${siteUrl}/#business`,
@@ -292,11 +273,8 @@ const jsonLd = {
 
     {
       '@type': 'WebPage',
-
       '@id': `${siteUrl}/#webpage`,
-
       url: siteUrl,
-
       name: 'ZHAR de PAR',
 
       description:
@@ -315,7 +293,6 @@ const jsonLd = {
 
     {
       '@type': 'VideoObject',
-
       '@id': `${siteUrl}/#video`,
 
       name: 'ZHAR de PAR — русская баня на Коста-Брава',
@@ -328,18 +305,14 @@ const jsonLd = {
       uploadDate: '2026-08-26',
 
       contentUrl: `${siteUrl}/video/videobanya.mp4`,
-
       embedUrl: siteUrl,
 
       inLanguage: 'ru-RU',
-
       isFamilyFriendly: true,
 
       publisher: {
         '@type': 'Organization',
-
         name: 'ZHAR de PAR',
-
         url: siteUrl,
 
         logo: {
@@ -372,8 +345,14 @@ export default function RootLayout({
     >
       <head>
         <meta charSet="utf-8" />
-        <meta name="application-name" content="ZHAR de PAR" />
-        <meta name="apple-mobile-web-app-title" content="ZHAR de PAR" />
+        <meta
+          name="application-name"
+          content="ZHAR de PAR"
+        />
+        <meta
+          name="apple-mobile-web-app-title"
+          content="ZHAR de PAR"
+        />
       </head>
 
       <body className="font-sans antialiased">
