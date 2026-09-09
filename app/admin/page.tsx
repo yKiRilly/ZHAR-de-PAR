@@ -64,19 +64,19 @@ type BookingFilter =
 const statuses = [
   {
     value: 'new',
-    label: 'ÐÐ¾Ð²Ð°Ñ',
+    label: 'Новая',
   },
   {
     value: 'confirmed',
-    label: 'ÐŸÐ¾Ð´Ñ‚Ð²ÐµÑ€Ð¶Ð´ÐµÐ½Ð°',
+    label: 'Подтверждена',
   },
   {
     value: 'completed',
-    label: 'Ð—Ð°Ð²ÐµÑ€ÑˆÐµÐ½Ð°',
+    label: 'Завершена',
   },
   {
     value: 'cancelled',
-    label: 'ÐžÑ‚Ð¼ÐµÐ½ÐµÐ½Ð°',
+    label: 'Отменена',
   },
 ]
 
@@ -86,36 +86,36 @@ const filters: {
 }[] = [
   {
     value: 'all',
-    label: 'Ð’ÑÐµ',
+    label: 'Все',
   },
   {
     value: 'today',
-    label: 'Ð¡ÐµÐ³Ð¾Ð´Ð½Ñ',
+    label: 'Сегодня',
   },
   {
     value: 'upcoming',
-    label: 'ÐŸÑ€ÐµÐ´ÑÑ‚Ð¾ÑÑ‰Ð¸Ðµ',
+    label: 'Предстоящие',
   },
   {
     value: 'new',
-    label: 'ÐÐ¾Ð²Ñ‹Ðµ',
+    label: 'Новые',
   },
   {
     value: 'confirmed',
-    label: 'ÐŸÐ¾Ð´Ñ‚Ð²ÐµÑ€Ð¶Ð´Ñ‘Ð½Ð½Ñ‹Ðµ',
+    label: 'Подтверждённые',
   },
   {
     value: 'completed',
-    label: 'Ð—Ð°Ð²ÐµÑ€ÑˆÑ‘Ð½Ð½Ñ‹Ðµ',
+    label: 'Завершённые',
   },
   {
     value: 'cancelled',
-    label: 'ÐžÑ‚Ð¼ÐµÐ½Ñ‘Ð½Ð½Ñ‹Ðµ',
+    label: 'Отменённые',
   },
 ]
 
 function formatDate(date: string | null) {
-  if (!date) return 'â€”'
+  if (!date) return '—'
 
   const parts = date.split('-')
 
@@ -130,7 +130,7 @@ function getStatusLabel(status: string | null) {
   return (
     statuses.find(
       (item) => item.value === (status || 'new'),
-    )?.label || 'ÐÐ¾Ð²Ð°Ñ'
+    )?.label || 'Новая'
   )
 }
 
@@ -155,7 +155,7 @@ function getServiceName(item: BookingItem) {
   const name = item.name?.trim() || ''
 
   if (id === 'sauna-rental' || id === 'sauna') {
-    return 'ÐÑ€ÐµÐ½Ð´Ð° Ð±Ð°Ð½Ð½Ð¾Ð³Ð¾ Ð¿Ñ€Ð¾ÑÑ‚Ñ€Ð°Ð½ÑÑ‚Ð²Ð°'
+    return 'Аренда банного пространства'
   }
 
   if (
@@ -163,11 +163,11 @@ function getServiceName(item: BookingItem) {
     id === 'steam-ritual' ||
     id === 'shared-steam'
   ) {
-    return 'ÐŸÐ°Ñ€ÐµÐ½Ð¸Ðµ â€” Ð¾Ð±Ñ‰Ð¸Ð¹ Ñ€Ð¸Ñ‚ÑƒÐ°Ð»'
+    return 'Парение — общий ритуал'
   }
 
   if (id === 'individual-steam') {
-    return 'ÐŸÐ°Ñ€ÐµÐ½Ð¸Ðµ â€” Ð¸Ð½Ð´Ð¸Ð²Ð¸Ð´ÑƒÐ°Ð»ÑŒÐ½Ñ‹Ð¹ Ñ€Ð¸Ñ‚ÑƒÐ°Ð»'
+    return 'Парение — индивидуальный ритуал'
   }
 
   if (
@@ -175,18 +175,18 @@ function getServiceName(item: BookingItem) {
     id === 'bath' ||
     id === 'baptismal-font'
   ) {
-    return 'ÐšÑƒÐ¿ÐµÐ»ÑŒ'
+    return 'Купель'
   }
 
   if (id === 'grill') {
-    return 'ÐœÐ°Ð½Ð³Ð°Ð»'
+    return 'Мангал'
   }
 
   if (
     id === 'salt-honey' ||
     id === 'salt-honey-scrub'
   ) {
-    return 'Ð¡ÐºÑ€Ð°Ð± Ñ ÑÐ¾Ð»ÑŒÑŽ Ð¸ Ð¼Ñ‘Ð´Ð¾Ð¼'
+    return 'Скраб с солью и мёдом'
   }
 
   if (
@@ -194,45 +194,45 @@ function getServiceName(item: BookingItem) {
     id === 'towels' ||
     id === 'towel-sheet'
   ) {
-    return 'ÐŸÐ¾Ð»Ð¾Ñ‚ÐµÐ½Ñ†Ðµ Ð¸ Ð¿Ñ€Ð¾ÑÑ‚Ñ‹Ð½ÑŒ'
+    return 'Полотенце и простынь'
   }
 
   if (
     id === 'slippers' ||
     id === 'slippers-hat'
   ) {
-    return 'Ð¢Ð°Ð¿Ð¾Ñ‡ÐºÐ¸ Ð¸ Ð±Ð°Ð½Ð½Ð°Ñ ÑˆÐ°Ð¿ÐºÐ°'
+    return 'Тапочки и банная шапка'
   }
 
   if (
     id === 'birch' ||
     id === 'birch-broom'
   ) {
-    return 'Ð‘ÐµÑ€Ñ‘Ð·Ð¾Ð²Ñ‹Ð¹ Ð²ÐµÐ½Ð¸Ðº'
+    return 'Берёзовый веник'
   }
 
   if (
     id === 'oak' ||
     id === 'oak-broom'
   ) {
-    return 'Ð”ÑƒÐ±Ð¾Ð²Ñ‹Ð¹ Ð²ÐµÐ½Ð¸Ðº'
+    return 'Дубовый веник'
   }
 
   if (
     id === 'eucalyptus' ||
     id === 'eucalyptus-broom'
   ) {
-    return 'Ð­Ð²ÐºÐ°Ð»Ð¸Ð¿Ñ‚Ð¾Ð²Ñ‹Ð¹ Ð²ÐµÐ½Ð¸Ðº'
+    return 'Эвкалиптовый веник'
   }
 
   if (
     id === 'canadian' ||
     id === 'canadian-broom'
   ) {
-    return 'ÐšÐ°Ð½Ð°Ð´ÑÐºÐ¸Ð¹ Ð²ÐµÐ½Ð¸Ðº'
+    return 'Канадский веник'
   }
 
-  return name || 'Ð£ÑÐ»ÑƒÐ³Ð°'
+  return name || 'Услуга'
 }
 
 function parseCart(cart: Booking['cart']): BookingItem[] {
@@ -405,7 +405,7 @@ function getBookingEnd(
 }
 
 function formatTime(value: string | null) {
-  if (!value) return 'â€”'
+  if (!value) return '—'
 
   if (value.includes(' ')) {
     return value.split(' ').pop()?.slice(0, 5) || value
@@ -514,7 +514,7 @@ export default function AdminPage() {
 
         setError(
           bookingsError.message ||
-            'ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð·Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚ÑŒ Ð±Ñ€Ð¾Ð½Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ.',
+            'Не удалось загрузить бронирования.',
         )
 
         return
@@ -528,7 +528,7 @@ export default function AdminPage() {
       )
 
       setError(
-        'ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð·Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚ÑŒ Ð±Ñ€Ð¾Ð½Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ.',
+        'Не удалось загрузить бронирования.',
       )
     } finally {
       setLoading(false)
@@ -640,7 +640,7 @@ export default function AdminPage() {
   ) => {
     if (newStatus === 'cancelled') {
       const confirmed = window.confirm(
-        'Ð’Ñ‹ Ð´ÐµÐ¹ÑÑ‚Ð²Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð¾ Ñ…Ð¾Ñ‚Ð¸Ñ‚Ðµ Ð¾Ñ‚Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ ÑÑ‚Ñƒ Ð±Ñ€Ð¾Ð½ÑŒ?\n\nÐŸÐ¾ÑÐ»Ðµ Ð¾Ñ‚Ð¼ÐµÐ½Ñ‹ ÑÑ‚Ð¾ Ð²Ñ€ÐµÐ¼Ñ ÑÐ½Ð¾Ð²Ð° ÑÑ‚Ð°Ð½ÐµÑ‚ Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ñ‹Ð¼ Ð´Ð»Ñ ÐºÐ»Ð¸ÐµÐ½Ñ‚Ð¾Ð².',
+        'Вы действительно хотите отменить эту бронь?\n\nПосле отмены это время снова станет доступным для клиентов.',
       )
 
       if (!confirmed) return
@@ -666,7 +666,7 @@ export default function AdminPage() {
 
         alert(
           updateError.message ||
-            'ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð¸Ð·Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ ÑÑ‚Ð°Ñ‚ÑƒÑ.',
+            'Не удалось изменить статус.',
         )
 
         return
@@ -691,7 +691,7 @@ export default function AdminPage() {
     bookingId: string | number,
   ) => {
     const confirmed = window.confirm(
-      'ÐžÑ‚Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ ÑÑ‚Ñƒ Ð±Ñ€Ð¾Ð½ÑŒ?\n\nÐŸÐ¾ÑÐ»Ðµ Ð¾Ñ‚Ð¼ÐµÐ½Ñ‹ Ð²Ñ€ÐµÐ¼Ñ ÑÐ½Ð¾Ð²Ð° Ð±ÑƒÐ´ÐµÑ‚ Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð½Ð¾ Ð´Ð»Ñ Ð±Ñ€Ð¾Ð½Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ.',
+      'Отменить эту бронь?\n\nПосле отмены время снова будет доступно для бронирования.',
     )
 
     if (!confirmed) return
@@ -716,7 +716,7 @@ export default function AdminPage() {
 
         alert(
           updateError.message ||
-            'ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð¾Ñ‚Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ Ð±Ñ€Ð¾Ð½ÑŒ.',
+            'Не удалось отменить бронь.',
         )
 
         return
@@ -787,22 +787,22 @@ export default function AdminPage() {
       editForm.message.trim()
 
     if (!name) {
-      alert('Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð¸Ð¼Ñ ÐºÐ»Ð¸ÐµÐ½Ñ‚Ð°.')
+      alert('Введите имя клиента.')
       return
     }
 
     if (!phone) {
-      alert('Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ñ‚ÐµÐ»ÐµÑ„Ð¾Ð½ ÐºÐ»Ð¸ÐµÐ½Ñ‚Ð°.')
+      alert('Введите телефон клиента.')
       return
     }
 
     if (!bookingDate) {
-      alert('Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð´Ð°Ñ‚Ñƒ.')
+      alert('Выберите дату.')
       return
     }
 
     if (!bookingTime) {
-      alert('Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð²Ñ€ÐµÐ¼Ñ.')
+      alert('Выберите время.')
       return
     }
 
@@ -811,7 +811,7 @@ export default function AdminPage() {
       guests > 50
     ) {
       alert(
-        'ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð³Ð¾ÑÑ‚ÐµÐ¹ Ð´Ð¾Ð»Ð¶Ð½Ð¾ Ð±Ñ‹Ñ‚ÑŒ Ð¾Ñ‚ 1 Ð´Ð¾ 50.',
+        'Количество гостей должно быть от 1 до 50.',
       )
       return
     }
@@ -889,7 +889,7 @@ export default function AdminPage() {
 
         alert(
           conflictError.message ||
-            'ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð¿Ñ€Ð¾Ð²ÐµÑ€Ð¸Ñ‚ÑŒ Ð·Ð°Ð½ÑÑ‚Ð¾ÑÑ‚ÑŒ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸.',
+            'Не удалось проверить занятость времени.',
         )
 
         return
@@ -935,7 +935,7 @@ export default function AdminPage() {
 
       if (hasConflict) {
         alert(
-          'Ð­Ñ‚Ð¾ Ð²Ñ€ÐµÐ¼Ñ ÑƒÐ¶Ðµ Ð·Ð°Ð½ÑÑ‚Ð¾ Ð´Ñ€ÑƒÐ³Ð¾Ð¹ Ð±Ñ€Ð¾Ð½ÑŒÑŽ.\n\nÐŸÐ¾Ð¶Ð°Ð»ÑƒÐ¹ÑÑ‚Ð°, Ð²Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð´Ñ€ÑƒÐ³Ð¾Ðµ Ð²Ñ€ÐµÐ¼Ñ.',
+          'Это время уже занято другой бронью.\n\nПожалуйста, выберите другое время.',
         )
 
         return
@@ -1013,12 +1013,12 @@ export default function AdminPage() {
           '23P01'
         ) {
           alert(
-            'Ð­Ñ‚Ð¾ Ð²Ñ€ÐµÐ¼Ñ ÑƒÐ¶Ðµ Ð·Ð°Ð½ÑÑ‚Ð¾ Ð´Ñ€ÑƒÐ³Ð¾Ð¹ Ð±Ñ€Ð¾Ð½ÑŒÑŽ.\n\nÐŸÐ¾Ð¶Ð°Ð»ÑƒÐ¹ÑÑ‚Ð°, Ð²Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð´Ñ€ÑƒÐ³Ð¾Ðµ Ð²Ñ€ÐµÐ¼Ñ.',
+            'Это время уже занято другой бронью.\n\nПожалуйста, выберите другое время.',
           )
         } else {
           alert(
             updateError.message ||
-              'ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ ÑÐ¾Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ÑŒ Ð¸Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ñ.',
+              'Не удалось сохранить изменения.',
           )
         }
 
@@ -1053,7 +1053,7 @@ export default function AdminPage() {
       setEditingBooking(null)
 
       alert(
-        'Ð‘Ñ€Ð¾Ð½ÑŒ ÑƒÑÐ¿ÐµÑˆÐ½Ð¾ Ð¸Ð·Ð¼ÐµÐ½ÐµÐ½Ð°.',
+        'Бронь успешно изменена.',
       )
     } finally {
       setSavingEdit(false)
@@ -1195,11 +1195,11 @@ export default function AdminPage() {
               </p>
 
               <h1 className="mt-1 font-serif text-3xl font-light sm:mt-2 sm:text-5xl">
-                Ð‘Ñ€Ð¾Ð½Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ
+                Бронирования
               </h1>
 
               <p className="mt-1 text-xs text-muted-foreground sm:mt-2 sm:text-sm">
-                Ð£Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ð·Ð°ÑÐ²ÐºÐ°Ð¼Ð¸ Ð¸ Ð·Ð°Ð½ÑÑ‚Ð¾ÑÑ‚ÑŒÑŽ
+                Управление заявками и занятостью
               </p>
             </div>
 
@@ -1218,8 +1218,8 @@ export default function AdminPage() {
                   }`}
                 />
                 {loading
-                  ? 'Ð—Ð°Ð³Ñ€ÑƒÐ·ÐºÐ°'
-                  : 'ÐžÐ±Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ'}
+                  ? 'Загрузка'
+                  : 'Обновить'}
               </button>
 
               <button
@@ -1227,7 +1227,7 @@ export default function AdminPage() {
                 onClick={logout}
                 className="min-h-11 rounded-full border border-red-500/30 px-3 py-3 text-[10px] font-medium uppercase tracking-wider text-red-300 transition active:scale-[0.98] hover:bg-red-500 hover:text-white sm:px-5 sm:text-xs sm:tracking-widest"
               >
-                Ð’Ñ‹Ð¹Ñ‚Ð¸
+                Выйти
               </button>
             </div>
           </div>
@@ -1238,11 +1238,11 @@ export default function AdminPage() {
         <div className="mb-5 grid grid-cols-2 gap-2 sm:mb-8 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
           {[
             {
-              label: 'Ð’ÑÐµÐ³Ð¾',
+              label: 'Всего',
               value: bookings.length,
             },
             {
-              label: 'ÐÐ¾Ð²Ñ‹Ðµ',
+              label: 'Новые',
               value: bookings.filter(
                 (booking) =>
                   !booking.status ||
@@ -1251,7 +1251,7 @@ export default function AdminPage() {
               ).length,
             },
             {
-              label: 'ÐŸÐ¾Ð´Ñ‚Ð²ÐµÑ€Ð¶Ð´ÐµÐ½Ñ‹',
+              label: 'Подтверждены',
               value: bookings.filter(
                 (booking) =>
                   booking.status ===
@@ -1259,7 +1259,7 @@ export default function AdminPage() {
               ).length,
             },
             {
-              label: 'ÐžÑ‚Ð¼ÐµÐ½ÐµÐ½Ñ‹',
+              label: 'Отменены',
               value: bookings.filter(
                 (booking) =>
                   booking.status ===
@@ -1297,7 +1297,7 @@ export default function AdminPage() {
                 <CalendarDays className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
 
                 <p className="text-[10px] uppercase tracking-[0.2em] text-primary sm:text-xs sm:tracking-[0.25em]">
-                  ÐšÐ°Ð»ÐµÐ½Ð´Ð°Ñ€ÑŒ
+                  Календарь
                 </p>
               </div>
 
@@ -1315,7 +1315,7 @@ export default function AdminPage() {
                   goPreviousMonth
                 }
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/20 text-primary transition active:scale-95 hover:bg-primary hover:text-black"
-                aria-label="ÐŸÑ€ÐµÐ´Ñ‹Ð´ÑƒÑ‰Ð¸Ð¹ Ð¼ÐµÑÑÑ†"
+                aria-label="Предыдущий месяц"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
@@ -1325,14 +1325,14 @@ export default function AdminPage() {
                 onClick={goToday}
                 className="h-10 rounded-full border border-primary/20 px-3 text-[9px] uppercase tracking-wider text-primary transition active:scale-95 hover:bg-primary hover:text-black sm:px-4 sm:text-xs sm:tracking-widest"
               >
-                Ð¡ÐµÐ³Ð¾Ð´Ð½Ñ
+                Сегодня
               </button>
 
               <button
                 type="button"
                 onClick={goNextMonth}
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/20 text-primary transition active:scale-95 hover:bg-primary hover:text-black"
-                aria-label="Ð¡Ð»ÐµÐ´ÑƒÑŽÑ‰Ð¸Ð¹ Ð¼ÐµÑÑÑ†"
+                aria-label="Следующий месяц"
               >
                 <ChevronRight className="h-5 w-5" />
               </button>
@@ -1343,13 +1343,13 @@ export default function AdminPage() {
 
           <div className="mb-1 grid grid-cols-7 gap-1 sm:mb-2 sm:gap-2">
             {[
-              'ÐŸÐ½',
-              'Ð’Ñ‚',
-              'Ð¡Ñ€',
-              'Ð§Ñ‚',
-              'ÐŸÑ‚',
-              'Ð¡Ð±',
-              'Ð’Ñ',
+              'Пн',
+              'Вт',
+              'Ср',
+              'Чт',
+              'Пт',
+              'Сб',
+              'Вс',
             ].map((day) => (
               <div
                 key={day}
@@ -1430,7 +1430,7 @@ export default function AdminPage() {
 
                     {today && (
                       <span className="absolute right-1 top-1 hidden text-[7px] uppercase tracking-widest text-primary sm:block">
-                        ÑÐµÐ³Ð¾Ð´Ð½Ñ
+                        сегодня
                       </span>
                     )}
 
@@ -1439,7 +1439,7 @@ export default function AdminPage() {
                         <div className="h-1 rounded-full bg-primary sm:h-1.5" />
 
                         <span className="mt-1 hidden text-[9px] text-primary sm:block">
-                          Ð•ÑÑ‚ÑŒ Ð±Ñ€Ð¾Ð½ÑŒ
+                          Есть бронь
                         </span>
                       </div>
                     )}
@@ -1455,7 +1455,7 @@ export default function AdminPage() {
             <div className="flex items-center justify-between gap-3">
               <div className="min-w-0">
                 <p className="text-[9px] uppercase tracking-widest text-muted-foreground sm:text-[10px]">
-                  Ð’Ñ‹Ð±Ñ€Ð°Ð½Ð½Ð°Ñ Ð´Ð°Ñ‚Ð°
+                  Выбранная дата
                 </p>
 
                 <p className="mt-1 font-serif text-xl text-primary sm:text-2xl">
@@ -1466,7 +1466,7 @@ export default function AdminPage() {
               </div>
 
               <div className="shrink-0 rounded-full border border-primary/15 px-3 py-2 text-xs text-muted-foreground">
-                Ð—Ð°Ð½ÑÑ‚Ð¾:{' '}
+                Занято:{' '}
                 <span className="text-primary">
                   {
                     selectedDayBookings.length
@@ -1483,13 +1483,13 @@ export default function AdminPage() {
           <div className="mb-4">
             <div className="flex items-center gap-2">
               <p className="text-[10px] uppercase tracking-[0.2em] text-primary sm:text-xs sm:tracking-[0.25em]">
-                Ð—Ð°Ð½ÑÑ‚Ð¾ÑÑ‚ÑŒ
+                Занятость
               </p>
 
               {selectedDate ===
                 getTodayString() && (
                 <span className="rounded-full bg-primary/10 px-2 py-1 text-[8px] uppercase tracking-widest text-primary">
-                  Ð¡ÐµÐ³Ð¾Ð´Ð½Ñ
+                  Сегодня
                 </span>
               )}
             </div>
@@ -1505,11 +1505,11 @@ export default function AdminPage() {
           0 ? (
             <div className="rounded-2xl border border-green-500/20 bg-green-500/5 p-5 sm:p-6">
               <p className="font-serif text-xl text-green-300 sm:text-2xl">
-                Ð”ÐµÐ½ÑŒ ÑÐ²Ð¾Ð±Ð¾Ð´ÐµÐ½
+                День свободен
               </p>
 
               <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
-                ÐÐ° Ð²Ñ‹Ð±Ñ€Ð°Ð½Ð½ÑƒÑŽ Ð´Ð°Ñ‚Ñƒ Ð°ÐºÑ‚Ð¸Ð²Ð½Ñ‹Ñ… Ð±Ñ€Ð¾Ð½Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ð¹ Ð½ÐµÑ‚.
+                На выбранную дату активных бронирований нет.
               </p>
             </div>
           ) : (
@@ -1531,11 +1531,11 @@ export default function AdminPage() {
 
                           <p className="text-[10px] text-muted-foreground sm:text-xs">
                             {booking.booking_end
-                              ? `Ð´Ð¾ ${formatTime(
+                              ? `до ${formatTime(
                                   booking.booking_end,
                                 )}`
                               : booking.duration_minutes
-                                ? `${booking.duration_minutes / 60} Ñ‡.`
+                                ? `${booking.duration_minutes / 60} ч.`
                                 : ''}
                           </p>
                         </div>
@@ -1543,13 +1543,13 @@ export default function AdminPage() {
                         <div className="min-w-0 border-l border-primary/10 pl-3">
                           <p className="truncate text-sm font-medium sm:text-base">
                             {booking.name ||
-                              'Ð‘ÐµÐ· Ð¸Ð¼ÐµÐ½Ð¸'}
+                              'Без имени'}
                           </p>
 
                           <p className="text-xs text-muted-foreground">
                             {booking.guests ||
                               0}{' '}
-                            Ð³Ð¾ÑÑ‚ÐµÐ¹
+                            гостей
                           </p>
                         </div>
                       </div>
@@ -1571,7 +1571,7 @@ export default function AdminPage() {
                         }}
                         className="shrink-0 rounded-full border border-primary/20 px-3 py-2 text-[9px] uppercase tracking-wider text-primary transition active:scale-95 hover:bg-primary hover:text-black sm:px-4 sm:text-xs sm:tracking-widest"
                       >
-                        ÐŸÐ¾Ð´Ñ€Ð¾Ð±Ð½ÐµÐµ
+                        Подробнее
                       </button>
                     </div>
 
@@ -1592,7 +1592,7 @@ export default function AdminPage() {
                           className="flex items-center gap-1.5 text-xs text-primary"
                         >
                           <Phone className="h-3.5 w-3.5" />
-                          ÐŸÐ¾Ð·Ð²Ð¾Ð½Ð¸Ñ‚ÑŒ
+                          Позвонить
                         </a>
                       )}
                     </div>
@@ -1606,7 +1606,7 @@ export default function AdminPage() {
             0 && (
             <div className="mt-4 rounded-2xl border border-red-500/15 bg-red-500/5 p-4 sm:p-5">
               <p className="mb-3 text-[10px] uppercase tracking-widest text-red-300">
-                ÐžÑ‚Ð¼ÐµÐ½Ñ‘Ð½Ð½Ñ‹Ðµ Ð±Ñ€Ð¾Ð½Ð¸
+                Отменённые брони
               </p>
 
               <div className="space-y-2">
@@ -1620,13 +1620,13 @@ export default function AdminPage() {
                         {formatTime(
                           booking.booking_time,
                         )}{' '}
-                        â€”{' '}
+                        —{' '}
                         {booking.name ||
-                          'Ð‘ÐµÐ· Ð¸Ð¼ÐµÐ½Ð¸'}
+                          'Без имени'}
                       </span>
 
                       <span className="shrink-0 text-red-300">
-                        ÐžÑ‚Ð¼ÐµÐ½ÐµÐ½Ð°
+                        Отменена
                       </span>
                     </div>
                   ),
@@ -1641,16 +1641,16 @@ export default function AdminPage() {
         <section>
           <div className="mb-4">
             <p className="text-[10px] uppercase tracking-[0.2em] text-primary sm:text-xs sm:tracking-[0.25em]">
-              Ð’ÑÐµ Ð·Ð°ÑÐ²ÐºÐ¸
+              Все заявки
             </p>
 
             <div className="mt-1 flex items-end justify-between gap-3">
               <h2 className="font-serif text-2xl sm:text-3xl">
-                Ð‘Ñ€Ð¾Ð½Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ
+                Бронирования
               </h2>
 
               <span className="shrink-0 text-[10px] text-muted-foreground sm:text-xs">
-                Ð¡ÐµÐ³Ð¾Ð´Ð½Ñ:{' '}
+                Сегодня:{' '}
                 <span className="text-primary">
                   {todayBookingsCount}
                 </span>
@@ -1674,7 +1674,7 @@ export default function AdminPage() {
                     event.target.value,
                   )
                 }
-                placeholder="ÐŸÐ¾Ð¸ÑÐº Ð¿Ð¾ Ð¸Ð¼ÐµÐ½Ð¸ Ð¸Ð»Ð¸ Ñ‚ÐµÐ»ÐµÑ„Ð¾Ð½Ñƒ..."
+                placeholder="Поиск по имени или телефону..."
                 className="min-h-12 w-full rounded-2xl border border-primary/20 bg-[#0e0a08] py-3 pl-11 pr-10 text-sm outline-none transition placeholder:text-muted-foreground/50 focus:border-primary"
               />
 
@@ -1685,7 +1685,7 @@ export default function AdminPage() {
                     setSearch('')
                   }
                   className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground transition hover:text-primary"
-                  aria-label="ÐžÑ‡Ð¸ÑÑ‚Ð¸Ñ‚ÑŒ Ð¿Ð¾Ð¸ÑÐº"
+                  aria-label="Очистить поиск"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -1724,13 +1724,13 @@ export default function AdminPage() {
 
             <div className="mt-3 flex flex-col gap-2 border-t border-primary/10 pt-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-[11px] text-muted-foreground">
-                ÐŸÐ¾ÐºÐ°Ð·Ð°Ð½Ð¾:{' '}
+                Показано:{' '}
                 <span className="font-medium text-primary">
                   {
                     filteredBookings.length
                   }
                 </span>{' '}
-                Ð¸Ð·{' '}
+                из{' '}
                 <span className="font-medium text-primary">
                   {bookings.length}
                 </span>
@@ -1750,36 +1750,36 @@ export default function AdminPage() {
                 className="self-start rounded-full border border-primary/20 px-4 py-2 text-[9px] uppercase tracking-wider text-primary transition active:scale-95 hover:bg-primary hover:text-black sm:self-auto sm:text-xs sm:tracking-widest"
               >
                 {sortOrder === 'asc'
-                  ? 'Ð‘Ð»Ð¸Ð¶Ð°Ð¹ÑˆÐ¸Ðµ â†‘'
-                  : 'ÐŸÐ¾Ð·Ð´Ð½Ð¸Ðµ â†“'}
+                  ? 'Ближайшие ↑'
+                  : 'Поздние ↓'}
               </button>
             </div>
           </div>
 
           {loading ? (
             <div className="rounded-2xl border border-primary/15 bg-[#15100e] p-10 text-center text-sm text-muted-foreground">
-              Ð—Ð°Ð³Ñ€ÑƒÐ¶Ð°ÐµÐ¼ Ð±Ñ€Ð¾Ð½Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ...
+              Загружаем бронирования...
             </div>
           ) : bookings.length ===
             0 ? (
             <div className="rounded-2xl border border-primary/15 bg-[#15100e] p-10 text-center">
               <p className="font-serif text-xl sm:text-2xl">
-                Ð‘Ñ€Ð¾Ð½Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ð¹ Ð¿Ð¾ÐºÐ° Ð½ÐµÑ‚
+                Бронирований пока нет
               </p>
 
               <p className="mt-2 text-xs text-muted-foreground sm:text-sm">
-                ÐÐ¾Ð²Ñ‹Ðµ Ð·Ð°ÑÐ²ÐºÐ¸ Ð¿Ð¾ÑÐ²ÑÑ‚ÑÑ Ð·Ð´ÐµÑÑŒ.
+                Новые заявки появятся здесь.
               </p>
             </div>
           ) : filteredBookings.length ===
             0 ? (
             <div className="rounded-2xl border border-primary/15 bg-[#15100e] p-8 text-center sm:p-10">
               <p className="font-serif text-xl sm:text-2xl">
-                ÐÐ¸Ñ‡ÐµÐ³Ð¾ Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½Ð¾
+                Ничего не найдено
               </p>
 
               <p className="mt-2 text-xs text-muted-foreground sm:text-sm">
-                ÐŸÐ¾Ð¿Ñ€Ð¾Ð±ÑƒÐ¹Ñ‚Ðµ Ð¸Ð·Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ Ñ„Ð¸Ð»ÑŒÑ‚Ñ€ Ð¸Ð»Ð¸ Ð¿Ð¾Ð¸ÑÐºÐ¾Ð²Ñ‹Ð¹ Ð·Ð°Ð¿Ñ€Ð¾Ñ.
+                Попробуйте изменить фильтр или поисковый запрос.
               </p>
 
               <button
@@ -1790,7 +1790,7 @@ export default function AdminPage() {
                 }}
                 className="mt-5 min-h-11 rounded-full border border-primary/30 px-5 py-3 text-[10px] uppercase tracking-widest text-primary transition active:scale-95 hover:bg-primary hover:text-black"
               >
-                Ð¡Ð±Ñ€Ð¾ÑÐ¸Ñ‚ÑŒ Ñ„Ð¸Ð»ÑŒÑ‚Ñ€Ñ‹
+                Сбросить фильтры
               </button>
             </div>
           ) : (
@@ -1863,7 +1863,7 @@ export default function AdminPage() {
                                   booking.booking_date,
                                 )}
                                 {booking.duration_minutes
-                                  ? ` Â· ${booking.duration_minutes / 60} Ñ‡.`
+                                  ? ` · ${booking.duration_minutes / 60} ч.`
                                   : ''}
                               </p>
                             </div>
@@ -1876,44 +1876,44 @@ export default function AdminPage() {
                           <div className="mt-4 grid grid-cols-2 gap-3 border-t border-primary/10 pt-4 sm:grid-cols-4">
                             <div className="min-w-0">
                               <p className="text-[9px] uppercase tracking-widest text-muted-foreground">
-                                ÐšÐ»Ð¸ÐµÐ½Ñ‚
+                                Клиент
                               </p>
 
                               <p className="mt-1 truncate text-sm font-medium">
                                 {booking.name ||
-                                  'â€”'}
+                                  '—'}
                               </p>
                             </div>
 
                             <div className="min-w-0">
                               <p className="text-[9px] uppercase tracking-widest text-muted-foreground">
-                                Ð¢ÐµÐ»ÐµÑ„Ð¾Ð½
+                                Телефон
                               </p>
 
                               <p className="mt-1 truncate text-xs text-muted-foreground">
                                 {booking.phone ||
-                                  'â€”'}
+                                  '—'}
                               </p>
                             </div>
 
                             <div>
                               <p className="text-[9px] uppercase tracking-widest text-muted-foreground">
-                                Ð“Ð¾ÑÑ‚Ð¸
+                                Гости
                               </p>
 
                               <p className="mt-1 text-sm">
                                 {booking.guests ||
-                                  'â€”'}
+                                  '—'}
                               </p>
                             </div>
 
                             <div>
                               <p className="text-[9px] uppercase tracking-widest text-muted-foreground">
-                                Ð¡ÑƒÐ¼Ð¼Ð°
+                                Сумма
                               </p>
 
                               <p className="mt-1 font-serif text-lg text-primary">
-                                â‚¬
+                                €
                                 {Number(
                                   booking.total ||
                                     0,
@@ -1936,24 +1936,24 @@ export default function AdminPage() {
 
                             <div>
                               <h2 className="mb-4 font-serif text-2xl">
-                                Ð”ÐµÑ‚Ð°Ð»Ð¸
+                                Детали
                               </h2>
 
                               <div className="space-y-0 rounded-2xl border border-primary/10 bg-[#0e0a08]">
                                 <div className="flex items-center justify-between gap-4 border-b border-primary/10 p-3.5 text-sm">
                                   <span className="text-muted-foreground">
-                                    Ð˜Ð¼Ñ
+                                    Имя
                                   </span>
 
                                   <span className="text-right">
                                     {booking.name ||
-                                      'â€”'}
+                                      '—'}
                                   </span>
                                 </div>
 
                                 <div className="flex items-center justify-between gap-4 border-b border-primary/10 p-3.5 text-sm">
                                   <span className="text-muted-foreground">
-                                    Ð¢ÐµÐ»ÐµÑ„Ð¾Ð½
+                                    Телефон
                                   </span>
 
                                   {booking.phone ? (
@@ -1966,14 +1966,14 @@ export default function AdminPage() {
                                     </a>
                                   ) : (
                                     <span>
-                                      â€”
+                                      —
                                     </span>
                                   )}
                                 </div>
 
                                 <div className="flex items-center justify-between gap-4 border-b border-primary/10 p-3.5 text-sm">
                                   <span className="text-muted-foreground">
-                                    Ð”Ð°Ñ‚Ð°
+                                    Дата
                                   </span>
 
                                   <span>
@@ -1985,7 +1985,7 @@ export default function AdminPage() {
 
                                 <div className="flex items-center justify-between gap-4 border-b border-primary/10 p-3.5 text-sm">
                                   <span className="text-muted-foreground">
-                                    ÐÐ°Ñ‡Ð°Ð»Ð¾
+                                    Начало
                                   </span>
 
                                   <span>
@@ -1998,7 +1998,7 @@ export default function AdminPage() {
 
                                 <div className="flex items-center justify-between gap-4 border-b border-primary/10 p-3.5 text-sm">
                                   <span className="text-muted-foreground">
-                                    ÐšÐ¾Ð½ÐµÑ†
+                                    Конец
                                   </span>
 
                                   <span>
@@ -2010,23 +2010,23 @@ export default function AdminPage() {
 
                                 <div className="flex items-center justify-between gap-4 border-b border-primary/10 p-3.5 text-sm">
                                   <span className="text-muted-foreground">
-                                    Ð“Ð¾ÑÑ‚Ð¸
+                                    Гости
                                   </span>
 
                                   <span>
                                     {booking.guests ||
-                                      'â€”'}
+                                      '—'}
                                   </span>
                                 </div>
 
                                 <div className="p-3.5 text-sm">
                                   <p className="text-muted-foreground">
-                                    ÐšÐ¾Ð¼Ð¼ÐµÐ½Ñ‚Ð°Ñ€Ð¸Ð¹
+                                    Комментарий
                                   </p>
 
                                   <p className="mt-1 break-words">
                                     {booking.message ||
-                                      'â€”'}
+                                      '—'}
                                   </p>
                                 </div>
                               </div>
@@ -2036,7 +2036,7 @@ export default function AdminPage() {
 
                             <div>
                               <h2 className="mb-4 font-serif text-2xl">
-                                Ð£ÑÐ»ÑƒÐ³Ð¸
+                                Услуги
                               </h2>
 
                               <div className="space-y-2">
@@ -2068,14 +2068,14 @@ export default function AdminPage() {
                                             {getServiceName(
                                               item,
                                             )}{' '}
-                                            Ã—{' '}
+                                            ×{' '}
                                             {
                                               quantity
                                             }
                                           </span>
 
                                           <span className="shrink-0 whitespace-nowrap text-primary">
-                                            â‚¬
+                                            €
                                             {(
                                               price *
                                               quantity
@@ -2089,7 +2089,7 @@ export default function AdminPage() {
                                   )
                                 ) : (
                                   <p className="text-sm text-muted-foreground">
-                                    Ð£ÑÐ»ÑƒÐ³Ð¸ Ð½Ðµ ÑƒÐºÐ°Ð·Ð°Ð½Ñ‹.
+                                    Услуги не указаны.
                                   </p>
                                 )}
                               </div>
@@ -2097,11 +2097,11 @@ export default function AdminPage() {
                               <div className="mt-4 rounded-xl border border-primary/20 bg-[#0e0a08] p-4">
                                 <div className="flex items-center justify-between">
                                   <span className="text-sm text-muted-foreground">
-                                    Ð˜Ñ‚Ð¾Ð³Ð¾
+                                    Итого
                                   </span>
 
                                   <span className="font-serif text-2xl text-primary">
-                                    â‚¬
+                                    €
                                     {Number(
                                       booking.total ||
                                         0,
@@ -2125,7 +2125,7 @@ export default function AdminPage() {
                                   className="flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-[10px] font-medium uppercase tracking-widest text-black transition active:scale-[0.98] hover:bg-primary/90 sm:col-span-2"
                                 >
                                   <Pencil className="h-4 w-4" />
-                                  Ð ÐµÐ´Ð°ÐºÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ Ð±Ñ€Ð¾Ð½ÑŒ
+                                  Редактировать бронь
                                 </button>
 
                                 {booking.phone && (
@@ -2135,7 +2135,7 @@ export default function AdminPage() {
                                       className="flex min-h-12 items-center justify-center gap-2 rounded-full border border-primary/20 px-4 py-3 text-[10px] uppercase tracking-widest text-primary transition active:scale-[0.98] hover:bg-primary hover:text-black"
                                     >
                                       <Phone className="h-4 w-4" />
-                                      ÐŸÐ¾Ð·Ð²Ð¾Ð½Ð¸Ñ‚ÑŒ
+                                      Позвонить
                                     </a>
 
                                     <a
@@ -2155,7 +2155,7 @@ export default function AdminPage() {
 
                               <div className="mt-6">
                                 <p className="mb-3 text-[10px] uppercase tracking-widest text-muted-foreground">
-                                  Ð˜Ð·Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ ÑÑ‚Ð°Ñ‚ÑƒÑ
+                                  Изменить статус
                                 </p>
 
                                 <div className="grid grid-cols-2 gap-2">
@@ -2221,8 +2221,8 @@ export default function AdminPage() {
 
                                   {updatingId ===
                                   booking.id
-                                    ? 'ÐžÑ‚Ð¼ÐµÐ½ÑÐµÐ¼...'
-                                    : 'ÐžÑ‚Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ Ð±Ñ€Ð¾Ð½ÑŒ'}
+                                    ? 'Отменяем...'
+                                    : 'Отменить бронь'}
                                 </button>
                               )}
                             </div>
@@ -2260,15 +2260,15 @@ export default function AdminPage() {
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <p className="text-[10px] uppercase tracking-[0.2em] text-primary sm:text-xs sm:tracking-[0.25em]">
-                    Ð ÐµÐ´Ð°ÐºÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ
+                    Редактирование
                   </p>
 
                   <h2 className="mt-1 truncate font-serif text-2xl sm:text-3xl">
-                    Ð‘Ñ€Ð¾Ð½ÑŒ #{editingBooking.id}
+                    Бронь #{editingBooking.id}
                   </h2>
 
                   <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
-                    Ð˜Ð·Ð¼ÐµÐ½Ð¸Ñ‚Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ ÐºÐ»Ð¸ÐµÐ½Ñ‚Ð° Ð¸Ð»Ð¸ Ð²Ñ€ÐµÐ¼Ñ.
+                    Измените данные клиента или время.
                   </p>
                 </div>
 
@@ -2277,7 +2277,7 @@ export default function AdminPage() {
                   onClick={closeEdit}
                   disabled={savingEdit}
                   className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-primary/20 text-muted-foreground transition active:scale-95 hover:border-primary hover:text-primary disabled:opacity-50"
-                  aria-label="Ð—Ð°ÐºÑ€Ñ‹Ñ‚ÑŒ"
+                  aria-label="Закрыть"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -2293,7 +2293,7 @@ export default function AdminPage() {
 
                 <div>
                   <label className="mb-2 block text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
-                    Ð˜Ð¼Ñ ÐºÐ»Ð¸ÐµÐ½Ñ‚Ð°
+                    Имя клиента
                   </label>
 
                   <input
@@ -2309,7 +2309,7 @@ export default function AdminPage() {
                       )
                     }
                     className="min-h-12 w-full rounded-2xl border border-primary/20 bg-[#0e0a08] px-4 py-3 text-sm outline-none transition focus:border-primary"
-                    placeholder="Ð˜Ð¼Ñ"
+                    placeholder="Имя"
                   />
                 </div>
 
@@ -2317,7 +2317,7 @@ export default function AdminPage() {
 
                 <div>
                   <label className="mb-2 block text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
-                    Ð¢ÐµÐ»ÐµÑ„Ð¾Ð½
+                    Телефон
                   </label>
 
                   <input
@@ -2343,7 +2343,7 @@ export default function AdminPage() {
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
                     <label className="mb-2 block text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
-                      Ð”Ð°Ñ‚Ð°
+                      Дата
                     </label>
 
                     <input
@@ -2367,7 +2367,7 @@ export default function AdminPage() {
 
                   <div>
                     <label className="mb-2 block text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
-                      Ð’Ñ€ÐµÐ¼Ñ
+                      Время
                     </label>
 
                     <input
@@ -2394,7 +2394,7 @@ export default function AdminPage() {
 
                 <div>
                   <label className="mb-2 block text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
-                    ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð³Ð¾ÑÑ‚ÐµÐ¹
+                    Количество гостей
                   </label>
 
                   <input
@@ -2418,8 +2418,8 @@ export default function AdminPage() {
                   />
 
                   <p className="mt-2 text-[10px] leading-relaxed text-muted-foreground sm:text-xs">
-                    Ð”Ð¾ 8 Ð³Ð¾ÑÑ‚ÐµÐ¹ Ð²Ñ…Ð¾Ð´Ð¸Ñ‚ Ð² Ð°Ñ€ÐµÐ½Ð´Ñƒ.
-                    Ð¡ 9-Ð³Ð¾ Ð³Ð¾ÑÑ‚Ñ +â‚¬50 Ð·Ð° ÐºÐ°Ð¶Ð´Ð¾Ð³Ð¾.
+                    До 8 гостей входит в аренду.
+                    С 9-го гостя +€50 за каждого.
                   </p>
                 </div>
 
@@ -2427,7 +2427,7 @@ export default function AdminPage() {
 
                 <div>
                   <label className="mb-2 block text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
-                    ÐšÐ¾Ð¼Ð¼ÐµÐ½Ñ‚Ð°Ñ€Ð¸Ð¹
+                    Комментарий
                   </label>
 
                   <textarea
@@ -2444,7 +2444,7 @@ export default function AdminPage() {
                       )
                     }
                     className="w-full resize-none rounded-2xl border border-primary/20 bg-[#0e0a08] px-4 py-3 text-sm outline-none transition focus:border-primary"
-                    placeholder="ÐšÐ¾Ð¼Ð¼ÐµÐ½Ñ‚Ð°Ñ€Ð¸Ð¹ ÐºÐ»Ð¸ÐµÐ½Ñ‚Ð°..."
+                    placeholder="Комментарий клиента..."
                   />
                 </div>
 
@@ -2452,13 +2452,13 @@ export default function AdminPage() {
 
                 <div className="rounded-2xl border border-primary/10 bg-[#0e0a08] p-4">
                   <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
-                    Ð¢ÐµÐºÑƒÑ‰Ð°Ñ Ð±Ñ€Ð¾Ð½ÑŒ
+                    Текущая бронь
                   </p>
 
                   <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
                     <div>
                       <p className="text-xs text-muted-foreground">
-                        Ð¡ÐµÐ¹Ñ‡Ð°Ñ
+                        Сейчас
                       </p>
 
                       <p className="mt-1 text-sm text-primary">
@@ -2473,19 +2473,19 @@ export default function AdminPage() {
 
                     <div>
                       <p className="text-xs text-muted-foreground">
-                        Ð”Ð»Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð¾ÑÑ‚ÑŒ
+                        Длительность
                       </p>
 
                       <p className="mt-1 text-sm">
                         {editingBooking.duration_minutes
-                          ? `${editingBooking.duration_minutes / 60} Ñ‡.`
-                          : '3 Ñ‡.'}
+                          ? `${editingBooking.duration_minutes / 60} ч.`
+                          : '3 ч.'}
                       </p>
                     </div>
 
                     <div>
                       <p className="text-xs text-muted-foreground">
-                        Ð¡Ñ‚Ð°Ñ‚ÑƒÑ
+                        Статус
                       </p>
 
                       <p className="mt-1 text-sm text-primary">
@@ -2509,7 +2509,7 @@ export default function AdminPage() {
                   disabled={savingEdit}
                   className="min-h-12 rounded-full border border-primary/20 px-6 py-3 text-[10px] font-medium uppercase tracking-widest text-muted-foreground transition active:scale-[0.98] hover:border-primary hover:text-primary disabled:opacity-50"
                 >
-                  ÐžÑ‚Ð¼ÐµÐ½Ð°
+                  Отмена
                 </button>
 
                 <button
@@ -2519,8 +2519,8 @@ export default function AdminPage() {
                   className="min-h-12 rounded-full bg-primary px-6 py-3 text-[10px] font-medium uppercase tracking-widest text-black transition active:scale-[0.98] hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {savingEdit
-                    ? 'Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÑÐµÐ¼...'
-                    : 'Ð¡Ð¾Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ÑŒ Ð¸Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ñ'}
+                    ? 'Сохраняем...'
+                    : 'Сохранить изменения'}
                 </button>
               </div>
             </div>
