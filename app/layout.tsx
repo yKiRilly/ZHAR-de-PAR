@@ -1,4 +1,3 @@
-
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Cormorant_Garamond, Jost } from 'next/font/google'
@@ -60,10 +59,8 @@ export const metadata: Metadata = {
     url: siteUrl,
     siteName: 'ZHAR de PAR',
     title: 'ZHAR de PAR',
-
     description:
       'Частная русская баня ZHAR de PAR в Бланесе на Коста-Брава рядом с Барселоной. Парение веником, купель, джакузи и банные ритуалы.',
-
     images: [
       {
         url: '/photos/view/viewgeneral.PNG',
@@ -77,17 +74,14 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'ZHAR de PAR',
-
     description:
       'Частная русская баня ZHAR de PAR в Бланесе рядом с Барселоной. Парение веником, банные ритуалы, купель, джакузи и отдых на природе.',
-
     images: ['/photos/view/viewgeneral.PNG'],
   },
 
   robots: {
     index: true,
     follow: true,
-
     googleBot: {
       index: true,
       follow: true,
@@ -100,12 +94,12 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: '/photos/logos/logogoogle.png',
+        url: '/favicon.png',
         type: 'image/png',
       },
     ],
-    shortcut: '/photos/logos/logogoogle.png',
-    apple: '/photos/logos/logogoogle.png',
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
   },
 }
 
@@ -115,9 +109,7 @@ const jsonLd = {
   '@graph': [
     {
       '@type': 'LocalBusiness',
-
       '@id': `${siteUrl}/#business`,
-
       name: 'ZHAR de PAR',
       alternateName: 'ЖАР де ПАР',
 
@@ -178,9 +170,7 @@ const jsonLd = {
         },
       ],
 
-      sameAs: [
-        'https://www.instagram.com/banka_blanes/',
-      ],
+      sameAs: ['https://www.instagram.com/banka_blanes/'],
 
       knowsAbout: [
         'Русская баня',
@@ -206,11 +196,7 @@ const jsonLd = {
         '@type': 'ContactPoint',
         telephone: '+34601801800',
         contactType: 'customer service',
-
-        availableLanguage: [
-          'Russian',
-          'Ukrainian',
-        ],
+        availableLanguage: ['Russian', 'Ukrainian'],
       },
 
       hasOfferCatalog: {
@@ -266,21 +252,15 @@ const jsonLd = {
 
     {
       '@type': 'WebSite',
-
       '@id': `${siteUrl}/#website`,
-
       url: siteUrl,
-
       name: 'ZHAR de PAR',
       alternateName: 'ЖАР де ПАР',
 
       description:
         'Русская баня ZHAR de PAR на Коста-Брава рядом с Барселоной.',
 
-      inLanguage: [
-        'ru-RU',
-        'uk-UA',
-      ],
+      inLanguage: ['ru-RU', 'uk-UA'],
 
       publisher: {
         '@id': `${siteUrl}/#business`,
@@ -289,11 +269,8 @@ const jsonLd = {
 
     {
       '@type': 'WebPage',
-
       '@id': `${siteUrl}/#webpage`,
-
       url: siteUrl,
-
       name: 'ZHAR de PAR',
 
       description:
@@ -312,7 +289,6 @@ const jsonLd = {
 
     {
       '@type': 'VideoObject',
-
       '@id': `${siteUrl}/#video`,
 
       name: 'ZHAR de PAR — русская баня на Коста-Брава',
@@ -325,18 +301,14 @@ const jsonLd = {
       uploadDate: '2026-08-26',
 
       contentUrl: `${siteUrl}/video/videobanya.mp4`,
-
       embedUrl: siteUrl,
 
       inLanguage: 'ru-RU',
-
       isFamilyFriendly: true,
 
       publisher: {
         '@type': 'Organization',
-
         name: 'ZHAR de PAR',
-
         url: siteUrl,
 
         logo: {
@@ -387,17 +359,17 @@ export default function RootLayout({
           content="ZHAR de PAR"
         />
 
-        {/* Favicon для Google и браузера */}
+        {/* Favicon */}
         <link
           rel="icon"
           type="image/png"
-          href="/photos/logos/logogoogle.png"
+          href="/favicon.png"
         />
 
         <link
           rel="shortcut icon"
           type="image/png"
-          href="/photos/logos/logogoogle.png"
+          href="/favicon.png"
         />
       </head>
 
