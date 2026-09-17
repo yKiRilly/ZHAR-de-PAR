@@ -635,28 +635,28 @@ export function ServicesSection() {
         </Reveal>
 
         {/* Main heading */}
-<Reveal>
-  <h2
-  className="
-    mt-16
-    max-w-[1100px]
-    text-balance
-    font-serif
-    text-3xl
-    font-light
-    leading-[1.1]
-    sm:mt-20
-    sm:text-5xl
-    sm:leading-[1.1]
-  "
->
-  {t.broomHeading1}
-  <br />
-  {t.broomHeading2}
-  <br />
-  {t.broomHeading3}
-</h2>
-</Reveal>
+        <Reveal>
+          <h2
+            className="
+              mt-16
+              max-w-[1100px]
+              text-balance
+              font-serif
+              text-3xl
+              font-light
+              leading-[1.1]
+              sm:mt-20
+              sm:text-5xl
+              sm:leading-[1.1]
+            "
+          >
+            {t.broomHeading1}
+            <br />
+            {t.broomHeading2}
+            <br />
+            {t.broomHeading3}
+          </h2>
+        </Reveal>
 
         {/* Steam rituals */}
         <div
@@ -670,8 +670,8 @@ export function ServicesSection() {
           "
         >
           {services.map((service, i) => {
-const translated =
-  t.services[service.id as keyof typeof t.services]
+            const translated =
+              t.services[service.id as keyof typeof t.services]
 
             const isMultiple =
               service.id === 'group-steam-ritual' ||
@@ -851,6 +851,60 @@ const translated =
               </Reveal>
             )
           })}
+        </div>
+
+        {/* Brooms reminder */}
+        <div className="mt-16 flex flex-col items-center text-center sm:mt-24">
+          {/* Decorative line */}
+          <div className="mb-8 h-px w-20 bg-primary sm:mb-10 sm:w-28" />
+
+          {/* Small label */}
+          <p className="text-xs font-medium uppercase tracking-[0.35em] text-primary sm:text-sm">
+            Для ритуала парения
+          </p>
+
+          {/* Main heading */}
+          <h3 className="mt-4 max-w-4xl font-serif text-3xl font-semibold leading-tight text-foreground sm:mt-5 sm:text-5xl lg:text-6xl">
+            Не забудьте выбрать веники
+          </h3>
+
+          {/* Subtitle */}
+          <p className="mt-4 max-w-2xl text-base font-medium leading-relaxed text-muted-foreground sm:mt-6 sm:text-lg">
+            Подберите веники заранее — мы подготовим их к вашему приезду.
+          </p>
+
+          {/* Button */}
+          <a
+            href="#brooms"
+            className="
+              mt-8
+              inline-flex
+              items-center
+              justify-center
+              rounded-full
+              border
+              border-primary
+              bg-transparent
+              px-10
+              py-4
+              text-xs
+              font-semibold
+              uppercase
+              tracking-[0.2em]
+              text-primary
+              transition-all
+              duration-300
+              hover:bg-primary
+              hover:text-primary-foreground
+              sm:mt-10
+              sm:px-12
+            "
+          >
+            Выбрать веники
+          </a>
+
+          {/* Bottom decorative line */}
+          <div className="mt-10 h-px w-20 bg-primary/40 sm:mt-12 sm:w-28" />
         </div>
       </div>
     </section>
