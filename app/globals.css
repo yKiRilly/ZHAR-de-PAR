@@ -8,27 +8,19 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
-
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
-
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
-
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
-
   --color-destructive: var(--destructive);
-
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -45,6 +37,11 @@
   --animate-steam: steam 8s ease-in-out infinite;
   --animate-marquee: marquee 40s linear infinite;
 }
+
+/* =========================================================
+   DESKTOP / BASE THEME
+   Не меняем текущий дизайн
+   ========================================================= */
 
 :root {
   color-scheme: dark;
@@ -80,6 +77,10 @@
   --radius: 0.25rem;
 }
 
+/* =========================================================
+   BASE
+   ========================================================= */
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -114,6 +115,10 @@
   }
 }
 
+/* =========================================================
+   UTILITIES
+   ========================================================= */
+
 @layer utilities {
   .font-serif {
     font-family: var(--font-serif);
@@ -123,6 +128,10 @@
     text-shadow: 0 2px 40px oklch(0.1 0.01 55 / 0.7);
   }
 }
+
+/* =========================================================
+   STEAM ANIMATION
+   ========================================================= */
 
 @keyframes steam {
   0% {
@@ -149,6 +158,10 @@
   }
 }
 
+/* =========================================================
+   MARQUEE ANIMATION
+   ========================================================= */
+
 @keyframes marquee {
   from {
     transform: translateX(0);
@@ -158,6 +171,10 @@
     transform: translateX(-50%);
   }
 }
+
+/* =========================================================
+   REVEAL ANIMATION
+   ========================================================= */
 
 @keyframes reveal-up {
   from {
@@ -179,6 +196,10 @@
   animation: reveal-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -188,5 +209,169 @@
   .reveal.is-visible {
     animation: none;
     opacity: 1;
+  }
+}
+
+/* =========================================================
+   MOBILE LIGHT VERSION
+   Только <= 768px
+   Desktop выше 768px НЕ меняется
+   ========================================================= */
+
+@media (max-width: 768px) {
+  :root {
+    color-scheme: light;
+
+    /* Основной фон */
+    --background: #f3efe7;
+    --foreground: #26231f;
+
+    /* Карточки */
+    --card: #faf8f3;
+    --card-foreground: #26231f;
+
+    /* Popup / modal */
+    --popover: #faf8f3;
+    --popover-foreground: #26231f;
+
+    /* Фирменное золото */
+    --primary: #b28d20;
+    --primary-foreground: #ffffff;
+
+    /* Дополнительные поверхности */
+    --secondary: #e8e1d5;
+    --secondary-foreground: #29251f;
+
+    --muted: #e7e0d4;
+    --muted-foreground: #696258;
+
+    --accent: #c8aa60;
+    --accent-foreground: #26231f;
+
+    /* Ошибки */
+    --destructive: #b33b2e;
+
+    /* Границы */
+    --border: #d9d1c3;
+    --input: #ddd5c8;
+
+    /* Focus */
+    --ring: #b28d20;
+  }
+
+  html,
+  body {
+    background: #f3efe7;
+    color: #26231f;
+  }
+
+  body {
+    color-scheme: light;
+  }
+
+  /* =======================================================
+     ОСНОВНЫЕ ТЁМНЫЕ ФОНЫ
+     ======================================================= */
+
+  [class*='bg-zinc-950'],
+  [class*='bg-neutral-950'],
+  [class*='bg-stone-950'] {
+    background-color: #eee8de;
+  }
+
+  [class*='bg-zinc-900'],
+  [class*='bg-neutral-900'],
+  [class*='bg-stone-900'] {
+    background-color: #e7e0d5;
+  }
+
+  [class*='bg-black'] {
+    background-color: #eee9df;
+  }
+
+  /* =======================================================
+     ТЕКСТ
+     ======================================================= */
+
+  [class~='text-white'],
+  [class*='text-white/'] {
+    color: #29251f;
+  }
+
+  [class*='text-zinc-100'],
+  [class*='text-zinc-200'],
+  [class*='text-neutral-100'],
+  [class*='text-neutral-200'],
+  [class*='text-stone-100'],
+  [class*='text-stone-200'] {
+    color: #302c26;
+  }
+
+  [class*='text-zinc-300'],
+  [class*='text-zinc-400'],
+  [class*='text-neutral-300'],
+  [class*='text-neutral-400'],
+  [class*='text-stone-300'],
+  [class*='text-stone-400'] {
+    color: #686158;
+  }
+
+  /* =======================================================
+     КАРТОЧКИ
+     ======================================================= */
+
+  [class*='bg-card'] {
+    background-color: var(--card);
+  }
+
+  /* =======================================================
+     ГРАНИЦЫ
+     ======================================================= */
+
+  [class*='border-white'] {
+    border-color: rgba(178, 141, 32, 0.22);
+  }
+
+  /* =======================================================
+     INPUT / TEXTAREA / SELECT
+     ======================================================= */
+
+  input,
+  textarea,
+  select {
+    background: #faf8f3;
+    color: #29251f;
+    border-color: #d8d0c2;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #8a8277;
+  }
+
+  /* =======================================================
+     КНОПКИ И ССЫЛКИ
+     ======================================================= */
+
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* =======================================================
+     ТЕНИ
+     ======================================================= */
+
+  [class*='shadow-'] {
+    --tw-shadow-color: rgba(55, 45, 30, 0.1);
+  }
+
+  /* =======================================================
+     SELECTION
+     ======================================================= */
+
+  ::selection {
+    background: rgba(178, 141, 32, 0.25);
+    color: #26231f;
   }
 }
