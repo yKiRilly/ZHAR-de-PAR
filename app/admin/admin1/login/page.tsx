@@ -3,7 +3,6 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-
 import { supabase } from '@/lib/supabase'
 
 const ADMIN_EMAIL = 'kirill2525225@gmail.com'
@@ -22,10 +21,7 @@ export default function AdminLoginPage() {
         data: { session },
       } = await supabase.auth.getSession()
 
-      if (
-        session &&
-        session.user.email === ADMIN_EMAIL
-      ) {
+      if (session?.user?.email === ADMIN_EMAIL) {
         router.replace('/admin')
       }
     }
@@ -49,20 +45,22 @@ export default function AdminLoginPage() {
         })
 
       if (error) {
-        setError('ÐÐµÐ²ÐµÑ€Ð½Ñ‹Ð¹ email Ð¸Ð»Ð¸ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ.')
+        setError('Неверный email или пароль.')
         return
       }
 
       if (!data.session) {
-        setError('ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð²Ñ‹Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÑŒ Ð²Ñ…Ð¾Ð´.')
+        setError('Не удалось выполнить вход.')
         return
       }
 
       if (data.user.email !== ADMIN_EMAIL) {
         await supabase.auth.signOut()
+
         setError(
-          'Ð£ ÑÑ‚Ð¾Ð³Ð¾ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚Ð° Ð½ÐµÑ‚ Ð´Ð¾ÑÑ‚ÑƒÐ¿Ð° Ðº Ð°Ð´Ð¼Ð¸Ð½-Ð¿Ð°Ð½ÐµÐ»Ð¸.',
+          'У этого аккаунта нет доступа к админ-панели.',
         )
+
         return
       }
 
@@ -70,27 +68,28 @@ export default function AdminLoginPage() {
       router.refresh()
     } catch (err) {
       console.error('ADMIN LOGIN ERROR:', err)
-      setError('ÐŸÑ€Ð¾Ð¸Ð·Ð¾ÑˆÐ»Ð° Ð¾ÑˆÐ¸Ð±ÐºÐ° Ð²Ñ…Ð¾Ð´Ð°.')
+      setError('Произошла ошибка входа.')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#110d0b] px-6 text-foreground">
+    <main className="flex min-h-screen items-center justify-center bg-[#110d0b] px-4 py-8 text-foreground sm:px-6">
       <div className="w-full max-w-md">
-        <div className="rounded-2xl border border-primary/20 bg-[#15100e] p-8 shadow-2xl">
-          <div className="mb-8 text-center">
+        <div className="rounded-2xl border border-primary/20 bg-[#15100e] p-5 shadow-2xl sm:p-8">
+          
+          <div className="mb-7 text-center sm:mb-8">
             <p className="text-xs font-medium uppercase tracking-[0.3em] text-primary">
               ZHAR de PAR
             </p>
 
-            <h1 className="mt-3 font-serif text-4xl font-light">
+            <h1 className="mt-3 font-serif text-3xl font-light sm:text-4xl">
               Admin
             </h1>
 
             <p className="mt-3 text-sm text-muted-foreground">
-              Ð£Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ð±Ñ€Ð¾Ð½Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸ÑÐ¼Ð¸
+              Управление бронированиями
             </p>
           </div>
 
@@ -115,6 +114,7 @@ export default function AdminLoginPage() {
                 }
                 required
                 autoComplete="email"
+                inputMode="email"
                 className="h-[54px] w-full rounded-xl border border-primary/20 bg-[#0e0a08] px-4 text-sm outline-none transition focus:border-primary focus:ring-1 focus:ring-primary/20"
               />
             </div>
@@ -124,7 +124,7 @@ export default function AdminLoginPage() {
                 htmlFor="admin-password"
                 className="mb-2 block text-xs font-medium uppercase tracking-widest text-muted-foreground"
               >
-                ÐŸÐ°Ñ€Ð¾Ð»ÑŒ
+                Пароль
               </label>
 
               <input
@@ -136,13 +136,13 @@ export default function AdminLoginPage() {
                 }
                 required
                 autoComplete="current-password"
-                placeholder="Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð¿Ð°Ñ€Ð¾Ð»ÑŒ"
+                placeholder="Введите пароль"
                 className="h-[54px] w-full rounded-xl border border-primary/20 bg-[#0e0a08] px-4 text-sm outline-none transition focus:border-primary focus:ring-1 focus:ring-primary/20"
               />
             </div>
 
             {error && (
-              <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+              <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm leading-5 text-red-300">
                 {error}
               </div>
             )}
@@ -150,9 +150,9 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-full border border-primary/40 bg-primary px-6 py-4 text-xs font-medium uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
+              className="min-h-[54px] w-full rounded-full border border-primary/40 bg-primary px-6 py-4 text-xs font-medium uppercase tracking-widest text-primary-foreground transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {loading ? 'Ð’Ñ…Ð¾Ð´...' : 'Ð’Ð¾Ð¹Ñ‚Ð¸'}
+              {loading ? 'Вход...' : 'Войти'}
             </button>
           </form>
         </div>
@@ -160,4 +160,3 @@ export default function AdminLoginPage() {
     </main>
   )
 }
-
