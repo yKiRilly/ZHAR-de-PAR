@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+
 @import 'tw-animate-css';
 
 /* @import 'shadcn/tailwind.css'; */
@@ -8,27 +9,19 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
-
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
-
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
-
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
-
   --color-destructive: var(--destructive);
-
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -223,29 +216,30 @@
 /* =========================================================
    MOBILE LIGHT VERSION
    Только телефоны
+   Desktop не затрагивается
    ========================================================= */
 
 @media (max-width: 768px) {
+
+  /* =======================================================
+     MOBILE COLORS
+     ======================================================= */
+
   :root {
     color-scheme: light;
 
-    /* Основной фон */
     --background: #f3efe7;
     --foreground: #26231f;
 
-    /* Карточки */
     --card: #faf8f3;
     --card-foreground: #26231f;
 
-    /* Popovers */
     --popover: #faf8f3;
     --popover-foreground: #26231f;
 
-    /* Золото */
     --primary: #b28d20;
     --primary-foreground: #ffffff;
 
-    /* Дополнительные цвета */
     --secondary: #e8e1d5;
     --secondary-foreground: #29251f;
 
@@ -275,19 +269,28 @@
 
   body {
     color-scheme: light;
-  }
-
-  /* =======================================================
-     ШРИФТ — ДЕЛАЕМ ЖИРНЕЕ
-     ======================================================= */
-
-  body {
+    font-size: 17px;
     font-weight: 400;
   }
 
-  /* Все элементы, которые раньше были font-light */
+  /* =======================================================
+     MOBILE TYPOGRAPHY
+     ======================================================= */
+
+  /* Все font-light делаем заметнее */
   [class~='font-light'] {
     font-weight: 500 !important;
+  }
+
+  /* Обычный текст */
+  p {
+    font-weight: 450;
+  }
+
+  /* Жирные элементы */
+  strong,
+  b {
+    font-weight: 700 !important;
   }
 
   /* Заголовки */
@@ -297,26 +300,149 @@
   h4,
   h5,
   h6 {
-    font-weight: 500;
-  }
-
-  /* Небольшие подписи оставляем немного легче */
-  p {
-    font-weight: 400;
+    font-weight: 600 !important;
   }
 
   /* =======================================================
-     СВЕТЛЫЕ ТЁМНЫЕ ПОВЕРХНОСТИ
-     
+     HERO — ФОТОГРАФИЯ
+     ======================================================= */
+
+  /*
      ВАЖНО:
-     Используем [class~="..."] вместо [class*="..."].
-     
-     Это значит:
-     bg-black      -> осветляем
-     bg-black/50   -> НЕ трогаем
-     bg-black/70   -> НЕ трогаем
-     
-     Поэтому прозрачные слои поверх фотографий сохраняются.
+     Принудительно возвращаем фотографию Hero
+     на мобильном.
+
+     hero.tsx при этом НЕ меняем.
+  */
+
+  #top {
+    position: relative;
+    background: #1a1713 !important;
+  }
+
+  #top > div:first-of-type {
+    background-image: url('/photos/view/viewof.PNG') !important;
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+
+    /*
+     Небольшое увеличение фотографии,
+     чтобы края не выглядели пустыми
+    */
+    transform: scale(1.05) !important;
+  }
+
+  /*
+     Dark overlay Hero.
+     Оставляем достаточно прозрачным,
+     чтобы фотография была хорошо видна.
+  */
+
+  #top > div:nth-of-type(2) {
+    background-color: rgba(0, 0, 0, 0.22) !important;
+  }
+
+  /*
+     Градиент поверх фотографии.
+     Не делаем его слишком тёмным.
+  */
+
+  #top > div:nth-of-type(3) {
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.12),
+      transparent 45%,
+      rgba(0, 0, 0, 0.28)
+    ) !important;
+  }
+
+  /* =======================================================
+     HERO TITLE
+     ======================================================= */
+
+  #top h1 {
+    font-size: 58px !important;
+    font-weight: 700 !important;
+    line-height: 0.94 !important;
+
+    color: #b28d20 !important;
+
+    text-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.65),
+      0 4px 28px rgba(0, 0, 0, 0.45) !important;
+  }
+
+  /* =======================================================
+     HERO LOCATION
+     ======================================================= */
+
+  #top > div.relative.z-10 p:first-of-type {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    line-height: 1.35 !important;
+    letter-spacing: 0.13em !important;
+
+    color: #b28d20 !important;
+
+    text-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.65) !important;
+  }
+
+  /* =======================================================
+     HERO DESCRIPTION
+     ======================================================= */
+
+  #top > div.relative.z-10 p:last-of-type {
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    line-height: 1.5 !important;
+
+    color: rgba(255, 255, 255, 0.96) !important;
+
+    text-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.8),
+      0 4px 20px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  /* =======================================================
+     HERO BUTTONS
+     ======================================================= */
+
+  #top button {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.12em !important;
+  }
+
+  #top a[href='#sauna-rental'] {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.12em !important;
+
+    color: #ffffff !important;
+
+    background: rgba(0, 0, 0, 0.22) !important;
+
+    border-color: rgba(255, 255, 255, 0.6) !important;
+
+    text-shadow:
+      0 2px 6px rgba(0, 0, 0, 0.7) !important;
+  }
+
+  /* =======================================================
+     HERO SCROLL INDICATOR
+     ======================================================= */
+
+  #top > a[href='#philosophy'] {
+    color: rgba(255, 255, 255, 0.9) !important;
+
+    text-shadow:
+      0 2px 6px rgba(0, 0, 0, 0.7) !important;
+  }
+
+  /* =======================================================
+     LIGHT DARK SURFACES
      ======================================================= */
 
   [class~='bg-zinc-950'],
@@ -331,7 +457,11 @@
     background-color: #e7e0d5;
   }
 
-  /* Только полностью чёрный фон */
+  /*
+     Только полностью чёрный фон.
+     НЕ трогаем bg-black/30, bg-black/50 и т.д.
+  */
+
   [class~='bg-black'] {
     background-color: #eee9df;
   }
@@ -345,7 +475,7 @@
   }
 
   /* =======================================================
-     TEXT COLORS
+     DARK TEXT COLORS
      ======================================================= */
 
   [class*='text-zinc-100'],
@@ -367,11 +497,24 @@
   }
 
   /* =======================================================
-     WHITE TEXT
-     
-     Не трогаем text-white и text-white/..
-     чтобы текст Hero оставался читаемым поверх фото.
+     INPUTS
      ======================================================= */
+
+  input,
+  textarea,
+  select {
+    background: #faf8f3;
+    color: #29251f;
+    border-color: #d8d0c2;
+
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #8a8277;
+  }
 
   /* =======================================================
      BORDERS
@@ -382,28 +525,15 @@
   }
 
   /* =======================================================
-     INPUTS
-     ======================================================= */
-
-  input,
-  textarea,
-  select {
-    background: #faf8f3;
-    color: #29251f;
-    border-color: #d8d0c2;
-  }
-
-  input::placeholder,
-  textarea::placeholder {
-    color: #8a8277;
-  }
-
-  /* =======================================================
      BUTTONS
      ======================================================= */
 
   button {
     -webkit-tap-highlight-color: transparent;
+  }
+
+  button {
+    font-weight: 600;
   }
 
   /* =======================================================
