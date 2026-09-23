@@ -1,5 +1,5 @@
-@import 'tailwindcss';
 
+@import 'tailwindcss';
 @import 'tw-animate-css';
 
 /* @import 'shadcn/tailwind.css'; */
@@ -72,7 +72,6 @@
 
   --border: oklch(0.32 0.015 60);
   --input: oklch(0.3 0.015 60);
-
   --ring: #b28d20;
 
   --radius: 0.25rem;
@@ -220,7 +219,6 @@
    ========================================================= */
 
 @media (max-width: 768px) {
-
   /* =======================================================
      MOBILE COLORS
      ======================================================= */
@@ -277,23 +275,20 @@
      MOBILE TYPOGRAPHY
      ======================================================= */
 
-  /* Все font-light делаем заметнее */
   [class~='font-light'] {
     font-weight: 500 !important;
   }
 
-  /* Обычный текст */
   p {
     font-weight: 450;
+    line-height: 1.55;
   }
 
-  /* Жирные элементы */
   strong,
   b {
     font-weight: 700 !important;
   }
 
-  /* Заголовки */
   h1,
   h2,
   h3,
@@ -307,14 +302,6 @@
      HERO — ФОТОГРАФИЯ
      ======================================================= */
 
-  /*
-     ВАЖНО:
-     Принудительно возвращаем фотографию Hero
-     на мобильном.
-
-     hero.tsx при этом НЕ меняем.
-  */
-
   #top {
     position: relative;
     background: #1a1713 !important;
@@ -325,28 +312,20 @@
     background-size: cover !important;
     background-position: center center !important;
     background-repeat: no-repeat !important;
-
-    /*
-     Небольшое увеличение фотографии,
-     чтобы края не выглядели пустыми
-    */
     transform: scale(1.05) !important;
   }
 
-  /*
-     Dark overlay Hero.
-     Оставляем достаточно прозрачным,
-     чтобы фотография была хорошо видна.
-  */
+  /* =======================================================
+     HERO OVERLAY
+     ======================================================= */
 
   #top > div:nth-of-type(2) {
     background-color: rgba(0, 0, 0, 0.22) !important;
   }
 
-  /*
-     Градиент поверх фотографии.
-     Не делаем его слишком тёмным.
-  */
+  /* =======================================================
+     HERO GRADIENT
+     ======================================================= */
 
   #top > div:nth-of-type(3) {
     background: linear-gradient(
@@ -365,7 +344,6 @@
     font-size: 58px !important;
     font-weight: 700 !important;
     line-height: 0.94 !important;
-
     color: #b28d20 !important;
 
     text-shadow:
@@ -382,7 +360,6 @@
     font-weight: 700 !important;
     line-height: 1.35 !important;
     letter-spacing: 0.13em !important;
-
     color: #b28d20 !important;
 
     text-shadow:
@@ -397,7 +374,6 @@
     font-size: 18px !important;
     font-weight: 600 !important;
     line-height: 1.5 !important;
-
     color: rgba(255, 255, 255, 0.96) !important;
 
     text-shadow:
@@ -421,9 +397,7 @@
     letter-spacing: 0.12em !important;
 
     color: #ffffff !important;
-
     background: rgba(0, 0, 0, 0.22) !important;
-
     border-color: rgba(255, 255, 255, 0.6) !important;
 
     text-shadow:
@@ -458,8 +432,8 @@
   }
 
   /*
-     Только полностью чёрный фон.
-     НЕ трогаем bg-black/30, bg-black/50 и т.д.
+    Только полностью чёрный фон.
+    НЕ трогаем bg-black/30, bg-black/50 и т.д.
   */
 
   [class~='bg-black'] {
@@ -506,7 +480,6 @@
     background: #faf8f3;
     color: #29251f;
     border-color: #d8d0c2;
-
     font-size: 16px;
     font-weight: 500;
   }
@@ -530,9 +503,6 @@
 
   button {
     -webkit-tap-highlight-color: transparent;
-  }
-
-  button {
     font-weight: 600;
   }
 
