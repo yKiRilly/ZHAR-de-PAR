@@ -8,19 +8,27 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
+
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
+
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
+
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+
   --color-destructive: var(--destructive);
+
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -39,8 +47,8 @@
 }
 
 /* =========================================================
-   DESKTOP / BASE THEME
-   Не меняем текущий дизайн
+   BASE / DESKTOP
+   Полностью сохраняем текущую компьютерную версию
    ========================================================= */
 
 :root {
@@ -130,7 +138,7 @@
 }
 
 /* =========================================================
-   STEAM ANIMATION
+   STEAM
    ========================================================= */
 
 @keyframes steam {
@@ -159,7 +167,7 @@
 }
 
 /* =========================================================
-   MARQUEE ANIMATION
+   MARQUEE
    ========================================================= */
 
 @keyframes marquee {
@@ -173,7 +181,7 @@
 }
 
 /* =========================================================
-   REVEAL ANIMATION
+   REVEAL
    ========================================================= */
 
 @keyframes reveal-up {
@@ -214,8 +222,7 @@
 
 /* =========================================================
    MOBILE LIGHT VERSION
-   Только <= 768px
-   Desktop выше 768px НЕ меняется
+   Только телефоны
    ========================================================= */
 
 @media (max-width: 768px) {
@@ -230,15 +237,15 @@
     --card: #faf8f3;
     --card-foreground: #26231f;
 
-    /* Popup / modal */
+    /* Popovers */
     --popover: #faf8f3;
     --popover-foreground: #26231f;
 
-    /* Фирменное золото */
+    /* Золото */
     --primary: #b28d20;
     --primary-foreground: #ffffff;
 
-    /* Дополнительные поверхности */
+    /* Дополнительные цвета */
     --secondary: #e8e1d5;
     --secondary-foreground: #29251f;
 
@@ -248,16 +255,17 @@
     --accent: #c8aa60;
     --accent-foreground: #26231f;
 
-    /* Ошибки */
     --destructive: #b33b2e;
 
-    /* Границы */
     --border: #d9d1c3;
     --input: #ddd5c8;
 
-    /* Focus */
     --ring: #b28d20;
   }
+
+  /* =======================================================
+     BODY
+     ======================================================= */
 
   html,
   body {
@@ -270,33 +278,75 @@
   }
 
   /* =======================================================
-     ОСНОВНЫЕ ТЁМНЫЕ ФОНЫ
+     ШРИФТ — ДЕЛАЕМ ЖИРНЕЕ
      ======================================================= */
 
-  [class*='bg-zinc-950'],
-  [class*='bg-neutral-950'],
-  [class*='bg-stone-950'] {
+  body {
+    font-weight: 400;
+  }
+
+  /* Все элементы, которые раньше были font-light */
+  [class~='font-light'] {
+    font-weight: 500 !important;
+  }
+
+  /* Заголовки */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 500;
+  }
+
+  /* Небольшие подписи оставляем немного легче */
+  p {
+    font-weight: 400;
+  }
+
+  /* =======================================================
+     СВЕТЛЫЕ ТЁМНЫЕ ПОВЕРХНОСТИ
+     
+     ВАЖНО:
+     Используем [class~="..."] вместо [class*="..."].
+     
+     Это значит:
+     bg-black      -> осветляем
+     bg-black/50   -> НЕ трогаем
+     bg-black/70   -> НЕ трогаем
+     
+     Поэтому прозрачные слои поверх фотографий сохраняются.
+     ======================================================= */
+
+  [class~='bg-zinc-950'],
+  [class~='bg-neutral-950'],
+  [class~='bg-stone-950'] {
     background-color: #eee8de;
   }
 
-  [class*='bg-zinc-900'],
-  [class*='bg-neutral-900'],
-  [class*='bg-stone-900'] {
+  [class~='bg-zinc-900'],
+  [class~='bg-neutral-900'],
+  [class~='bg-stone-900'] {
     background-color: #e7e0d5;
   }
 
-  [class*='bg-black'] {
+  /* Только полностью чёрный фон */
+  [class~='bg-black'] {
     background-color: #eee9df;
   }
 
   /* =======================================================
-     ТЕКСТ
+     CARD
      ======================================================= */
 
-  [class~='text-white'],
-  [class*='text-white/'] {
-    color: #29251f;
+  [class~='bg-card'] {
+    background-color: var(--card);
   }
+
+  /* =======================================================
+     TEXT COLORS
+     ======================================================= */
 
   [class*='text-zinc-100'],
   [class*='text-zinc-200'],
@@ -317,15 +367,14 @@
   }
 
   /* =======================================================
-     КАРТОЧКИ
+     WHITE TEXT
+     
+     Не трогаем text-white и text-white/..
+     чтобы текст Hero оставался читаемым поверх фото.
      ======================================================= */
 
-  [class*='bg-card'] {
-    background-color: var(--card);
-  }
-
   /* =======================================================
-     ГРАНИЦЫ
+     BORDERS
      ======================================================= */
 
   [class*='border-white'] {
@@ -333,7 +382,7 @@
   }
 
   /* =======================================================
-     INPUT / TEXTAREA / SELECT
+     INPUTS
      ======================================================= */
 
   input,
@@ -350,16 +399,23 @@
   }
 
   /* =======================================================
-     КНОПКИ И ССЫЛКИ
+     BUTTONS
      ======================================================= */
 
-  button,
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* =======================================================
+     LINKS
+     ======================================================= */
+
   a {
     -webkit-tap-highlight-color: transparent;
   }
 
   /* =======================================================
-     ТЕНИ
+     SOFT SHADOW
      ======================================================= */
 
   [class*='shadow-'] {
