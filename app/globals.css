@@ -531,3 +531,232 @@
     color: #26231f;
   }
 }
+/* =========================================================
+   BOOKING CART / MODAL
+   MOBILE LIGHT VERSION
+   Только телефоны — desktop НЕ изменяется
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  /* -------------------------------------------------------
+     MAIN BOOKING MODAL
+     ------------------------------------------------------- */
+
+  .fixed.inset-0.z-\[100\] > div {
+    background: #f3efe7 !important;
+    color: #26231f !important;
+    border-color: rgba(178, 141, 32, 0.28) !important;
+  }
+
+  /* -------------------------------------------------------
+     CART PRODUCT CARDS
+     bg-[#15100e]
+     ------------------------------------------------------- */
+
+  .fixed.inset-0.z-\[100\] [class*="bg-\[#15100e\]"] {
+    background: #faf8f3 !important;
+    color: #26231f !important;
+  }
+
+  /* -------------------------------------------------------
+     INPUTS / DATE / TIME / GUEST BUTTONS
+     bg-[#0e0a08]
+     ------------------------------------------------------- */
+
+  .fixed.inset-0.z-\[100\] [class*="bg-\[#0e0a08\]"] {
+    background: #faf8f3 !important;
+    color: #29251f !important;
+    border-color: #d8d0c2 !important;
+  }
+
+  /* -------------------------------------------------------
+     CALENDAR / TIME / GUEST DROPDOWNS
+     bg-[#17110e]
+     ------------------------------------------------------- */
+
+  .fixed.inset-0.z-\[100\] [class*="bg-\[#17110e\]"] {
+    background: #faf8f3 !important;
+    color: #26231f !important;
+    border-color: rgba(178, 141, 32, 0.35) !important;
+  }
+
+  /* -------------------------------------------------------
+     MAIN MODAL DARK BACKGROUND
+     bg-[#110d0b]
+     ------------------------------------------------------- */
+
+  .fixed.inset-0.z-\[100\] [class*="bg-\[#110d0b\]"] {
+    background: #f3efe7 !important;
+    color: #26231f !important;
+  }
+
+  /* -------------------------------------------------------
+     TEXT
+     ------------------------------------------------------- */
+
+  .fixed.inset-0.z-\[100\] [class*="text-foreground"] {
+    color: #26231f !important;
+  }
+
+  .fixed.inset-0.z-\[100\] [class*="text-muted-foreground"] {
+    color: #696258 !important;
+  }
+
+  /* -------------------------------------------------------
+     INPUT TEXT
+     ------------------------------------------------------- */
+
+  .fixed.inset-0.z-\[100\] input,
+  .fixed.inset-0.z-\[100\] textarea {
+    background: #faf8f3 !important;
+    color: #29251f !important;
+    border-color: #d8d0c2 !important;
+  }
+
+  .fixed.inset-0.z-\[100\] input::placeholder,
+  .fixed.inset-0.z-\[100\] textarea::placeholder {
+    color: #8a8277 !important;
+  }
+
+  /* -------------------------------------------------------
+     PRODUCT QUANTITY BUTTONS
+     ------------------------------------------------------- */
+
+  .fixed.inset-0.z-\[100\] button[class*="border-primary\/25"] {
+    background: #faf8f3 !important;
+    color: #302c26 !important;
+  }
+
+  .fixed.inset-0.z-\[100\] button[class*="border-primary\/25"]:hover {
+    background: #b28d20 !important;
+    color: #ffffff !important;
+  }
+
+  /* -------------------------------------------------------
+     CALENDAR DAYS
+     ------------------------------------------------------- */
+
+  .fixed.inset-0.z-\[100\] button[class*="hover\:bg-primary\/20"] {
+    color: #302c26 !important;
+  }
+
+  .fixed.inset-0.z-\[100\] button[class*="hover\:bg-primary\/20"]:hover {
+    background: rgba(178, 141, 32, 0.12) !important;
+    color: #b28d20 !important;
+  }
+
+  /* Selected calendar day */
+  .fixed.inset-0.z-\[100\] button[class*="bg-primary"] {
+    background: #b28d20 !important;
+    color: #ffffff !important;
+  }
+
+  /* -------------------------------------------------------
+     TIME BUTTONS
+     ------------------------------------------------------- */
+
+  .fixed.inset-0.z-\[100\] button[class*="bg-\[#0e0a08\]"] {
+    background: #faf8f3 !important;
+    color: #302c26 !important;
+    border-color: rgba(178, 141, 32, 0.20) !important;
+  }
+
+  .fixed.inset-0.z-\[100\] button[class*="bg-\[#0e0a08\]"]:hover {
+    border-color: #b28d20 !important;
+    color: #b28d20 !important;
+  }
+
+  /* Selected time */
+  .fixed.inset-0.z-\[100\] button[class*="bg-primary"] {
+    background: #b28d20 !important;
+    color: #ffffff !important;
+  }
+
+  /* -------------------------------------------------------
+     GUEST PICKER
+     ------------------------------------------------------- */
+
+  .fixed.inset-0.z-\[100\] button[class*="hover\:bg-primary\/10"] {
+    color: #302c26 !important;
+  }
+
+  .fixed.inset-0.z-\[100\] button[class*="hover\:bg-primary\/10"]:hover {
+    background: rgba(178, 141, 32, 0.10) !important;
+    color: #b28d20 !important;
+  }
+
+  /* -------------------------------------------------------
+     TOTAL BLOCK
+     ------------------------------------------------------- */
+
+  .fixed.inset-0.z-\[100\] .border-t {
+    border-color: rgba(178, 141, 32, 0.18) !important;
+  }
+
+  /* -------------------------------------------------------
+     PRIVACY BOX
+     ------------------------------------------------------- */
+
+  .fixed.inset-0.z-\[100\] label[class*="bg-\[#15100e\]"] {
+    background: #faf8f3 !important;
+    color: #26231f !important;
+  }
+
+  /* -------------------------------------------------------
+     GOLD TEXT
+     ------------------------------------------------------- */
+
+  .fixed.inset-0.z-\[100\] .text-primary {
+    color: #b28d20 !important;
+  }
+
+  /* -------------------------------------------------------
+     CLOSE BUTTON
+     ------------------------------------------------------- */
+
+  .fixed.inset-0.z-\[100\] button[class*="rounded-full"] {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* -------------------------------------------------------
+     SUBMIT BUTTON
+     ------------------------------------------------------- */
+
+  .fixed.inset-0.z-\[100\] button[type="submit"] {
+    background: #b28d20 !important;
+    color: #ffffff !important;
+    border-color: #b28d20 !important;
+  }
+
+  .fixed.inset-0.z-\[100\] button[type="submit"]:hover {
+    background: #9f7c18 !important;
+  }
+
+  /* -------------------------------------------------------
+     RED BOOKING ERRORS / DELETE
+     Не осветляем красные элементы
+     ------------------------------------------------------- */
+
+  .fixed.inset-0.z-\[100\] .text-red-300 {
+    color: #a33a2e !important;
+  }
+
+  /* -------------------------------------------------------
+     SCROLLBAR
+     ------------------------------------------------------- */
+
+  .fixed.inset-0.z-\[100\] ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .fixed.inset-0.z-\[100\] ::-webkit-scrollbar-track {
+    background: #eee8de;
+  }
+
+  .fixed.inset-0.z-\[100\] ::-webkit-scrollbar-thumb {
+    background: rgba(178, 141, 32, 0.35);
+    border-radius: 999px;
+  }
+
+}
