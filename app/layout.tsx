@@ -1,11 +1,7 @@
 import { Analytics } from '@vercel/analytics/next'
-
 import type { Metadata, Viewport } from 'next'
-
 import { Cormorant_Garamond, Jost } from 'next/font/google'
-
 import { LanguageProvider } from '@/components/language-provider'
-
 import './globals.css'
 
 const cormorant = Cormorant_Garamond({
@@ -90,7 +86,6 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
-
     googleBot: {
       index: true,
       follow: true,
@@ -119,7 +114,6 @@ const jsonLd = {
     {
       '@type': 'LocalBusiness',
       '@id': `${siteUrl}/#business`,
-
       name: 'ZHAR de PAR',
       alternateName: 'ЖАР де ПАР',
 
@@ -127,7 +121,6 @@ const jsonLd = {
         'Частная русская баня в Бланесе на Коста-Брава рядом с Барселоной, Ллорет-де-Мар и Жироной.',
 
       url: siteUrl,
-
       logo: `${siteUrl}/photos/logos/logoof.png`,
       image: `${siteUrl}/photos/view/viewgeneral.PNG`,
 
@@ -265,7 +258,6 @@ const jsonLd = {
     {
       '@type': 'WebSite',
       '@id': `${siteUrl}/#website`,
-
       url: siteUrl,
       name: 'ZHAR de PAR',
       alternateName: 'ЖАР де ПАР',
@@ -283,7 +275,6 @@ const jsonLd = {
     {
       '@type': 'WebPage',
       '@id': `${siteUrl}/#webpage`,
-
       url: siteUrl,
       name: 'ZHAR de PAR',
 
@@ -356,10 +347,6 @@ export default function RootLayout({
       translate="no"
       className={`${cormorant.variable} ${jost.variable} bg-background`}
     >
-      <head>
-        <meta name="google" content="notranslate" />
-      </head>
-
       <body className="font-sans antialiased">
         <LanguageProvider>
           {children}
