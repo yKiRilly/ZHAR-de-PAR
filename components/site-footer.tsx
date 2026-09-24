@@ -328,7 +328,7 @@ export function SiteFooter() {
           {/* Instagram */}
 
           <a
-            href="https://www.instagram.com/banka_blanes/"
+            href="https://www.instagram.com/zhardepar_spain?stkn=am0wMHNxdjBxMjRu"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
