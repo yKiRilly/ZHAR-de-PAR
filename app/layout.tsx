@@ -1,5 +1,7 @@
 import { Analytics } from '@vercel/analytics/next'
+
 import type { Metadata, Viewport } from 'next'
+
 import { Cormorant_Garamond, Jost } from 'next/font/google'
 
 import { LanguageProvider } from '@/components/language-provider'
@@ -25,6 +27,10 @@ const siteUrl = 'https://www.zhardepar.com'
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
 
+  other: {
+    google: 'notranslate',
+  },
+
   verification: {
     google: 'L4RE2vGSQwVzUxglBVvdd0hZCZ6p0RAeLvyXBLNRV10',
   },
@@ -45,12 +51,10 @@ export const metadata: Metadata = {
   ],
 
   creator: 'ZHAR de PAR',
-
   publisher: 'ZHAR de PAR',
 
   alternates: {
     canonical: siteUrl,
-
     languages: {
       'ru-RU': siteUrl,
       'uk-UA': siteUrl,
@@ -62,12 +66,9 @@ export const metadata: Metadata = {
     locale: 'ru_RU',
     url: siteUrl,
     siteName: 'ZHAR de PAR',
-
     title: 'ZHAR de PAR',
-
     description:
       'Частная русская баня ZHAR de PAR в Бланесе на Коста-Брава рядом с Барселоной. Парение веником, купель, джакузи и банные ритуалы.',
-
     images: [
       {
         url: '/photos/view/viewgeneral.PNG',
@@ -80,12 +81,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: 'summary_large_image',
-
     title: 'ZHAR de PAR',
-
     description:
       'Частная русская баня ZHAR de PAR в Бланесе рядом с Барселоной. Парение веником, банные ритуалы, купель, джакузи и отдых на природе.',
-
     images: ['/photos/view/viewgeneral.PNG'],
   },
 
@@ -109,9 +107,7 @@ export const metadata: Metadata = {
         type: 'image/png',
       },
     ],
-
     shortcut: '/favicon.png',
-
     apple: '/favicon.png',
   },
 }
@@ -122,11 +118,9 @@ const jsonLd = {
   '@graph': [
     {
       '@type': 'LocalBusiness',
-
       '@id': `${siteUrl}/#business`,
 
       name: 'ZHAR de PAR',
-
       alternateName: 'ЖАР де ПАР',
 
       description:
@@ -135,26 +129,19 @@ const jsonLd = {
       url: siteUrl,
 
       logo: `${siteUrl}/photos/logos/logoof.png`,
-
       image: `${siteUrl}/photos/view/viewgeneral.PNG`,
 
       priceRange: '€€',
-
       currenciesAccepted: 'EUR',
 
       telephone: '+34601801800',
-
       email: 'zhardepar1@gmail.com',
 
       address: {
         '@type': 'PostalAddress',
-
         addressLocality: 'Blanes',
-
         addressRegion: 'Girona',
-
         postalCode: '17300',
-
         addressCountry: 'ES',
       },
 
@@ -163,37 +150,30 @@ const jsonLd = {
           '@type': 'City',
           name: 'Blanes',
         },
-
         {
           '@type': 'City',
           name: 'Lloret de Mar',
         },
-
         {
           '@type': 'City',
           name: 'Tossa de Mar',
         },
-
         {
           '@type': 'City',
           name: 'Girona',
         },
-
         {
           '@type': 'AdministrativeArea',
           name: 'Costa Brava',
         },
-
         {
           '@type': 'AdministrativeArea',
           name: 'Catalonia',
         },
-
         {
           '@type': 'City',
           name: 'Barcelona',
         },
-
         {
           '@type': 'Country',
           name: 'Spain',
@@ -226,76 +206,55 @@ const jsonLd = {
 
       contactPoint: {
         '@type': 'ContactPoint',
-
         telephone: '+34601801800',
-
         contactType: 'customer service',
-
         availableLanguage: ['Russian', 'Ukrainian'],
       },
 
       hasOfferCatalog: {
         '@type': 'OfferCatalog',
-
         name: 'Услуги ZHAR de PAR',
 
         itemListElement: [
           {
             '@type': 'Offer',
-
             itemOffered: {
               '@type': 'Service',
-
               name: 'Аренда частной русской бани',
             },
           },
-
           {
             '@type': 'Offer',
-
             itemOffered: {
               '@type': 'Service',
-
               name: 'Парение веником',
             },
           },
-
           {
             '@type': 'Offer',
-
             itemOffered: {
               '@type': 'Service',
-
               name: 'Банный ритуал',
             },
           },
-
           {
             '@type': 'Offer',
-
             itemOffered: {
               '@type': 'Service',
-
               name: 'Купель',
             },
           },
-
           {
             '@type': 'Offer',
-
             itemOffered: {
               '@type': 'Service',
-
               name: 'Джакузи',
             },
           },
-
           {
             '@type': 'Offer',
-
             itemOffered: {
               '@type': 'Service',
-
               name: 'Банный веник',
             },
           },
@@ -305,13 +264,10 @@ const jsonLd = {
 
     {
       '@type': 'WebSite',
-
       '@id': `${siteUrl}/#website`,
 
       url: siteUrl,
-
       name: 'ZHAR de PAR',
-
       alternateName: 'ЖАР де ПАР',
 
       description:
@@ -326,11 +282,9 @@ const jsonLd = {
 
     {
       '@type': 'WebPage',
-
       '@id': `${siteUrl}/#webpage`,
 
       url: siteUrl,
-
       name: 'ZHAR de PAR',
 
       description:
@@ -349,7 +303,6 @@ const jsonLd = {
 
     {
       '@type': 'VideoObject',
-
       '@id': `${siteUrl}/#video`,
 
       name: 'ZHAR de PAR — русская баня на Коста-Брава',
@@ -357,13 +310,11 @@ const jsonLd = {
       description:
         'Видео о ZHAR de PAR — частной русской бане в Бланесе на Коста-Брава рядом с Барселоной.',
 
-      thumbnailUrl:
-        `${siteUrl}/photos/view/viewgeneral.PNG`,
+      thumbnailUrl: `${siteUrl}/photos/view/viewgeneral.PNG`,
 
       uploadDate: '2026-08-26',
 
-      contentUrl:
-        `${siteUrl}/video/videobanya.mp4`,
+      contentUrl: `${siteUrl}/video/videobanya.mp4`,
 
       embedUrl: siteUrl,
 
@@ -373,16 +324,12 @@ const jsonLd = {
 
       publisher: {
         '@type': 'Organization',
-
         name: 'ZHAR de PAR',
-
         url: siteUrl,
 
         logo: {
           '@type': 'ImageObject',
-
-          url:
-            `${siteUrl}/photos/logos/logoof.png`,
+          url: `${siteUrl}/photos/logos/logoof.png`,
         },
       },
 
@@ -409,6 +356,10 @@ export default function RootLayout({
       translate="no"
       className={`${cormorant.variable} ${jost.variable} bg-background`}
     >
+      <head>
+        <meta name="google" content="notranslate" />
+      </head>
+
       <body className="font-sans antialiased">
         <LanguageProvider>
           {children}
