@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -10,6 +10,9 @@ import {
   Pencil,
   Phone,
   RefreshCw,
+  Wallet,
+  TrendingUp,
+  BarChart3,
   Search,
   Trash2,
   Users,
@@ -1781,8 +1784,107 @@ export default function AdminPage() {
       [bookings],
     )
 
+  const finance = useMemo(() => {
+    // Деньги, которые реально заработаны:
+    // учитываем только завершённые бронирования.
+    const completedBookings = bookings.filter(
+      (booking) => booking.status === 'completed',
+    )
+
+    // Все деньги по активным броням — это ещё не заработок,
+    // а ожидаемая выручка.
+    const activeBookings = bookings.filter(
+      (booking) => booking.status !== 'cancelled',
+    )
+
+    const earnedRevenue = completedBookings.reduce(
+      (sum, booking) => sum + Number(booking.total || 0),
+      0,
+    )
+
+    const expectedRevenue = activeBookings
+      .filter((booking) => booking.status !== 'completed')
+      .reduce(
+        (sum, booking) => sum + Number(booking.total || 0),
+        0,
+      )
+
+    const currentYear = new Date().getFullYear()
+    const currentMonth = new Date().getMonth()
+
+    const currentMonthEarned = completedBookings
+      .filter((booking) => {
+        if (!booking.booking_date) return false
+
+        const [year, month] = booking.booking_date
+          .split('-')
+          .map(Number)
+
+        return (
+          year === currentYear &&
+          month === currentMonth + 1
+        )
+      })
+      .reduce(
+        (sum, booking) => sum + Number(booking.total || 0),
+        0,
+      )
+
+    const months = Array.from(
+      { length: 12 },
+      (_, index) => {
+        const date = new Date(
+          currentYear,
+          currentMonth - (11 - index),
+          1,
+        )
+
+        const year = date.getFullYear()
+        const month = date.getMonth() + 1
+        const key = `${year}-${String(month).padStart(2, '0')}`
+
+        const monthCompleted = completedBookings.filter(
+          (booking) =>
+            booking.booking_date?.startsWith(key),
+        )
+
+        const monthExpected = activeBookings.filter(
+          (booking) =>
+            booking.status !== 'completed' &&
+            booking.booking_date?.startsWith(key),
+        )
+
+        return {
+          key,
+          label: date.toLocaleDateString('ru-RU', {
+            month: 'long',
+            year: 'numeric',
+          }),
+          earned: monthCompleted.reduce(
+            (sum, booking) =>
+              sum + Number(booking.total || 0),
+            0,
+          ),
+          expected: monthExpected.reduce(
+            (sum, booking) =>
+              sum + Number(booking.total || 0),
+            0,
+          ),
+          bookings: monthCompleted.length,
+        }
+      },
+    ).reverse()
+
+    return {
+      earnedRevenue,
+      expectedRevenue,
+      currentMonthEarned,
+      months,
+    }
+  }, [bookings])
+
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#110d0b] text-foreground">
+    <main className="min-h-[100svh] w-full overflow-x-hidden bg-[#110d0b] text-foreground">
       <div className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-6 sm:py-8 lg:px-10">
 
         {/* HEADER */}
@@ -1951,6 +2053,104 @@ export default function AdminPage() {
                 ),
               )}
             </div>
+
+            <section className="mb-7 rounded-3xl border border-primary/15 bg-[#15100e] p-4 sm:mb-10 sm:p-6">
+              <div className="mb-5 flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                  <Wallet className="h-5 w-5" />
+                </div>
+
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-primary sm:text-xs sm:tracking-[0.25em]">
+                    Финансы
+                  </p>
+                  <h2 className="mt-1 font-serif text-2xl sm:text-3xl">
+                    Доход
+                  </h2>
+                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                    Заработок считается только по бронированиям со статусом «Завершена». Отменённые брони не учитываются.
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 sm:gap-4">
+                <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 sm:p-5">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-[9px] uppercase tracking-widest text-muted-foreground sm:text-xs">
+                      Заработано всего
+                    </p>
+                    <TrendingUp className="h-4 w-4 text-primary" />
+                  </div>
+                  <p className="mt-2 font-serif text-3xl text-primary sm:text-4xl">
+                    €{finance.earnedRevenue.toFixed(0)}
+                  </p>
+                  <p className="mt-1 text-[10px] text-muted-foreground sm:text-xs">
+                    Только завершённые брони
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-primary/15 bg-[#0e0a08] p-4 sm:p-5">
+                  <p className="text-[9px] uppercase tracking-widest text-muted-foreground sm:text-xs">
+                    Этот месяц
+                  </p>
+                  <p className="mt-2 font-serif text-3xl text-primary sm:text-4xl">
+                    €{finance.currentMonthEarned.toFixed(0)}
+                  </p>
+                  <p className="mt-1 text-[10px] capitalize text-muted-foreground sm:text-xs">
+                    Заработано в {getMonthName(new Date())}
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-primary/15 bg-[#0e0a08] p-4 sm:p-5">
+                  <p className="text-[9px] uppercase tracking-widest text-muted-foreground sm:text-xs">
+                    Завершённые
+                  </p>
+                  <p className="mt-2 font-serif text-3xl text-primary sm:text-4xl">
+                    €{finance.expectedRevenue.toFixed(0)}
+                  </p>
+                  <p className="mt-1 text-[10px] text-muted-foreground sm:text-xs">
+                    Ожидается по активным броням
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-5 overflow-hidden rounded-2xl border border-primary/10 bg-[#0e0a08]">
+                <div className="flex items-center gap-2 border-b border-primary/10 p-4">
+                  <BarChart3 className="h-4 w-4 text-primary" />
+                  <p className="text-[10px] uppercase tracking-widest text-primary sm:text-xs">
+                    Учёт по месяцам
+                  </p>
+                </div>
+
+                <div className="divide-y divide-primary/10">
+                  {finance.months.map((month) => (
+                    <div
+                      key={month.key}
+                      className="flex items-center justify-between gap-4 px-4 py-3 sm:px-5"
+                    >
+                      <div className="min-w-0">
+                        <p className="truncate text-sm capitalize">
+                          {month.label}
+                        </p>
+                        <p className="mt-0.5 text-[10px] text-muted-foreground sm:text-xs">
+                          {month.bookings}{' '}
+                          {month.bookings === 1
+                            ? 'завершённая бронь'
+                            : 'завершённых броней'}
+                          {month.expected > 0
+                            ? ` · ожидается €${month.expected.toFixed(0)}`
+                            : ''}
+                        </p>
+                      </div>
+
+                      <p className="shrink-0 font-serif text-xl text-primary sm:text-2xl">
+                        €{month.earned.toFixed(0)}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
 
             {error && (
               <div className="mb-5 rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-300 sm:mb-6 sm:p-5">
