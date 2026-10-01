@@ -775,3 +775,146 @@
     user-select: text;
   }
 }
+/* =========================================================
+   PREMIUM MOBILE FOOTER
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  .site-footer {
+    background: #120f0c !important;
+    color: #ffffff !important;
+    border-top: 1px solid rgba(178, 141, 32, 0.25) !important;
+  }
+
+  /* Фотография CTA */
+  .site-footer > div:first-of-type {
+    min-height: 500px !important;
+    color: #ffffff !important;
+    border-bottom: 1px solid rgba(178, 141, 32, 0.28) !important;
+  }
+
+  /* Затемнение фотографии */
+  .site-footer > div:first-of-type > div:first-of-type {
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.42),
+        rgba(0, 0, 0, 0.28) 35%,
+        rgba(0, 0, 0, 0.65) 100%
+      ) !important;
+  }
+
+  /* Заголовок */
+  .site-footer > div:first-of-type h2 {
+    color: #ffffff !important;
+    font-size: 46px !important;
+    line-height: 0.98 !important;
+    font-weight: 700 !important;
+    text-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.85),
+      0 8px 30px rgba(0, 0, 0, 0.7) !important;
+  }
+
+  /* Золотой подзаголовок */
+  .site-footer > div:first-of-type p.text-primary {
+    color: #c6a348 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.24em !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
+  }
+
+  /* Описание */
+  .site-footer > div:first-of-type p.text-muted-foreground {
+    color: rgba(255, 255, 255, 0.92) !important;
+    font-size: 16px !important;
+    line-height: 1.65 !important;
+    text-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.9),
+      0 4px 20px rgba(0, 0, 0, 0.6) !important;
+  }
+
+  /* Кнопка */
+  .site-footer > div:first-of-type button {
+    min-width: 190px;
+    padding: 15px 28px !important;
+    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    border-radius: 999px !important;
+    background: linear-gradient(135deg, #b28d20, #9d7916) !important;
+    color: #ffffff !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.18em !important;
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  }
+
+  /* Нижняя часть футера */
+  .site-footer > div:nth-of-type(2) {
+    background: #100d0a !important;
+    color: #ffffff !important;
+  }
+
+  /* Логотип */
+  .site-footer > div:nth-of-type(2) img {
+    width: 220px !important;
+    max-width: 72vw !important;
+    filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.35));
+  }
+
+  /* Заголовки */
+  .site-footer > div:nth-of-type(2) h3 {
+    color: #b28d20 !important;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.28em !important;
+  }
+
+  /* Обычный текст */
+  .site-footer > div:nth-of-type(2) .text-muted-foreground {
+    color: rgba(255, 255, 255, 0.75) !important;
+  }
+
+  /* Ссылки */
+  .site-footer > div:nth-of-type(2) a {
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  /* Иконки */
+  .site-footer > div:nth-of-type(2) svg {
+    color: #b28d20;
+  }
+
+  /* Instagram / WhatsApp */
+  .site-footer > div:nth-of-type(2) a[aria-label="Instagram"],
+  .site-footer > div:nth-of-type(2) a[aria-label="WhatsApp"] {
+    width: 46px !important;
+    height: 46px !important;
+    border-color: rgba(178, 141, 32, 0.5) !important;
+    color: #b28d20 !important;
+    background: rgba(178, 141, 32, 0.04) !important;
+  }
+
+  /* Разделители */
+  .site-footer > div:nth-of-type(2) .border-t {
+    border-color: rgba(255, 255, 255, 0.10) !important;
+  }
+
+  /* Юридические ссылки */
+  .site-footer > div:nth-of-type(2) > div.border-t a {
+    color: rgba(255, 255, 255, 0.48) !important;
+    font-size: 10px !important;
+  }
+
+  /* Нижняя строка */
+  .site-footer > div:nth-of-type(2) > div:last-of-type p {
+    color: rgba(255, 255, 255, 0.42) !important;
+    font-size: 9px !important;
+  }
+
+  .site-footer > div:nth-of-type(2) > div:last-of-type p:last-child {
+    color: rgba(178, 141, 32, 0.72) !important;
+  }
+}
