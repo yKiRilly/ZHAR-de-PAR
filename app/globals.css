@@ -1,4 +1,3 @@
-
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
@@ -41,7 +40,6 @@
 
 /* =========================================================
    BASE / DESKTOP
-   Полностью сохраняем текущую компьютерную версию
    ========================================================= */
 
 :root {
@@ -72,6 +70,7 @@
 
   --border: oklch(0.32 0.015 60);
   --input: oklch(0.3 0.015 60);
+
   --ring: #b28d20;
 
   --radius: 0.25rem;
@@ -215,10 +214,10 @@
 /* =========================================================
    MOBILE LIGHT VERSION
    Только телефоны
-   Desktop не затрагивается
    ========================================================= */
 
 @media (max-width: 768px) {
+
   /* =======================================================
      MOBILE COLORS
      ======================================================= */
@@ -395,7 +394,6 @@
     font-size: 15px !important;
     font-weight: 700 !important;
     letter-spacing: 0.12em !important;
-
     color: #ffffff !important;
     background: rgba(0, 0, 0, 0.22) !important;
     border-color: rgba(255, 255, 255, 0.6) !important;
@@ -431,10 +429,8 @@
     background-color: #e7e0d5;
   }
 
-  /*
-    Только полностью чёрный фон.
-    НЕ трогаем bg-black/30, bg-black/50 и т.д.
-  */
+  /* Только полностью чёрный фон.
+     НЕ трогаем bg-black/30, bg-black/50 и т.д. */
 
   [class~='bg-black'] {
     background-color: #eee9df;
@@ -531,17 +527,13 @@
     color: #26231f;
   }
 }
+
 /* =========================================================
    BOOKING CART / MODAL
    MOBILE LIGHT VERSION
-   Только телефоны — desktop НЕ изменяется
    ========================================================= */
 
 @media (max-width: 768px) {
-
-  /* -------------------------------------------------------
-     MAIN BOOKING MODAL
-     ------------------------------------------------------- */
 
   .fixed.inset-0.z-\[100\] > div {
     background: #f3efe7 !important;
@@ -549,20 +541,10 @@
     border-color: rgba(178, 141, 32, 0.28) !important;
   }
 
-  /* -------------------------------------------------------
-     CART PRODUCT CARDS
-     bg-[#15100e]
-     ------------------------------------------------------- */
-
   .fixed.inset-0.z-\[100\] [class*="bg-\[#15100e\]"] {
     background: #faf8f3 !important;
     color: #26231f !important;
   }
-
-  /* -------------------------------------------------------
-     INPUTS / DATE / TIME / GUEST BUTTONS
-     bg-[#0e0a08]
-     ------------------------------------------------------- */
 
   .fixed.inset-0.z-\[100\] [class*="bg-\[#0e0a08\]"] {
     background: #faf8f3 !important;
@@ -570,30 +552,16 @@
     border-color: #d8d0c2 !important;
   }
 
-  /* -------------------------------------------------------
-     CALENDAR / TIME / GUEST DROPDOWNS
-     bg-[#17110e]
-     ------------------------------------------------------- */
-
   .fixed.inset-0.z-\[100\] [class*="bg-\[#17110e\]"] {
     background: #faf8f3 !important;
     color: #26231f !important;
     border-color: rgba(178, 141, 32, 0.35) !important;
   }
 
-  /* -------------------------------------------------------
-     MAIN MODAL DARK BACKGROUND
-     bg-[#110d0b]
-     ------------------------------------------------------- */
-
   .fixed.inset-0.z-\[100\] [class*="bg-\[#110d0b\]"] {
     background: #f3efe7 !important;
     color: #26231f !important;
   }
-
-  /* -------------------------------------------------------
-     TEXT
-     ------------------------------------------------------- */
 
   .fixed.inset-0.z-\[100\] [class*="text-foreground"] {
     color: #26231f !important;
@@ -602,10 +570,6 @@
   .fixed.inset-0.z-\[100\] [class*="text-muted-foreground"] {
     color: #696258 !important;
   }
-
-  /* -------------------------------------------------------
-     INPUT TEXT
-     ------------------------------------------------------- */
 
   .fixed.inset-0.z-\[100\] input,
   .fixed.inset-0.z-\[100\] textarea {
@@ -619,10 +583,6 @@
     color: #8a8277 !important;
   }
 
-  /* -------------------------------------------------------
-     PRODUCT QUANTITY BUTTONS
-     ------------------------------------------------------- */
-
   .fixed.inset-0.z-\[100\] button[class*="border-primary\/25"] {
     background: #faf8f3 !important;
     color: #302c26 !important;
@@ -633,10 +593,6 @@
     color: #ffffff !important;
   }
 
-  /* -------------------------------------------------------
-     CALENDAR DAYS
-     ------------------------------------------------------- */
-
   .fixed.inset-0.z-\[100\] button[class*="hover\:bg-primary\/20"] {
     color: #302c26 !important;
   }
@@ -646,15 +602,10 @@
     color: #b28d20 !important;
   }
 
-  /* Selected calendar day */
   .fixed.inset-0.z-\[100\] button[class*="bg-primary"] {
     background: #b28d20 !important;
     color: #ffffff !important;
   }
-
-  /* -------------------------------------------------------
-     TIME BUTTONS
-     ------------------------------------------------------- */
 
   .fixed.inset-0.z-\[100\] button[class*="bg-\[#0e0a08\]"] {
     background: #faf8f3 !important;
@@ -667,16 +618,6 @@
     color: #b28d20 !important;
   }
 
-  /* Selected time */
-  .fixed.inset-0.z-\[100\] button[class*="bg-primary"] {
-    background: #b28d20 !important;
-    color: #ffffff !important;
-  }
-
-  /* -------------------------------------------------------
-     GUEST PICKER
-     ------------------------------------------------------- */
-
   .fixed.inset-0.z-\[100\] button[class*="hover\:bg-primary\/10"] {
     color: #302c26 !important;
   }
@@ -686,42 +627,22 @@
     color: #b28d20 !important;
   }
 
-  /* -------------------------------------------------------
-     TOTAL BLOCK
-     ------------------------------------------------------- */
-
   .fixed.inset-0.z-\[100\] .border-t {
     border-color: rgba(178, 141, 32, 0.18) !important;
   }
-
-  /* -------------------------------------------------------
-     PRIVACY BOX
-     ------------------------------------------------------- */
 
   .fixed.inset-0.z-\[100\] label[class*="bg-\[#15100e\]"] {
     background: #faf8f3 !important;
     color: #26231f !important;
   }
 
-  /* -------------------------------------------------------
-     GOLD TEXT
-     ------------------------------------------------------- */
-
   .fixed.inset-0.z-\[100\] .text-primary {
     color: #b28d20 !important;
   }
 
-  /* -------------------------------------------------------
-     CLOSE BUTTON
-     ------------------------------------------------------- */
-
   .fixed.inset-0.z-\[100\] button[class*="rounded-full"] {
     -webkit-tap-highlight-color: transparent;
   }
-
-  /* -------------------------------------------------------
-     SUBMIT BUTTON
-     ------------------------------------------------------- */
 
   .fixed.inset-0.z-\[100\] button[type="submit"] {
     background: #b28d20 !important;
@@ -733,18 +654,9 @@
     background: #9f7c18 !important;
   }
 
-  /* -------------------------------------------------------
-     RED BOOKING ERRORS / DELETE
-     Не осветляем красные элементы
-     ------------------------------------------------------- */
-
   .fixed.inset-0.z-\[100\] .text-red-300 {
     color: #a33a2e !important;
   }
-
-  /* -------------------------------------------------------
-     SCROLLBAR
-     ------------------------------------------------------- */
 
   .fixed.inset-0.z-\[100\] ::-webkit-scrollbar {
     width: 5px;
@@ -758,8 +670,12 @@
     background: rgba(178, 141, 32, 0.35);
     border-radius: 999px;
   }
-
 }
+
+/* =========================================================
+   TEXT SELECTION
+   ========================================================= */
+
 @media (min-width: 769px), (max-width: 768px) {
   body {
     -webkit-user-select: none;
@@ -775,26 +691,35 @@
     user-select: text;
   }
 }
+
 /* =========================================================
-   PREMIUM MOBILE FOOTER
+   MOBILE FOOTER
+   Верхний CTA — тёмный с фотографией
+   Нижняя часть — светлая
    ========================================================= */
 
 @media (max-width: 768px) {
 
+  /* =======================================================
+     FOOTER BASE
+     ======================================================= */
+
   .site-footer {
-    background: #120f0c !important;
-    color: #ffffff !important;
-    border-top: 1px solid rgba(178, 141, 32, 0.25) !important;
+    background: #f3efe7 !important;
+    color: #26231f !important;
+    border-top: 1px solid rgba(178, 141, 32, 0.20) !important;
   }
 
-  /* Фотография CTA */
+  /* =======================================================
+     CTA — ФОТОГРАФИЯ
+     ======================================================= */
+
   .site-footer > div:first-of-type {
     min-height: 500px !important;
     color: #ffffff !important;
     border-bottom: 1px solid rgba(178, 141, 32, 0.28) !important;
   }
 
-  /* Затемнение фотографии */
   .site-footer > div:first-of-type > div:first-of-type {
     background:
       linear-gradient(
@@ -805,66 +730,84 @@
       ) !important;
   }
 
-  /* Заголовок */
   .site-footer > div:first-of-type h2 {
     color: #ffffff !important;
     font-size: 46px !important;
     line-height: 0.98 !important;
     font-weight: 700 !important;
+
     text-shadow:
       0 2px 8px rgba(0, 0, 0, 0.85),
       0 8px 30px rgba(0, 0, 0, 0.7) !important;
   }
 
-  /* Золотой подзаголовок */
   .site-footer > div:first-of-type p.text-primary {
     color: #c6a348 !important;
     font-size: 12px !important;
     font-weight: 600 !important;
     letter-spacing: 0.24em !important;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
+
+    text-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.9) !important;
   }
 
-  /* Описание */
   .site-footer > div:first-of-type p.text-muted-foreground {
     color: rgba(255, 255, 255, 0.92) !important;
     font-size: 16px !important;
     line-height: 1.65 !important;
+
     text-shadow:
       0 2px 8px rgba(0, 0, 0, 0.9),
       0 4px 20px rgba(0, 0, 0, 0.6) !important;
   }
 
-  /* Кнопка */
   .site-footer > div:first-of-type button {
     min-width: 190px;
     padding: 15px 28px !important;
+
     border: 1px solid rgba(255, 255, 255, 0.22) !important;
     border-radius: 999px !important;
-    background: linear-gradient(135deg, #b28d20, #9d7916) !important;
+
+    background: linear-gradient(
+      135deg,
+      #b28d20,
+      #9d7916
+    ) !important;
+
     color: #ffffff !important;
+
     font-size: 12px !important;
     font-weight: 700 !important;
     letter-spacing: 0.18em !important;
+
     box-shadow:
       0 10px 30px rgba(0, 0, 0, 0.4),
       inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
   }
 
-  /* Нижняя часть футера */
+  /* =======================================================
+     НИЖНЯЯ ЧАСТЬ ФУТЕРА — СВЕТЛАЯ
+     ======================================================= */
+
   .site-footer > div:nth-of-type(2) {
-    background: #100d0a !important;
-    color: #ffffff !important;
+    background: #f3efe7 !important;
+    color: #26231f !important;
   }
 
-  /* Логотип */
+  /* =======================================================
+     ЛОГОТИП
+     ======================================================= */
+
   .site-footer > div:nth-of-type(2) img {
     width: 220px !important;
     max-width: 72vw !important;
-    filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.35));
+    filter: none !important;
   }
 
-  /* Заголовки */
+  /* =======================================================
+     ЗАГОЛОВКИ
+     ======================================================= */
+
   .site-footer > div:nth-of-type(2) h3 {
     color: #b28d20 !important;
     font-size: 10px !important;
@@ -872,49 +815,81 @@
     letter-spacing: 0.28em !important;
   }
 
-  /* Обычный текст */
+  /* =======================================================
+     ОБЫЧНЫЙ ТЕКСТ
+     ======================================================= */
+
   .site-footer > div:nth-of-type(2) .text-muted-foreground {
-    color: rgba(255, 255, 255, 0.75) !important;
+    color: #696258 !important;
   }
 
-  /* Ссылки */
+  /* =======================================================
+     ССЫЛКИ
+     ======================================================= */
+
   .site-footer > div:nth-of-type(2) a {
-    color: rgba(255, 255, 255, 0.82);
+    color: #4f4941;
   }
 
-  /* Иконки */
+  .site-footer > div:nth-of-type(2) a:hover {
+    color: #b28d20;
+  }
+
+  /* =======================================================
+     ИКОНКИ
+     ======================================================= */
+
   .site-footer > div:nth-of-type(2) svg {
     color: #b28d20;
   }
 
-  /* Instagram / WhatsApp */
+  /* =======================================================
+     INSTAGRAM / WHATSAPP
+     ======================================================= */
+
   .site-footer > div:nth-of-type(2) a[aria-label="Instagram"],
   .site-footer > div:nth-of-type(2) a[aria-label="WhatsApp"] {
     width: 46px !important;
     height: 46px !important;
+
     border-color: rgba(178, 141, 32, 0.5) !important;
+
     color: #b28d20 !important;
+
     background: rgba(178, 141, 32, 0.04) !important;
   }
 
-  /* Разделители */
+  /* =======================================================
+     РАЗДЕЛИТЕЛИ
+     ======================================================= */
+
   .site-footer > div:nth-of-type(2) .border-t {
-    border-color: rgba(255, 255, 255, 0.10) !important;
+    border-color: rgba(178, 141, 32, 0.18) !important;
   }
 
-  /* Юридические ссылки */
+  /* =======================================================
+     ЮРИДИЧЕСКИЕ ССЫЛКИ
+     ======================================================= */
+
   .site-footer > div:nth-of-type(2) > div.border-t a {
-    color: rgba(255, 255, 255, 0.48) !important;
+    color: #80786d !important;
     font-size: 10px !important;
   }
 
-  /* Нижняя строка */
+  .site-footer > div:nth-of-type(2) > div.border-t a:hover {
+    color: #b28d20 !important;
+  }
+
+  /* =======================================================
+     НИЖНЯЯ СТРОКА
+     ======================================================= */
+
   .site-footer > div:nth-of-type(2) > div:last-of-type p {
-    color: rgba(255, 255, 255, 0.42) !important;
+    color: #91897d !important;
     font-size: 9px !important;
   }
 
   .site-footer > div:nth-of-type(2) > div:last-of-type p:last-child {
-    color: rgba(178, 141, 32, 0.72) !important;
+    color: rgba(178, 141, 32, 0.85) !important;
   }
 }
