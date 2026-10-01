@@ -1,9 +1,7 @@
-
 'use client'
 
 import Image from 'next/image'
 import Link from 'next/link'
-
 import {
   Clock,
   Mail,
@@ -21,10 +19,9 @@ export function SiteFooter() {
   return (
     <footer
       id="contact"
-      className="relative border-t border-border/50"
+      className="site-footer relative border-t border-border/50"
     >
       {/* CTA */}
-
       <div
         className="relative overflow-hidden border-b border-border/50 bg-cover bg-center"
         style={{
@@ -34,7 +31,6 @@ export function SiteFooter() {
         }}
       >
         {/* Затемнение только фоновой картинки */}
-
         <div className="pointer-events-none absolute inset-0 bg-black/30" />
 
         <div
@@ -144,7 +140,6 @@ export function SiteFooter() {
       </div>
 
       {/* Footer content */}
-
       <div
         className="
           mx-auto
@@ -158,7 +153,6 @@ export function SiteFooter() {
         "
       >
         {/* Main footer columns */}
-
         <div
           className="
             grid
@@ -172,7 +166,6 @@ export function SiteFooter() {
           "
         >
           {/* Logo */}
-
           <div
             className="
               flex
@@ -202,7 +195,6 @@ export function SiteFooter() {
           </div>
 
           {/* Visit */}
-
           <div className="text-center sm:text-left">
             <h3 className="text-xs font-medium uppercase tracking-[0.3em] text-primary">
               {t.footerVisit}
@@ -210,7 +202,6 @@ export function SiteFooter() {
 
             <ul className="mt-5 space-y-4 text-sm text-muted-foreground">
               {/* Google Maps */}
-
               <li
                 className="
                   flex
@@ -233,7 +224,6 @@ export function SiteFooter() {
               </li>
 
               {/* Hours */}
-
               <li
                 className="
                   flex
@@ -245,15 +235,12 @@ export function SiteFooter() {
               >
                 <Clock className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
 
-                <span>
-                  {t.footerHours}
-                </span>
+                <span>{t.footerHours}</span>
               </li>
             </ul>
           </div>
 
           {/* Concierge */}
-
           <div className="text-center sm:text-left">
             <h3 className="text-xs font-medium uppercase tracking-[0.3em] text-primary">
               {t.footerConcierge}
@@ -261,7 +248,6 @@ export function SiteFooter() {
 
             <ul className="mt-5 space-y-4 text-sm text-muted-foreground">
               {/* Phone */}
-
               <li>
                 <a
                   href="tel:+34601801800"
@@ -277,14 +263,11 @@ export function SiteFooter() {
                 >
                   <Phone className="h-4 w-4 shrink-0 text-primary" />
 
-                  <span>
-                    +34 601 80 18 00
-                  </span>
+                  <span>+34 601 80 18 00</span>
                 </a>
               </li>
 
               {/* Email */}
-
               <li>
                 <a
                   href="mailto:zhardepar1@gmail.com"
@@ -302,9 +285,7 @@ export function SiteFooter() {
                 >
                   <Mail className="h-4 w-4 shrink-0 text-primary" />
 
-                  <span>
-                    zhardepar1@gmail.com
-                  </span>
+                  <span>zhardepar1@gmail.com</span>
                 </a>
               </li>
             </ul>
@@ -312,7 +293,6 @@ export function SiteFooter() {
         </div>
 
         {/* Social media */}
-
         <div
           className="
             mt-10
@@ -326,7 +306,6 @@ export function SiteFooter() {
           "
         >
           {/* Instagram */}
-
           <a
             href="https://www.instagram.com/zhardepar_spain?stkn=am0wMHNxdjBxMjRu"
             target="_blank"
@@ -366,13 +345,11 @@ export function SiteFooter() {
                 height="18"
                 rx="5"
               />
-
               <circle
                 cx="12"
                 cy="12"
                 r="4"
               />
-
               <circle
                 cx="17.5"
                 cy="6.5"
@@ -384,7 +361,6 @@ export function SiteFooter() {
           </a>
 
           {/* WhatsApp */}
-
           <a
             href="https://wa.me/34601801800?text=Здравствуйте!%20Хочу%20забронировать%20баню"
             target="_blank"
@@ -418,7 +394,6 @@ export function SiteFooter() {
         </div>
 
         {/* Legal links */}
-
         <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 border-t border-border/40 pt-6 text-center text-xs text-muted-foreground">
           <Link
             href="/aviso-legal"
@@ -450,7 +425,6 @@ export function SiteFooter() {
         </div>
 
         {/* Bottom */}
-
         <div
           className="
             mt-6
