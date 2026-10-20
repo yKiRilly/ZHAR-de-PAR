@@ -1,4 +1,3 @@
-
 'use client'
 
 import Image from 'next/image'
@@ -9,7 +8,6 @@ import {
   X,
   ChevronDown,
   ShoppingBag,
-  Instagram,
 } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
@@ -123,9 +121,9 @@ export function SiteHeader() {
             priority
             className="
               h-auto
-              w-[155px]
+              w-[200px]
               object-contain
-              sm:w-[200px]
+              sm:w-[230px]
               lg:w-[250px]
             "
           />
@@ -163,7 +161,8 @@ export function SiteHeader() {
         </nav>
 
         {/* Right side */}
-        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+        <div className="flex shrink-0 items-center gap-3">
+
           {/* Language selector */}
           <div className="relative hidden sm:block">
             <button
@@ -246,34 +245,6 @@ export function SiteHeader() {
             )}
           </div>
 
-          
-{/* Instagram */}
-<a
-  href="https://www.instagram.com/banyabrava?obrf=MWk0eTFxZGF1NHY5NQ%3D%3D&utm_source=qr"
-  target="_blank"
-  rel="noopener noreferrer"
-  aria-label="Instagram Banya Brava"
-  title="Instagram Banya Brava"
-  className="
-    flex
-    h-10
-    w-9
-    shrink-0
-    items-center
-    justify-center
-    rounded-full
-    text-[#B28D20]
-    transition-all
-    duration-300
-    hover:bg-[#B28D20]/10
-    hover:text-[#d4ad36]
-    sm:h-11
-    sm:w-11
-  "
->
-  <Instagram className="h-5 w-5" />
-</a>
-
           {/* Cart */}
           <button
             type="button"
@@ -281,9 +252,8 @@ export function SiteHeader() {
             className="
               relative
               flex
-              h-10
-              w-10
-              shrink-0
+              h-11
+              w-11
               items-center
               justify-center
               rounded-full
@@ -293,8 +263,6 @@ export function SiteHeader() {
               transition-all
               hover:border-primary
               hover:text-primary
-              sm:h-11
-              sm:w-11
             "
             aria-label="Open cart"
           >
@@ -331,7 +299,6 @@ export function SiteHeader() {
               flex
               h-10
               w-10
-              shrink-0
               items-center
               justify-center
               rounded-full

@@ -307,7 +307,7 @@ export function SiteFooter() {
         >
           {/* Instagram */}
           <a
-            href="https://www.instagram.com/zhardepar_spain?stkn=am0wMHNxdjBxMjRu"
+            href="https://www.instagram.com/banyabrava?obrf=MWk0eTFxZGF1NHY5NQ%3D%3D&utm_source=qr"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
