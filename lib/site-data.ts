@@ -14,7 +14,7 @@ export const services: Service[] = [
     name: 'Shared Steam Ritual',
     guests: 'Up to 4 guests',
     duration: '45 minutes',
-    price: '€60',
+    price: '€80',
     description:
       'A traditional steam ritual in a relaxed shared setting, featuring aromatic bath brooms and approximately 10 minutes of gentle steam for a deeply refreshing experience.',
     includes: ['Aromatic broom treatment', 'Shared parilka session', 'Cold plunge access', 'Aromatic steam infusion'],
@@ -24,7 +24,7 @@ export const services: Service[] = [
     name: 'Individual Steam Ritual',
     guests: '1 guest',
     duration: '30 minutes',
-    price: '€40',
+    price: '€60',
     description:
       'A fully personalised steam ritual for guests seeking a traditional premium experience, guided one-to-one by a master banshchik. A deeply immersive ritual designed around your comfort.',
     includes: ['Private parilka session', 'Personal broom master', 'Herbal infusion pour', 'Cool-down ritual'],
@@ -34,7 +34,7 @@ export const services: Service[] = [
     name: 'Salt & Honey Scrub',
     guests: '1 guest',
     duration: '15 minutes',
-    price: '€20',
+    price: '€25',
     description:
       'Natural exfoliation treatment using premium ingredients to refresh the skin and improve circulation. A warm ritual that leaves the skin renewed, nourished and beautifully soft.',
     includes: ['Mineral salt exfoliation','Warm Rinse', 'Raw honey glaze', 'Deep skin renewal'],
