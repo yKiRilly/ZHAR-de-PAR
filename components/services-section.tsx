@@ -593,7 +593,7 @@ export function ServicesSection() {
                     </div>
 
                     <span className="shrink-0 font-serif text-xl text-primary sm:text-2xl">
-                      €80
+                      €40
                     </span>
                   </button>
                 </div>
